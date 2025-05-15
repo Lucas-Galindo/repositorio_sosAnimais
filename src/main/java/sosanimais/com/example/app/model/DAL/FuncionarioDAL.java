@@ -1,7 +1,7 @@
-package sosanimais.com.example.app.controller.services;
+package sosanimais.com.example.app.model.DAL;
 
 
-<<<<<<< HEAD
+
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
@@ -12,9 +12,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncionarioService implements IDAL<Funcionario> {
+public class FuncionarioDAL implements IDAL<Funcionario> {
 
-    PessoaService pessoaSerivce;
+    PessoaDAL pessoaSerivce;
 
 
     @Override
@@ -75,7 +75,7 @@ public class FuncionarioService implements IDAL<Funcionario> {
     }
 
     @Override
-    public Funcionario get( int mat) {
+    public Funcionario get(int mat) {
         Funcionario func=null;
         String sql = "", sql2 = "";
         ResultSet resultSet;
@@ -143,38 +143,37 @@ public class FuncionarioService implements IDAL<Funcionario> {
         try {
 
             if (!filtro.isEmpty())
-                sqlFunc+=" WHERE "+filtro;
+                sqlFunc += " WHERE " + filtro;
 
-                while (aux.next()) {
+            while (aux.next()) {
 
-                    resultSet = SingletonDB.getConexao().consultar(sqlFunc);
-                    if (resultSet.next()) {
+                resultSet = SingletonDB.getConexao().consultar(sqlFunc);
+                if (resultSet.next()) {
 
-                        if (resultSet.getLong("usu_id") == aux.getLong("pess_id")) {
+                    if (resultSet.getLong("usu_id") == aux.getLong("pess_id")) {
 
-                            //int idPess = aux.getLong("pess_id");
-                            pessoaAux = new PessoaInformacao(
-                                    aux.getString("pess_nome"),
-                                    aux.getString("pess_cpf"),
-                                    aux.getString("pess_telefone"),
-                                    aux.getString("pess_email")
-                            );
+                        //int idPess = aux.getLong("pess_id");
+                        pessoaAux = new PessoaInformacao(
+                                aux.getString("pess_nome"),
+                                aux.getString("pess_cpf"),
+                                aux.getString("pess_telefone"),
+                                aux.getString("pess_email")
+                        );
 
-                            func = new Funcionario(
-                                    resultSet.getLong("usu_id"),
-                                    pessoaAux,
-                                    resultSet.getInt("func_matricula"),
-                                    resultSet.getString("func_login"),
-                                    resultSet.getString("func_senha")
-                            );
+                        func = new Funcionario(
+                                resultSet.getLong("usu_id"),
+                                pessoaAux,
+                                resultSet.getInt("func_matricula"),
+                                resultSet.getString("func_login"),
+                                resultSet.getString("func_senha")
+                        );
 
-                            listaFunc.add(func);
+                        listaFunc.add(func);
 
-                        }
                     }
-
                 }
 
+            }
 
 
         } catch (Exception e) {
@@ -182,45 +181,6 @@ public class FuncionarioService implements IDAL<Funcionario> {
         }
 
         return listaFunc;
-=======
-import org.springframework.http.ResponseEntity;
-import sosanimais.com.example.app.model.db.IDAO;
-import sosanimais.com.example.app.model.entity.Funcionario;
-
-import java.util.List;
-
-public class FuncionarioService implements IDAO{
-
-
-    @Override
-    public boolean save(Object entidade) {
-        //metodo
-        return false;
     }
 
-    @Override
-    public boolean update(Object entidade) {
-        return false;
-    }
-
-    @Override
-    public boolean delete(Object entidade) {
-        return false;
-    }
-
-    @Override
-    public List<Object> getAll() {
-        return List.of();
-    }
-
-    @Override
-    public boolean get(int id) {
-        return false;
-    }
-
-    @Override
-    public List get(String filtro) {
-        return List.of();
->>>>>>> c79675591135cd43030da201dac6a938754b568b
-    }
 }

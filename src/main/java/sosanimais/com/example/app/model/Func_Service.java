@@ -2,13 +2,13 @@ package sosanimais.com.example.app.model;
 
 import java.util.Date;
 
-public class Executa {
+public class Func_Service {
 
     private int idServ;
     private int idFunc;
     private Date dataExecucao;
 
-    public Executa(int idServ, int idFunc, Date dataExecucao) {
+    public Func_Service(int idServ, int idFunc, Date dataExecucao) {
         this.idServ = idServ;
         this.idFunc = idFunc;
         this.dataExecucao = dataExecucao;

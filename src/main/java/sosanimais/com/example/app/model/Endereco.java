@@ -13,7 +13,6 @@ public class Endereco {
         this.complemento=complemento;
     }
 
-<<<<<<< HEAD
     public Endereco(){
 
     }
@@ -49,7 +48,5 @@ public class Endereco {
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
-=======
-    
->>>>>>> c79675591135cd43030da201dac6a938754b568b
+
 }

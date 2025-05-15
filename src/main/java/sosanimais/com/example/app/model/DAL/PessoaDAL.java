@@ -1,4 +1,4 @@
-package sosanimais.com.example.app.controller.services;
+package sosanimais.com.example.app.model.DAL;
 
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PessoaService implements IDAL<Pessoa> {
+public class PessoaDAL implements IDAL<Pessoa> {
 
 
     @Override
@@ -81,14 +81,8 @@ public class PessoaService implements IDAL<Pessoa> {
         try{
             if(resultSet.next()){
 
-
-//                pessoaInfo = new PessoaInformacao(
-//                        resultSet.getString("pess_nome"),
-//                        resultSet.getString("pess_cpf"),
-//                        resultSet.getString("pesse_telefone"),
-//                        resultSet.getString("pess_email"));
-                pessoa =new Pessoa(
-                        resultSet.getLong("pess_id"),getPessoaInfo(resultSet)
+                pessoa =new Pessoa(resultSet.getLong("pess_id"),
+                        getPessoaInfo(resultSet)
                 );
             }
 
@@ -117,16 +111,9 @@ public class PessoaService implements IDAL<Pessoa> {
             ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
             while (resultSet.next()) {
 
-
-//                pessoaInfo = new PessoaInformacao(
-//                        resultSet.getString("pess_nome"),
-//                        resultSet.getString("pess_cpf"),
-//                        resultSet.getString("pesse_telefone"),
-//                        resultSet.getString("pess_email"));
-
-
                 Pessoa pessoa = new Pessoa(
-                        resultSet.getLong("pess_id"),getPessoaInfo(resultSet));
+                        resultSet.getLong("pess_id"),
+                        getPessoaInfo(resultSet));
                 lista.add(pessoa);
             }
         }
