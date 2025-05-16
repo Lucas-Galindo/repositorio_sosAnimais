@@ -12,25 +12,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(("/apis/animal"))
 public class AnimalController {
-    @Autowired
-    AnimalService animalService;
+
+    private AnimalService animalService;
+    public AnimalController(AnimalService animalService) {
+        this.animalService = animalService;
+    }
 
 
     @GetMapping
-    public ResponseEntity<Object>getAllAnimals(){
+    public ResponseEntity<Object>getAllAnimals(){//ok
         List<Animal> animalList=new ArrayList<>();
         animalList=animalService.buscarTodos();
         if(!animalList.isEmpty()){
             return ResponseEntity.ok(animalList);
         }
         else{
-            return ResponseEntity.badRequest().body(new Erro("Erro ao buscar os animals"));
+            return ResponseEntity.badRequest().body(new Erro("Erro ao buscar os animais"));
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getAnimalById(@PathVariable int id){
+    public ResponseEntity<Object> getAnimalById(@PathVariable int id){//ok
         Animal aux=animalService.buscarPorId(id);
         if(aux!=null)
             return ResponseEntity.ok(aux);
@@ -38,7 +42,7 @@ public class AnimalController {
             return ResponseEntity.badRequest().body(new Erro("Erro ao buscar o animal de id: "+id));
     }
     @PostMapping
-    public ResponseEntity<Object> addAnimal(@RequestBody Animal animal){
+    public ResponseEntity<Object> addAnimal(@RequestBody Animal animal){//ok
         Animal aux=animalService.salvarAnimal(animal);
         if(aux!=null)
             return ResponseEntity.ok(aux);
@@ -46,7 +50,7 @@ public class AnimalController {
             return ResponseEntity.badRequest().body(new Erro("Erro ao salvar o animal"));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}")//ok
     public ResponseEntity<Object> updateAnimal(@PathVariable Long id, @RequestBody Animal animal){
         animal.setId(id);
         Animal aux=animalService.atualizarAnimal(animal);

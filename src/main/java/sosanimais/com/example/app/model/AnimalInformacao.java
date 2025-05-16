@@ -5,17 +5,17 @@ public class AnimalInformacao {
     private String raca;
     private String nome;
     private String descricao;
-    private String disponibilidade;
     private int idade;
     private char status;
+    private char statusVida;
 
-    public AnimalInformacao(String raca, String nome, String descricao, String disponibilidade, int idade, char status) {
+    public AnimalInformacao(String raca, String nome, String descricao, int idade, char status, char statusVida) {
         this.raca = raca;
         this.nome = nome;
         this.descricao = descricao;
-        this.disponibilidade = disponibilidade;
         this.idade = idade;
         this.status = status;
+        this.statusVida=statusVida;
     }
 
     public String getRaca() {
@@ -42,12 +42,11 @@ public class AnimalInformacao {
         this.descricao = descricao;
     }
 
-    public String getDisponibilidade() {
-        return disponibilidade;
+    public char getStatusVida() {
+        return statusVida;
     }
-
-    public void setDisponibilidade(String disponibilidade) {
-        this.disponibilidade = disponibilidade;
+    public void setStatusVida(char statusVida) {
+        this.statusVida = statusVida;
     }
 
     public int getIdade() {
