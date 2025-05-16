@@ -17,7 +17,7 @@ import java.util.List;
 public class FuncionarioDAL implements IDAL<Funcionario> {
 
 
-    private PessoaService pessoaService;
+    private PessoaService pessoaService = new PessoaService();
 
     @Override
     public boolean save(Funcionario entidade){

@@ -1,5 +1,6 @@
 package sosanimais.com.example.app.controller.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.model.DAL.FuncionarioDAL;
 import sosanimais.com.example.app.model.DAL.PessoaDAL;
@@ -12,9 +13,13 @@ import java.util.List;
 
 @Service
 public class PessoaService {
-    PessoaDAL repositorio = new PessoaDAL();
 
 
+    private PessoaDAL repositorio = new PessoaDAL();
+
+    public PessoaService(){
+
+    }
     public boolean cadastro(Pessoa entidade){
         return repositorio.save(entidade);
     }
