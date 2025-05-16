@@ -73,7 +73,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
 
     @Override
-    public Pessoa get(int id) {
+    public Pessoa get(Long id) {
         Pessoa pessoa=null;
         PessoaInformacao pessoaInfo = null;
         String sql = "SELECT * FROM pessoa WHERE pess_id="+id;

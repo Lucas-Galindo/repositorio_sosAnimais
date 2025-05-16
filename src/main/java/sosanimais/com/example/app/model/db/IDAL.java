@@ -11,7 +11,7 @@ public interface IDAL<T>{
      boolean save(T entidade);
      public boolean update(T entidade);
      public boolean delete(T entidade);
-     public T get(int id);
+     public T get(Long id);
      public List<T> get(String filtro);
 
 }
