@@ -90,7 +90,7 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         resultSet = SingletonDB.getConexao().consultar(sql);
         try{
             if(resultSet.next()){
-                pessoa = pessoaService.getById(resultSet.getLong("usu_id"));
+                pessoa = pessoaService.getId(resultSet.getLong("usu_id"));
 
                 pessoaAux = new PessoaInformacao(
                         resultSet.getString("pess_nome"),
@@ -174,7 +174,7 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         try{
             resultSet = SingletonDB.getConexao().consultar(sql);
             while(resultSet.next()){
-                infoPessoa = pessoaService.getById(resultSet.getLong("usu_id")).getPessoa();
+                infoPessoa = pessoaService.getId(resultSet.getLong("usu_id")).getPessoa();
                 func = new Funcionario(
                         resultSet.getLong("usu_id"),
                         infoPessoa,

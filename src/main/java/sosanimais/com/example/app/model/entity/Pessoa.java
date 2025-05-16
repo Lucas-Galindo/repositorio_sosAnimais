@@ -7,6 +7,11 @@ public class Pessoa {
     private Long id;
     private PessoaInformacao pessoa;
 
+    public Pessoa(Long id, PessoaInformacao pessoa) {
+        this.id = id;
+        this.pessoa = pessoa;
+    }
+    public Pessoa(){}
     public PessoaInformacao getPessoa() {
         return pessoa;
     }
@@ -15,11 +20,8 @@ public class Pessoa {
         this.pessoa = pessoa;
     }
 
-    public Pessoa(Long id, PessoaInformacao pessoa) {
-        this.id = id;
-        this.pessoa = pessoa;
-    }
-    public Pessoa(){}
+
+
 
     public Long getId() {
         return id;

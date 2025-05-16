@@ -1,6 +1,5 @@
 package sosanimais.com.example.app.model.DAL;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
@@ -14,7 +13,7 @@ import java.util.List;
 public class PessoaDAL implements IDAL<Pessoa> {
 
 
-    private PessoaService pessoaService;
+    private PessoaService pessoaService = new PessoaService();
 
     @Override
     public boolean save(Pessoa entidade) {
@@ -93,8 +92,8 @@ public class PessoaDAL implements IDAL<Pessoa> {
         List<Pessoa> lista = new ArrayList<>();
         PessoaInformacao pessoaInfo =null;
 
-        pessoaService = null;
-        String sql="SELECT * FROM Pessoa";
+
+        String sql="SELECT * FROM pessoa";
         if(!filtro.isEmpty())
             sql+=" WHERE "+filtro;
         try {
