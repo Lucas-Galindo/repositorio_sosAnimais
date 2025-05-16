@@ -3,6 +3,7 @@ package sosanimais.com.example.app.model.DAL;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
@@ -14,11 +15,14 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class FuncionarioDAL implements IDAL<Funcionario> {
 
 
-    private PessoaService pessoaService = new PessoaService();
-
+    private PessoaService pessoaService;
+    public FuncionarioDAL(PessoaService pessoaService){
+        this.pessoaService = pessoaService;
+   }
     @Override
     public boolean save(Funcionario entidade){
         String sql = "";
@@ -74,23 +78,21 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
     public Funcionario get(Long mat) {
 
         Funcionario func=null;
-        String sql = "", sql2 = "";
-        ResultSet resultSet = null;
-
-
-        Pessoa pessoa = null;
+        String sql = "";
+        ResultSet resultSet;
+//        Pessoa pessoa = null;
         PessoaInformacao pessoaAux;
 
-        pessoaService = null;
-        int matAux = 0;
-        String loginAux= "";
-        String senhaAux="";
+
+//        int matAux = 0;
+//        String loginAux= "";
+//        String senhaAux="";
 
         sql = "SELECT * FROM funcionario WHERE func_matricula="+mat;
         resultSet = SingletonDB.getConexao().consultar(sql);
         try{
             if(resultSet.next()){
-                pessoa = pessoaService.getId(resultSet.getLong("usu_id"));
+                //pessoa = pessoaService.getId(resultSet.getLong("usu_id"));
 
                 pessoaAux = new PessoaInformacao(
                         resultSet.getString("pess_nome"),
@@ -114,47 +116,6 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
             return null;
         }
 
-
-        //sql = "SELECT * FROM funcionario INNER JOIN pessoa ON funcionario.usu_id = pessoa.pess_id";
-//        sql = "SELECT * FROM funcionario WHERE func_matricula = "+ mat;
-//        resultSet =SingletonDB.getConexao().consultar(sql);
-//        try{
-//            if (resultSet.next()) {
-//                matAux = resultSet.getInt("func_matricula");
-//                loginAux = resultSet.getString("func_login");
-//                senhaAux = resultSet.getString("func_senha");
-//            }
-//
-//            sql2 = "SELECT * FROM pessoa WHERE pess_id = "+ resultSet.getLong("pess_id");
-//            resultSet =SingletonDB.getConexao().consultar(sql2);
-//            try{
-//
-//                if (resultSet.next()) {
-//                    PessoaInformacao pessoaAux = new PessoaInformacao();
-//                    pessoaAux.setNome(resultSet.getString("pess_nome"));
-//                    pessoaAux.setCpf(resultSet.getString("pess_cpf"));
-//                    pessoaAux.setEmail(resultSet.getString("pess_email"));
-//                    pessoaAux.setTelefone(resultSet.getString("pess_telefone"));
-//
-//
-//                    func = new Funcionario(
-//                            resultSet.getLong("pess_id"),
-//                            pessoaAux,
-//                            matAux,
-//                            loginAux,
-//                            senhaAux
-//                            );
-//                }
-//
-//            }catch(Exception e){
-//                return null;
-//            }
-//
-//        }catch(Exception e){
-//            return null;
-//        }
-
-
     }
 
     @Override
@@ -165,7 +126,7 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         Funcionario func = null;
         ResultSet aux, resultSet;
 
-        pessoaService = null;
+        //pessoaService = null;
         PessoaInformacao infoPessoa = null;
 
         String sql = "SELECT * FROM funcionario";
@@ -186,53 +147,8 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
             }
 
         }catch(Exception e){
-
+            return null;
         }
-
-
-//        String sqlFunc = "SELECT * FROM funcionario ";
-//        String sqlPess = "SELECT * FROM pessoas";
-//        aux = SingletonDB.getConexao().consultar(sqlPess);
-//        try {
-//
-//            if (!filtro.isEmpty())
-//                sqlFunc += " WHERE " + filtro;
-//
-//            while (aux.next()) {
-//
-//                resultSet = SingletonDB.getConexao().consultar(sqlFunc);
-//                if (resultSet.next()) {
-//
-//                    if (resultSet.getLong("usu_id") == aux.getLong("pess_id")) {
-//
-//                        //int idPess = aux.getLong("pess_id");
-//                        pessoaAux = new PessoaInformacao(
-//                                aux.getString("pess_nome"),
-//                                aux.getString("pess_cpf"),
-//                                aux.getString("pess_telefone"),
-//                                aux.getString("pess_email")
-//                        );
-//
-//                        func = new Funcionario(
-//                                resultSet.getLong("usu_id"),
-//                                pessoaAux,
-//                                resultSet.getInt("func_matricula"),
-//                                resultSet.getString("func_login"),
-//                                resultSet.getString("func_senha")
-//                        );
-//
-//                        listaFunc.add(func);
-//
-//                    }
-//                }
-//
-//            }
-//
-//
-//        } catch (Exception e) {
-//            return null;
-//        }
-//
 
         return listaFunc;
     }

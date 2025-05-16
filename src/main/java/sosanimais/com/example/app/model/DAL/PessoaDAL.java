@@ -1,6 +1,7 @@
 package sosanimais.com.example.app.model.DAL;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
@@ -11,9 +12,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class PessoaDAL implements IDAL<Pessoa> {
 
-    private PessoaService pessoaService = new PessoaService();
 
     @Override
     public boolean save(Pessoa entidade) {
@@ -62,7 +63,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
     @Override
     public Pessoa get(Long id) {
         Pessoa pessoa=null;
-        pessoaService = null;
+
         PessoaInformacao pessoaInfo = null;
         String sql = "SELECT * FROM pessoa WHERE pess_id="+id;
         ResultSet resultSet=SingletonDB.getConexao().consultar(sql);
@@ -70,7 +71,8 @@ public class PessoaDAL implements IDAL<Pessoa> {
             if(resultSet.next()){
 
                 pessoa =new Pessoa(resultSet.getLong("pess_id"),
-                        pessoaService.getPessoaInfo(resultSet)
+                        pessoa.getPessoa().getPessoaInfo(resultSet)
+
                 );
             }
 
@@ -90,7 +92,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
         List<Pessoa> lista = new ArrayList<>();
         PessoaInformacao pessoaInfo =null;
-
+        Pessoa pessoa = null;
 
         String sql="SELECT * FROM pessoa";
         if(!filtro.isEmpty())
@@ -99,9 +101,9 @@ public class PessoaDAL implements IDAL<Pessoa> {
             ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
             while (resultSet.next()) {
 
-                Pessoa pessoa = new Pessoa(
+                 pessoa = new Pessoa(
                         resultSet.getLong("pess_id"),
-                        pessoaService.getPessoaInfo(resultSet));
+                        pessoa.getPessoa().getPessoaInfo(resultSet));
                 lista.add(pessoa);
             }
         }
