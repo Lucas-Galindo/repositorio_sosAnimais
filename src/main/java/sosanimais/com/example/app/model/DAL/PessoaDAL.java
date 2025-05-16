@@ -3,9 +3,11 @@ package sosanimais.com.example.app.model.DAL;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
+import sosanimais.com.example.app.model.entity.Funcionario;
 import sosanimais.com.example.app.model.entity.Pessoa;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,11 @@ public class PessoaDAL implements IDAL<Pessoa> {
         sql=sql.replace("#5",entidade.getPessoa().getEmail());
 
         return SingletonDB.getConexao().manipular(sql);
+    }
+
+    @Override
+    public boolean save(Pessoa pessoa, Funcionario entidade) throws SQLException {
+        return false;
     }
 
     @Override
@@ -95,7 +102,15 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
     }
 
+    @Override
+    public boolean delete(Pessoa pessoa, Funcionario entidade) {
+        return false;
+    }
 
+    @Override
+    public Funcionario get(Pessoa pessoa, int mat) {
+        return null;
+    }
 
 
     @Override

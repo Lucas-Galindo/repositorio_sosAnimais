@@ -19,7 +19,6 @@ public class Funcionario extends Pessoa {
         this(0L,null,0,"","");
     }
 
-
     public int getMatricula() {
         return matricula;
     }

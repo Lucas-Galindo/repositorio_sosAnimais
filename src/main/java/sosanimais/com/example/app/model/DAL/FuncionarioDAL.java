@@ -9,6 +9,7 @@ import sosanimais.com.example.app.model.entity.Funcionario;
 import sosanimais.com.example.app.model.entity.Pessoa;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,11 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
 
 
+    }
+
+    @Override
+    public boolean save(Pessoa pessoa, Funcionario entidade) throws SQLException {
+        return false;
     }
 
     @Override
@@ -127,6 +133,16 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
 
         return func;
+    }
+
+    @Override
+    public boolean delete(Pessoa pessoa, Funcionario entidade) {
+        return false;
+    }
+
+    @Override
+    public Funcionario get(Pessoa pessoa, int mat) {
+        return null;
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class Conexao {
 
-    private Connection connect;
+    private static Connection connect;
     private String erro;
     public Conexao()
     {   erro="";
@@ -29,14 +29,16 @@ public class Conexao {
         { erro="Outro erro: " + ex.toString(); }
         return conectado;
     }
+
     public String getMensagemErro()
     {
         return erro;
     }
 
-    public boolean getEstadoConexao() {
+    public static boolean getEstadoConexao() {
         return (connect!=null);
     }
+
     public boolean manipular(String sql) // inserir, alterar,excluir
     {   boolean executou=false;
         try {
@@ -51,6 +53,7 @@ public class Conexao {
         }
         return executou;
     }
+
     public ResultSet consultar(String sql)
     {   ResultSet rs=null;
         try {
@@ -66,6 +69,7 @@ public class Conexao {
         }
         return rs;
     }
+
     public int getMaxPK(String tabela,String chave)
     {
         String sql="select max("+chave+") from "+tabela;
