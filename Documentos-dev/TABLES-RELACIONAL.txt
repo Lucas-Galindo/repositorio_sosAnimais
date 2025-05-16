@@ -265,7 +265,20 @@ CREATE TABLE Animal_Insumo (
 );
 
 
+CREATE TABLE informacoes (
+    emp_id PRIMARY KEY NOT NULL,
+    emp_nome VARCHAR(255),
+    emp_nomeFantasia VARCHAR(300),
+    emp_descricao TEXT,
+    emp_endereco TEXT,
+    emp_telefone VARCHAR(20),
+    emp_capacidade integer,
+    emp_cnpj VARCHAR(40) unique
+);
 
+-- empresa
+CREATE SEQUENCE empresa_id_seq START 1;
+ALTER TABLE Pessoa ALTER COLUMN emp_id SET DEFAULT nextval(' empresa_id_seq');
 
 ALTER TABLE funcionario
 DROP COLUMN func_nome;
