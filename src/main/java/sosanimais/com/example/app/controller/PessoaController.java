@@ -10,7 +10,8 @@ import sosanimais.com.example.app.model.util.Erro;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/apis/pessoa")
+@CrossOrigin
+@RequestMapping(value=("/apis/pessoa"))
 public class PessoaController {
 
     PessoaService pessoaService = new PessoaService();

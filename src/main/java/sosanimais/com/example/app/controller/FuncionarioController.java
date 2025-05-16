@@ -10,7 +10,8 @@ import sosanimais.com.example.app.model.util.Erro;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/apis/funcionario")
+@CrossOrigin
+@RequestMapping(value=("/apis/funcionario"))
 public class FuncionarioController {
     
     FuncionarioService funcService = new FuncionarioService();
