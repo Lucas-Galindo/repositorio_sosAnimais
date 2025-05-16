@@ -1,5 +1,7 @@
 package sosanimais.com.example.app.model.DAL;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
@@ -11,6 +13,8 @@ import java.util.List;
 
 public class PessoaDAL implements IDAL<Pessoa> {
 
+
+    private PessoaService pessoaService;
 
     @Override
     public boolean save(Pessoa entidade) {
@@ -57,24 +61,10 @@ public class PessoaDAL implements IDAL<Pessoa> {
     }
 
 
-    private PessoaInformacao getPessoaInfo(ResultSet resultSet) {
-        try {
-            return new PessoaInformacao(
-                    resultSet.getString("pess_nome"),
-                    resultSet.getString("pess_cpf"),
-                    resultSet.getString("pess_telefone"),
-                    resultSet.getString("pess_email")
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-
     @Override
     public Pessoa get(Long id) {
         Pessoa pessoa=null;
+        pessoaService = null;
         PessoaInformacao pessoaInfo = null;
         String sql = "SELECT * FROM pessoa WHERE pess_id="+id;
         ResultSet resultSet=SingletonDB.getConexao().consultar(sql);
@@ -82,7 +72,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
             if(resultSet.next()){
 
                 pessoa =new Pessoa(resultSet.getLong("pess_id"),
-                        getPessoaInfo(resultSet)
+                        pessoaService.getPessoaInfo(resultSet)
                 );
             }
 
@@ -97,13 +87,13 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
 
 
-
     @Override
     public List<Pessoa> get(String filtro) {
 
         List<Pessoa> lista = new ArrayList<>();
         PessoaInformacao pessoaInfo =null;
 
+        pessoaService = null;
         String sql="SELECT * FROM Pessoa";
         if(!filtro.isEmpty())
             sql+=" WHERE "+filtro;
@@ -113,7 +103,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
                 Pessoa pessoa = new Pessoa(
                         resultSet.getLong("pess_id"),
-                        getPessoaInfo(resultSet));
+                        pessoaService.getPessoaInfo(resultSet));
                 lista.add(pessoa);
             }
         }

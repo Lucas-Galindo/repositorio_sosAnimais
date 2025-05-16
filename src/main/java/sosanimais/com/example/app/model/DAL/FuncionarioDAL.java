@@ -17,7 +17,7 @@ import java.util.List;
 public class FuncionarioDAL implements IDAL<Funcionario> {
 
 
-     private PessoaService pessoaService;
+    private PessoaService pessoaService;
 
     @Override
     public boolean save(Funcionario entidade){
@@ -165,10 +165,25 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         Funcionario func = null;
         ResultSet aux, resultSet;
 
+        pessoaService = null;
+        PessoaInformacao infoPessoa = null;
+
         String sql = "SELECT * FROM funcionario";
         if(!filtro.isEmpty())
             sql+="WHERE " + filtro;
         try{
+            resultSet = SingletonDB.getConexao().consultar(sql);
+            while(resultSet.next()){
+                infoPessoa = pessoaService.getById(resultSet.getLong("usu_id")).getPessoa();
+                func = new Funcionario(
+                        resultSet.getLong("usu_id"),
+                        infoPessoa,
+                        resultSet.getInt("func_matricula"),
+                        resultSet.getString("func_login"),
+                        resultSet.getString("func_senha")
+                );
+                listaFunc.add(func);
+            }
 
         }catch(Exception e){
 
@@ -218,7 +233,8 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
 //            return null;
 //        }
 //
-//        return listaFunc;
+
+        return listaFunc;
     }
 
 }
