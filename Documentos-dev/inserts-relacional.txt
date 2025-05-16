@@ -1,0 +1,455 @@
+-- 1. INSERTS PARA PESSOA - correto
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (1, 'Maria Silva', '123.456.789-01', '(11) 99999-1111', 'maria.silva@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (2, 'João Santos', '234.567.890-12', '(11) 99999-2222', 'joao.santos@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (3, 'Ana Oliveira', '345.678.901-23', '(11) 99999-3333', 'ana.oliveira@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (4, 'Carlos Pereira', '456.789.012-34', '(11) 99999-4444', 'carlos.pereira@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (5, 'Juliana Costa', '567.890.123-45', '(11) 99999-5555', 'juliana.costa@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (6, 'Roberto Almeida', '678.901.234-56', '(11) 99999-6666', 'roberto.almeida@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (7, 'Patricia Lima', '789.012.345-67', '(11) 99999-7777', 'patricia.lima@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (8, 'Lucas Souza', '890.123.456-78', '(11) 99999-8888', 'lucas.souza@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (9, 'Fernanda Ribeiro', '901.234.567-89', '(11) 99999-9999', 'fernanda.ribeiro@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (10, 'Marcos Andrade', '012.345.678-90', '(11) 99999-0000', 'marcos.andrade@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (11, 'Camila Martins', '123.234.345-12', '(11) 98888-1111', 'camila.martins@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (12, 'Bruno Ferreira', '234.345.456-23', '(11) 98888-2222', 'bruno.ferreira@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (13, 'Débora Castro', '345.456.567-34', '(11) 98888-3333', 'debora.castro@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (14, 'Gabriel Moraes', '456.567.678-45', '(11) 98888-4444', 'gabriel.moraes@email.com');
+
+INSERT INTO Pessoa (Pess_ID, Pess_Nome, Pess_CPF, Pess_Telefone, Pess_Email) 
+VALUES (15, 'Helena Gomes', '567.678.789-56', '(11) 98888-5555', 'helena.gomes@email.com');
+
+-- 2. INSERTS PARA CATEGORIA - correto
+INSERT INTO Categoria (Cat_Id, Cat_Nome, Cat_Descricao) 
+VALUES (1, 'Ração', 'Alimentos para nutrição animal');
+
+INSERT INTO Categoria (Cat_Id, Cat_Nome, Cat_Descricao) 
+VALUES (2, 'Medicamentos', 'Remédios e tratamentos');
+
+INSERT INTO Categoria (Cat_Id, Cat_Nome, Cat_Descricao) 
+VALUES (3, 'Higiene', 'Produtos para limpeza e cuidados');
+
+INSERT INTO Categoria (Cat_Id, Cat_Nome, Cat_Descricao) 
+VALUES (4, 'Acessórios', 'Itens diversos para animais');
+
+INSERT INTO Categoria (Cat_Id, Cat_Nome, Cat_Descricao) 
+VALUES (5, 'Brinquedos', 'Itens para entretenimento animal');
+
+-- 3. INSERTS PARA BAIA - correto
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (1, 5);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (2, 3);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (3, 4);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (4, 2);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (5, 6);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (6, 4);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (7, 3);
+
+INSERT INTO Baia (baia_cod, baia_qtde) 
+VALUES (8, 5);
+
+-- 4. INSERTS PARA ARMAZENAMENTO - correto
+INSERT INTO Armazenamento (Arm_Id, Arm_Tipo, Arm_Quant, Arm_estado) 
+VALUES (1, 'Estoque de Ração', 100, 'A');
+
+INSERT INTO Armazenamento (Arm_Id, Arm_Tipo, Arm_Quant, Arm_estado) 
+VALUES (2, 'Farmácia', 50, 'A');
+
+INSERT INTO Armazenamento (Arm_Id, Arm_Tipo, Arm_Quant, Arm_estado) 
+VALUES (3, 'Produtos de Limpeza', 80, 'A');
+
+INSERT INTO Armazenamento (Arm_Id, Arm_Tipo, Arm_Quant, Arm_estado) 
+VALUES (4, 'Acessórios Diversos', 120, 'A');
+
+INSERT INTO Armazenamento (Arm_Id, Arm_Tipo, Arm_Quant, Arm_estado) 
+VALUES (5, 'Brinquedos e Recreação', 60, 'A');
+
+-- 5. INSERTS PARA PRODUTO - correto
+INSERT INTO Produto (Prod_Id, Prod_Nome, Prod_Descricao, Prod_Preco) 
+VALUES (1, 'Ração Premium Cães', 'Ração de alta qualidade para cães adultos', 89.90);
+
+INSERT INTO Produto (Prod_Id, Prod_Nome, Prod_Descricao, Prod_Preco) 
+VALUES (2, 'Ração Premium Gatos', 'Ração de alta qualidade para gatos adultos', 79.90);
+
+INSERT INTO Produto (Prod_Id, Prod_Nome, Prod_Descricao, Prod_Preco) 
+VALUES (3, 'Shampoo Antipulgas', 'Shampoo para controle de pulgas', 35.50);
+
+INSERT INTO Produto (Prod_Id, Prod_Nome, Prod_Descricao, Prod_Preco) 
+VALUES (4, 'Coleira de Identificação', 'Coleira com placa de identificação', 25.00);
+
+INSERT INTO Produto (Prod_Id, Prod_Nome, Prod_Descricao, Prod_Preco) 
+VALUES (5, 'Brinquedo Interativo', 'Brinquedo para estímulo mental', 45.80);
+
+-- 6. INSERTS PARA SERVICO - correto
+INSERT INTO Servico (serv_cod, serv_nome, serv_desc) 
+VALUES (1, 'Consulta Veterinária', 'Atendimento veterinário padrão');
+
+INSERT INTO Servico (serv_cod, serv_nome, serv_desc) 
+VALUES (2, 'Vacinação', 'Aplicação de vacinas');
+
+INSERT INTO Servico (serv_cod, serv_nome, serv_desc) 
+VALUES (3, 'Banho e Tosa', 'Serviço de higiene e estética');
+
+INSERT INTO Servico (serv_cod, serv_nome, serv_desc) 
+VALUES (4, 'Exames Laboratoriais', 'Realização de exames diagnósticos');
+
+INSERT INTO Servico (serv_cod, serv_nome, serv_desc) 
+VALUES (5, 'Cirurgia', 'Procedimentos cirúrgicos diversos');
+
+-- 7. INSERTS PARA INSUMO - correto
+INSERT INTO Insumo (insu_id, insu_nome, insu_categoria, insu_qtd_estoque, Insu_Descricao, Categoria_Cat_Id) 
+VALUES (1, 'Ração Filhotes', 'Ração', 50, 'Ração especial para filhotes', 1);
+
+INSERT INTO Insumo (insu_id, insu_nome, insu_categoria, insu_qtd_estoque, Insu_Descricao, Categoria_Cat_Id) 
+VALUES (2, 'Antibiótico', 'Medicamentos', 30, 'Antibiótico para tratamento de infecções', 2);
+
+INSERT INTO Insumo (insu_id, insu_nome, insu_categoria, insu_qtd_estoque, Insu_Descricao, Categoria_Cat_Id) 
+VALUES (3, 'Desinfetante', 'Limpeza', 40, 'Desinfetante para ambientes com animais', 3);
+
+INSERT INTO Insumo (insu_id, insu_nome, insu_categoria, insu_qtd_estoque, Insu_Descricao, Categoria_Cat_Id) 
+VALUES (4, 'Coleira', 'Acessórios', 25, 'Coleira para cães e gatos', 4);
+
+INSERT INTO Insumo (insu_id, insu_nome, insu_categoria, insu_qtd_estoque, Insu_Descricao, Categoria_Cat_Id) 
+VALUES (5, 'Bola de Borracha', 'Brinquedos', 15, 'Bola resistente para cães', 5);
+
+-- 8. INSERTS PARA DOADOR - correto
+INSERT INTO Doador (Usu_id, Doador_Matricula) 
+VALUES (1, 10001);
+
+INSERT INTO Doador (Usu_id, Doador_Matricula) 
+VALUES (2, 10002);
+
+INSERT INTO Doador (Usu_id, Doador_Matricula) 
+VALUES (3, 10003);
+
+INSERT INTO Doador (Usu_id, Doador_Matricula) 
+VALUES (4, 10004);
+
+INSERT INTO Doador (Usu_id, Doador_Matricula) 
+VALUES (5, 10005);
+
+-- 9. INSERTS PARA FUNCIONARIO - correto
+INSERT INTO funcionario (Usu_id, Func_Login, func_senha, Func_Matricula) 
+VALUES (6, 'mariamed', '12345', 20001);
+
+INSERT INTO funcionario (Usu_id, Func_Login, func_senha, Func_Matricula) 
+VALUES (7, 'joaoadm', '2222000', 20002);
+
+INSERT INTO funcionario (Usu_id, Func_Login, func_senha, Func_Matricula) 
+VALUES (8, 'anavet', '454545', 20003);
+
+INSERT INTO funcionario (Usu_id, Func_Login, func_senha, Func_Matricula) 
+VALUES (9, 'carlostreinador', '909090', 20004);
+
+INSERT INTO funcionario (Usu_id, Func_Login, func_senha, Func_Matricula) 
+VALUES (10, 'julianacuidadora', '101010', 20005);
+
+-- 10. INSERTS PARA COMPRA - correto
+INSERT INTO Compra (comp_id, comp_data, comp_valorFinal, Func_Matricula) 
+VALUES (1, '2025-05-01', 350.50, 20002);
+
+INSERT INTO Compra (comp_id, comp_data, comp_valorFinal, Func_Matricula) 
+VALUES (2, '2025-05-02', 420.00, 20002);
+
+INSERT INTO Compra (comp_id, comp_data, comp_valorFinal, Func_Matricula) 
+VALUES (3, '2025-05-03', 180.75, 20001);
+
+INSERT INTO Compra (comp_id, comp_data, comp_valorFinal, Func_Matricula) 
+VALUES (4, '2025-05-04', 560.20, 20003);
+
+INSERT INTO Compra (comp_id, comp_data, comp_valorFinal, Func_Matricula) 
+VALUES (5, '2025-05-05', 290.40, 20005);
+
+-- 11. INSERTS PARA MEDICA - correto
+INSERT INTO Medica (baia_cod) 
+VALUES (1);
+
+INSERT INTO Medica (baia_cod) 
+VALUES (2);
+
+INSERT INTO Medica (baia_cod) 
+VALUES (3);
+
+INSERT INTO Medica (baia_cod) 
+VALUES (4);
+
+-- 12. INSERTS PARA DEFINITIVA - correto
+INSERT INTO definitiva (baia_cod) 
+VALUES (5);
+
+INSERT INTO definitiva (baia_cod) 
+VALUES (6);
+
+INSERT INTO definitiva (baia_cod) 
+VALUES (7);
+
+INSERT INTO definitiva (baia_cod) 
+VALUES (8);
+
+-- 13. INSERTS PARA DOACAO_INSUMOS - correto
+INSERT INTO Doacao_Insumos (doa_id, doa_data, Usuario_Usu_ID) 
+VALUES (1, '2025-05-01', 1);
+
+INSERT INTO Doacao_Insumos (doa_id, doa_data, Usuario_Usu_ID) 
+VALUES (2, '2025-05-02', 2);
+
+INSERT INTO Doacao_Insumos (doa_id, doa_data, Usuario_Usu_ID) 
+VALUES (3, '2025-05-03', 3);
+
+INSERT INTO Doacao_Insumos (doa_id, doa_data, Usuario_Usu_ID) 
+VALUES (4, '2025-05-04', 4);
+
+INSERT INTO Doacao_Insumos (doa_id, doa_data, Usuario_Usu_ID) 
+VALUES (5, '2025-05-05', 5);
+
+-- 14. INSERTS PARA ADOTANTE - correto
+INSERT INTO adotante (Usu_id, Adotante_Matricula) 
+VALUES (11, 30001);
+
+INSERT INTO adotante (Usu_id, Adotante_Matricula) 
+VALUES (12, 30002);
+
+INSERT INTO adotante (Usu_id, Adotante_Matricula) 
+VALUES (13, 30003);
+
+INSERT INTO adotante (Usu_id, Adotante_Matricula) 
+VALUES (14, 30004);
+
+INSERT INTO adotante (Usu_id, Adotante_Matricula) 
+VALUES (15, 30005);
+
+-- 15. INSERTS PARA ACOLHIMENTO - correto
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
+VALUES (1, '2025-04-15', 20001, 30001, 1);
+
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
+VALUES (2, '2025-04-16', 20003, 30002, 2);
+
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
+VALUES (3, '2025-04-17', 20001, 30003, 3);
+
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
+VALUES (4, '2025-04-18', 20005, 30004, 4);
+
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
+VALUES (5, '2025-04-19', 20003, 30005, 5);
+
+-- 16. INSERTS PARA ANIMAL - correto
+INSERT INTO Animal (ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) 
+VALUES (1, 'Thor', 'Labrador', 'Cachorro dócil e brincalhão', 'A', 3, 'V', 1, 1);
+
+INSERT INTO Animal (ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) 
+VALUES (2, 'Luna', 'Siamês', 'Gata independente mas carinhosa', 'A', 2, 'V', 2, 5);
+
+INSERT INTO Animal (ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) 
+VALUES (3, 'Max', 'Pastor Alemão', 'Cachorro obediente e protetor', 'D', 5, 'V', 3, 2);
+
+INSERT INTO Animal (ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) 
+VALUES (4, 'Nina', 'Persa', 'Gata de pelos longos e temperamento calmo', 'A', 4, 'V', 4, 6);
+
+INSERT INTO Animal (ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) 
+VALUES (5, 'Rex', 'Rottweiler', 'Cachorro forte e leal', 'D', 6, 'V', 5, 3);
+
+-- 17. INSERTS PARA ADOCAO_ANIMAL - correto
+INSERT INTO Adocao_Animal (adota_cod, funcionario_Func_Login, Animal_ani_cod, adota_data, Func_Matricula) 
+VALUES (1, 'mariamed', 1, '2025-05-10', 20001);
+
+INSERT INTO Adocao_Animal (adota_cod, funcionario_Func_Login, Animal_ani_cod, adota_data, Func_Matricula) 
+VALUES (2, 'anavet', 2, '2025-05-11', 20003);
+
+INSERT INTO Adocao_Animal (adota_cod, funcionario_Func_Login, Animal_ani_cod, adota_data, Func_Matricula) 
+VALUES (3, 'joaoadm', 3, '2025-05-12', 20002);
+
+INSERT INTO Adocao_Animal (adota_cod, funcionario_Func_Login, Animal_ani_cod, adota_data, Func_Matricula) 
+VALUES (4, 'carlostreinador', 4, '2025-05-13', 20004);
+
+INSERT INTO Adocao_Animal (adota_cod, funcionario_Func_Login, Animal_ani_cod, adota_data, Func_Matricula) 
+VALUES (5, 'julianacuidadora', 5, '2025-05-14', 20005);
+
+-- Atualizar adotante com adoção - correto
+UPDATE adotante SET Adocao_Animal_adota_cod = 1 WHERE Adotante_Matricula = 30001;
+UPDATE adotante SET Adocao_Animal_adota_cod = 2 WHERE Adotante_Matricula = 30002;
+UPDATE adotante SET Adocao_Animal_adota_cod = 3 WHERE Adotante_Matricula = 30003;
+UPDATE adotante SET Adocao_Animal_adota_cod = 4 WHERE Adotante_Matricula = 30004;
+UPDATE adotante SET Adocao_Animal_adota_cod = 5 WHERE Adotante_Matricula = 30005;
+
+-- 18. INSERTS PARA TRANSFERIR_BAIA - correto
+INSERT INTO Transferir_Baia (tb_cod, tb_date, funcionario_Func_Login, Adocao_Animal_adota_cod, Func_Matricula) 
+VALUES (1, '2025-05-08', 'mariamed', 1, 20001);
+
+INSERT INTO Transferir_Baia (tb_cod, tb_date, funcionario_Func_Login, Adocao_Animal_adota_cod, Func_Matricula) 
+VALUES (2, '2025-05-09', 'anavet', 2, 20003);
+
+INSERT INTO Transferir_Baia (tb_cod, tb_date, funcionario_Func_Login, Adocao_Animal_adota_cod, Func_Matricula) 
+VALUES (3, '2025-05-10', 'joaoadm', 3, 20002);
+
+INSERT INTO Transferir_Baia (tb_cod, tb_date, funcionario_Func_Login, Adocao_Animal_adota_cod, Func_Matricula) 
+VALUES (4, '2025-05-11', 'julianacuidadora', 4, 20005);
+
+INSERT INTO Transferir_Baia (tb_cod, tb_date, funcionario_Func_Login, Adocao_Animal_adota_cod, Func_Matricula) 
+VALUES (5, '2025-05-12', 'carlostreinador', 5, 20004);
+
+-- 19. INSERTS PARA TRANSFERIRMEDICA - correto
+INSERT INTO TransferirMedica (Transferir_Baia_tb_cod, Medica_baia_cod) 
+VALUES (1, 1);
+
+INSERT INTO TransferirMedica (Transferir_Baia_tb_cod, Medica_baia_cod) 
+VALUES (2, 2);
+
+INSERT INTO TransferirMedica (Transferir_Baia_tb_cod, Medica_baia_cod) 
+VALUES (3, 3);
+
+INSERT INTO TransferirMedica (Transferir_Baia_tb_cod, Medica_baia_cod) 
+VALUES (4, 4);
+
+INSERT INTO TransferirMedica (Transferir_Baia_tb_cod, Medica_baia_cod) 
+VALUES (5, 1);
+
+-- 20. INSERTS PARA TRANSFERIRDEFINITIVA - correto
+INSERT INTO tranferirDefinitiva (Transferir_Baia_tb_cod, definitiva_baia_cod) 
+VALUES (1, 5);
+
+INSERT INTO tranferirDefinitiva (Transferir_Baia_tb_cod, definitiva_baia_cod) 
+VALUES (2, 6);
+
+INSERT INTO tranferirDefinitiva (Transferir_Baia_tb_cod, definitiva_baia_cod) 
+VALUES (3, 7);
+
+INSERT INTO tranferirDefinitiva (Transferir_Baia_tb_cod, definitiva_baia_cod) 
+VALUES (4, 8);
+
+INSERT INTO tranferirDefinitiva (Transferir_Baia_tb_cod, definitiva_baia_cod) 
+VALUES (5, 5);
+
+-- 21. INSERTS PARA EXECUTA - correto
+INSERT INTO executa (exe_id, funcionario_Usu_mat, Servico_serv_cod) 
+VALUES (1, 20001, 1);
+
+INSERT INTO executa (exe_id, funcionario_Usu_mat, Servico_serv_cod) 
+VALUES (2, 20001, 2);
+
+INSERT INTO executa (exe_id, funcionario_Usu_mat, Servico_serv_cod) 
+VALUES (3, 20003, 1);
+
+INSERT INTO executa (exe_id, funcionario_Usu_mat, Servico_serv_cod) 
+VALUES (4, 20003, 5);
+
+INSERT INTO executa (exe_id, funcionario_Usu_mat, Servico_serv_cod) 
+VALUES (5, 20004, 3);
+
+-- 22. INSERTS PARA ITENS_COMPRAS_PRODUTO - correto
+INSERT INTO Itens_Compras_Produto (Produto_Prod_Id, Compra_comp_id, Qtde, ValorParcial) 
+VALUES (1, 1, 2, 179.80);
+
+INSERT INTO Itens_Compras_Produto (Produto_Prod_Id, Compra_comp_id, Qtde, ValorParcial) 
+VALUES (2, 1, 1, 79.90);
+
+INSERT INTO Itens_Compras_Produto (Produto_Prod_Id, Compra_comp_id, Qtde, ValorParcial) 
+VALUES (3, 2, 3, 106.50);
+
+INSERT INTO Itens_Compras_Produto (Produto_Prod_Id, Compra_comp_id, Qtde, ValorParcial) 
+VALUES (4, 3, 5, 125.00);
+
+INSERT INTO Itens_Compras_Produto (Produto_Prod_Id, Compra_comp_id, Qtde, ValorParcial) 
+VALUES (5, 4, 3, 137.40);
+
+-- 23. INSERTS PARA ITENS_COMPRAS_INSUMO - correto
+INSERT INTO Itens_Compras_Insumo (Compra_comp_id, Insumo_insu_id, qtde, valorF) 
+VALUES (1, 1, 3, 90.80);
+
+INSERT INTO Itens_Compras_Insumo (Compra_comp_id, Insumo_insu_id, qtde, valorF) 
+VALUES (2, 2, 5, 313.50);
+
+INSERT INTO Itens_Compras_Insumo (Compra_comp_id, Insumo_insu_id, qtde, valorF) 
+VALUES (3, 3, 2, 55.75);
+
+INSERT INTO Itens_Compras_Insumo (Compra_comp_id, Insumo_insu_id, qtde, valorF) 
+VALUES (4, 4, 10, 422.80);
+
+INSERT INTO Itens_Compras_Insumo (Compra_comp_id, Insumo_insu_id, qtde, valorF) 
+VALUES (5, 5, 8, 290.40);
+
+-- 24. INSERTS PARA ITENS_MOVIMENTADOS_DOACAO - correto
+INSERT INTO Itens_Movimentados_Doacao (Doacao_Insumos_doa_id, Insumo_insu_id, quantidade, data_validade) 
+VALUES (1, 1, 10, '2026-05-01');
+
+INSERT INTO Itens_Movimentados_Doacao (Doacao_Insumos_doa_id, Insumo_insu_id, quantidade, data_validade) 
+VALUES (2, 2, 5, '2026-08-15');
+
+INSERT INTO Itens_Movimentados_Doacao (Doacao_Insumos_doa_id, Insumo_insu_id, quantidade, data_validade) 
+VALUES (3, 3, 8, '2027-02-20');
+
+INSERT INTO Itens_Movimentados_Doacao (Doacao_Insumos_doa_id, Insumo_insu_id, quantidade, data_validade) 
+VALUES (4, 4, 12, '2027-06-10');
+
+INSERT INTO Itens_Movimentados_Doacao (Doacao_Insumos_doa_id, Insumo_insu_id, quantidade, data_validade) 
+VALUES (5, 5, 6, '2026-12-31');
+
+-- 25. INSERTS PARA ITENS_MOVIMENTADOS - correto
+INSERT INTO Itens_Movimentados (IM_ID, Armazenamento_Arm_Cod, funcionario_Usu_mat, Data_Entrada, Data_Saida, Compra_comp_id, Doacao_Insumos_doa_id) 
+VALUES (1, 1, 20002, '2025-05-01', NULL, 1, NULL);
+
+INSERT INTO Itens_Movimentados (IM_ID, Armazenamento_Arm_Cod, funcionario_Usu_mat, Data_Entrada, Data_Saida, Compra_comp_id, Doacao_Insumos_doa_id) 
+VALUES (2, 2, 20003, '2025-05-02', NULL, 2, NULL);
+
+INSERT INTO Itens_Movimentados (IM_ID, Armazenamento_Arm_Cod, funcionario_Usu_mat, Data_Entrada, Data_Saida, Compra_comp_id, Doacao_Insumos_doa_id) 
+VALUES (3, 3, 20001, '2025-05-03', NULL, 3, NULL);
+
+INSERT INTO Itens_Movimentados (IM_ID, Armazenamento_Arm_Cod, funcionario_Usu_mat, Data_Entrada, Data_Saida, Compra_comp_id, Doacao_Insumos_doa_id) 
+VALUES (4, 4, 20005, '2025-05-04', NULL, NULL, 4);
+
+INSERT INTO Itens_Movimentados (IM_ID, Armazenamento_Arm_Cod, funcionario_Usu_mat, Data_Entrada, Data_Saida, Compra_comp_id, Doacao_Insumos_doa_id) 
+VALUES (5, 5, 20004, '2025-05-05', NULL, NULL, 5);
+
+-- 26. INSERTS PARA ANIMAL_INSUMO - correto
+INSERT INTO Animal_Insumo (AI_ID, Animal_ani_cod, Insumo_insu_id, AI_DataExecucao) 
+VALUES (1, 1, 1, '2025-05-01');
+
+INSERT INTO Animal_Insumo (AI_ID, Animal_ani_cod, Insumo_insu_id, AI_DataExecucao) 
+VALUES (2, 2, 2, '2025-05-02');
+
+INSERT INTO Animal_Insumo (AI_ID, Animal_ani_cod, Insumo_insu_id, AI_DataExecucao) 
+VALUES (3, 3, 3, '2025-05-03');
+
+INSERT INTO Animal_Insumo (AI_ID, Animal_ani_cod, Insumo_insu_id, AI_DataExecucao) 
+VALUES (4, 4, 4, '2025-05-04');
+
+INSERT INTO Animal_Insumo (AI_ID, Animal_ani_cod, Insumo_insu_id, AI_DataExecucao) 
+VALUES (5, 5, 5, '2025-05-05');
