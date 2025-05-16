@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Cadastro de Usuário</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos existentes - incorporando do arquivo fornecido */
+        :root {
+          /* Cores primárias */
+          --color-orange-burnt: #d37a47; /* Laranja queimado (fundo do logo) */
+          --color-brown-dark: #4a2d21;   /* Marrom escuro (silhueta do gato e texto "S.O.S.") */
+          --color-beige-light: #f2e6db;  /* Bege claro (fundo geral) */
+          
+          /* Cores secundárias */
+          --color-orange-light: #e59a62; /* Laranja claro (contorno do cão) */
+          --color-gray-dark: #4d4d4d;    /* Cinza escuro (texto "Amigos de Animais") */
+          
+          /* Variações para elementos de interface (opcionais) */
+          --color-orange-burnt-hover: #c06b3a; /* Versão mais escura para hover */
+          --color-orange-burnt-active: #b05d2c; /* Versão ainda mais escura para active */
+          
+          /* Cores de texto */
+          --text-dark: var(--color-brown-dark);
+          --text-light: #ffffff;
+          --text-muted: var(--color-gray-dark);
+          
+          /* Cores de fundo */
+          --bg-primary: var(--color-beige-light);
+          --bg-secondary: var(--color-orange-burnt);
+          --bg-accent: var(--color-orange-light);
+          
+          /* Cores de borda */
+          --border-primary: var(--color-orange-burnt);
+          --border-secondary: var(--color-orange-light);
+          
+          /* Cores de elementos interativos */
+          --button-primary: var(--color-orange-burnt);
+          --button-primary-hover: var(--color-orange-burnt-hover);
+          --button-secondary: var(--color-brown-dark);
+          --button-text: var(--color-beige-light);
+          
+          /* Sombras */
+          --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+          --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+          --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+        }
+
+        header {
+          display: flex;
+          background-color: var(--color-orange-burnt-active);
+          padding: 1rem 4rem;
+          align-items: center;
+          justify-content: space-between;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          height: 100px;
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 1000;
+        }
+
+        body {
+          background-color: var(--bg-primary);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .logo-container {
+          display: flex;
+          align-items: center;
+        }
+
+        .paw-logo {
+          width: 40px;
+          height: 40px;
+          margin-right: 15px;
+          filter: brightness(0) invert(1);
+        }
+
+        .title {
+          color: white;
+          font-size: 1.8rem;
+          font-weight: bold;
+        }
+
+        .header-icons {
+          display: flex;
+          align-items: center;
+        }
+
+        .notification-icon, .profile-icon {
+          margin-left: 20px;
+          cursor: pointer;
+          color: white;
+        }
+
+        .profile-icon {
+          background-color: #e8e8e8;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--color-brown-dark);
+        }
+
+        .main-container {
+          display: flex;
+          margin-top: 100px; /* Altura do header */
+          flex: 1;
+        }
+
+        .sidebar {
+          width: 280px;
+          height: calc(100vh - 100px); /* Altura da viewport menos a altura do header */
+          background-color: var(--color-orange-burnt);
+          color: white;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+          overflow-y: auto;
+          position: fixed;
+          top: 100px; /* Posiciona abaixo do header */
+        }
+
+        .menu-item {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          padding: 1rem 1.5rem;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1rem;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+          display: flex;
+          align-items: center;
+        }
+
+        .menu-icon {
+          margin-right: 10px;
+        }
+
+        .dropdown-icon {
+          transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+          transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease-out;
+          background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+          max-height: 500px;
+          transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem 0.75rem 3rem;
+          color: White;
+          font-weight: bold;
+          text-decoration: none;
+          transition: background-color 0.3s;
+          font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+          flex: 1;
+          padding: 2rem;
+          margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+          color: var(--text-dark);
+          margin-bottom: 1.5rem;
+          font-size: 1.8rem;
+          display: flex;
+          align-items: center;
+        }
+
+        .page-title i {
+          margin-right: 0.5rem;
+          color: var(--color-orange-burnt);
+        }
+
+        footer {
+          background-color: var(--color-orange-burnt-active);
+          color: white;
+          padding: 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+          margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .footer-logo {
+          display: flex;
+          align-items: center;
+        }
+
+        .footer-brand {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .footer-links {
+          display: flex;
+          gap: 20px;
+        }
+
+        .footer-link {
+          color: white;
+          text-decoration: none;
+          transition: opacity 0.3s;
+        }
+
+        .footer-link:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
+
+        .footer-copyright {
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+
+        .sidebar-toggle {
+          display: none;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+
+        /* Estilos específicos para a página de cadastro de usuário */
+        .form-container {
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: var(--shadow-small);
+          margin-bottom: 2rem;
+          overflow: hidden;
+        }
+
+        .form-header {
+          background-color: var(--color-orange-light);
+          color: white;
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .form-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .form-body {
+          padding: 1.5rem;
+        }
+
+        .form-section {
+          margin-bottom: 2rem;
+        }
+
+        .section-title {
+          color: var(--text-dark);
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-dark);
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+          content: '*';
+          color: red;
+          margin-left: 0.25rem;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: var(--color-orange-burnt);
+          box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control.invalid {
+          border-color: red;
+        }
+
+        .help-text {
+          display: block;
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+        }
+
+        .error-text {
+          display: block;
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: red;
+        }
+
+        .password-container {
+          position: relative;
+        }
+
+        .password-toggle {
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+          padding: 0;
+          font-size: 1rem;
+        }
+
+        .password-toggle:hover {
+          color: var(--text-dark);
+        }
+
+        .password-strength {
+          margin-top: 0.5rem;
+          height: 6px;
+          border-radius: 3px;
+          background-color: #eee;
+          overflow: hidden;
+        }
+
+        .password-strength-bar {
+          height: 100%;
+          width: 0;
+          transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .password-strength-text {
+          font-size: 0.8rem;
+          margin-top: 0.25rem;
+        }
+
+        .strength-weak {
+          background-color: #dc3545;
+          width: 25%;
+        }
+
+        .strength-fair {
+          background-color: #ffc107;
+          width: 50%;
+        }
+
+        .strength-good {
+          background-color: #28a745;
+          width: 75%;
+        }
+
+        .strength-strong {
+          background-color: #20c997;
+          width: 100%;
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: space-between;
+          padding-top: 1.5rem;
+          margin-top: 1.5rem;
+          border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .btn {
+          padding: 0.75rem 1.25rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background-color 0.3s, opacity 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .btn i {
+          margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+          background-color: var(--button-primary);
+          color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+          background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+          background-color: var(--button-secondary);
+          color: var(--button-text);
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--color-orange-burnt);
+          color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+          background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        /* Notificação Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+          .form-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          
+          .form-actions {
+            flex-direction: column-reverse;
+            gap: 1rem;
+          }
+          
+          .form-actions-left,
+          .form-actions-right {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+
+        @media (max-width: 768px) {
+          header {
+            padding: 1rem 2rem;
+          }
+          
+          .sidebar-toggle {
+            display: block;
+          }
+          
+          .sidebar {
+            transform: translateX(-280px);
+            transition: transform 0.3s ease;
+            z-index: 999;
+          }
+          
+          .sidebar.active {
+            transform: translateX(0);
+          }
+          
+          .content {
+            margin-left: 0;
+            width: 100%;
+            padding: 1.5rem;
+          }
+          
+          footer {
+            margin-left: 0;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+          }
+          
+          .footer-links {
+            flex-direction: column;
+            gap: 10px;
+          }
+          
+          .title {
+            font-size: 1.4rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          header {
+            padding: 1rem;
+          }
+          
+          .paw-logo {
+            width: 30px;
+            height: 30px;
+          }
+          
+          .title {
+            font-size: 1.2rem;
+          }
+          
+          .header-icons > * {
+            margin-left: 10px;
+          }
+          
+          .profile-icon {
+            width: 35px;
+            height: 35px;
+          }
+          
+          .content {
+            padding: 1rem;
+          }
+          
+          .form-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+          }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo-container">
+            <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
+            <div class="title">S.O.S. Amigos de Animais</div>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-bell notification-icon fa-lg"></i>
+            <div class="profile-icon">
+                <i class="fas fa-user fa-lg"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-home menu-icon"></i>
+                        Dashboard
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-chart-line"></i>
+                        Estatísticas
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        Calendário
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-paw menu-icon"></i>
+                        Animais
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-list"></i>
+                        Listar todos
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-plus-circle"></i>
+                        Cadastrar novo
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-search"></i>
+                        Buscar animal
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-users menu-icon"></i>
+                        Usuários
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu active">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-list"></i>
+                        Listar todos
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-plus"></i>
+                        Cadastrar novo
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-search"></i>
+                        Buscar usuário
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-heart menu-icon"></i>
+                        Doações
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        Receber doação
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-history"></i>
+                        Histórico
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-file-alt menu-icon"></i>
+                        Relatórios
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-paw"></i>
+                        Animais
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-home"></i>
+                        Adoções
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-heart"></i>
+                        Doações
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-friends"></i>
+                        Voluntários
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-cog menu-icon"></i>
+                        Configurações
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-cog"></i>
+                        Perfil
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-users-cog"></i>
+                        Usuários
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-user-plus"></i>
+                Cadastro de Usuário
+            </h1>
+            
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-title">Novo Cadastro de Usuário</div>
+                </div>
+                
+                <form class="form-body" id="userForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Informações de Acesso</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="username" class="required">Nome de Usuário (Login)</label>
+                                <input type="text" id="username" name="username" class="form-control" placeholder="Digite o nome de usuário" required>
+                                <div class="error-text" id="username-error" style="display: none;">Nome de usuário inválido ou já existente.</div>
+                                <span class="help-text">Use apenas letras, números e underscore (_). Mínimo de 4 caracteres.</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="required">E-mail</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="exemplo@email.com" required>
+                                <div class="error-text" id="email-error" style="display: none;">Por favor, informe um e-mail válido.</div>
+                                <span class="help-text">Será usado para recuperação de senha e notificações.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="password" class="required">Senha</label>
+                                <div class="password-container">
+                                    <input type="password" id="password" name="password" class="form-control" placeholder="Digite sua senha" required>
+                                    <button type="button" class="password-toggle" id="password-toggle">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-strength">
+                                    <div class="password-strength-bar" id="password-strength-bar"></div>
+                                </div>
+                                <div class="password-strength-text" id="password-strength-text"></div>
+                                <div class="error-text" id="password-error" style="display: none;">A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="confirm-password" class="required">Confirmar Senha</label>
+                                <div class="password-container">
+                                    <input type="password" id="confirm-password" name="confirmPassword" class="form-control" placeholder="Confirme sua senha" required>
+                                    <button type="button" class="password-toggle" id="confirm-password-toggle">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="error-text" id="confirm-password-error" style="display: none;">As senhas não coincidem.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="user-type" class="required">Tipo de Usuário</label>
+                                <select id="user-type" name="userType" class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="ADMIN">Administrador</option>
+                                    <option value="OPERATOR">Operador</option>
+                                    <option value="VOLUNTEER">Voluntário</option>
+                                    <option value="READONLY">Somente Leitura</option>
+                                </select>
+                                <div class="error-text" id="user-type-error" style="display: none;">Por favor, selecione um tipo de usuário.</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="user-name">Nome Completo</label>
+                                <input type="text" id="user-name" name="name" class="form-control" placeholder="Digite o nome completo">
+                                <span class="help-text">Opcional. Será exibido no sistema em vez do nome de usuário.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <div class="form-actions-left">
+                                <button type="button" class="btn btn-outline" id="btn-cancel">
+                                    <i class="fas fa-times"></i>
+                                    Cancelar
+                                </button>
+                            </div>
+                            <div class="form-actions-right">
+                                <button type="button" class="btn btn-primary" id="btn-save">
+                                    <i class="fas fa-save"></i>
+                                    Cadastrar Usuário
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div class="toast-container" id="toast-container">
+        <!-- As notificações serão injetadas aqui via JavaScript -->
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <i class="fas fa-paw" style="margin-right: 10px;"></i>
+            <div class="footer-brand">S.O.S. Amigos de Animais</div>
+        </div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Sobre nós</a>
+            <a href="#" class="footer-link">Política de Privacidade</a>
+            <a href="#" class="footer-link">Contato</a>
+        </div>
+        <div class="footer-copyright">
+            &copy; 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // JavaScript para controlar os dropdowns
+            const menuButtons = document.querySelectorAll('.menu-button');
+            
+            menuButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Encontra o dropdown-menu associado a este botão
+                    const dropdownMenu = this.nextElementSibling;
+                    const dropdownIcon = this.querySelector('.dropdown-icon');
+                    
+                    // Toggle da classe active
+                    dropdownMenu.classList.toggle('active');
+                    dropdownIcon.classList.toggle('active');
+                    
+                    // Opcional: Fecha outros dropdowns abertos
+                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                        if (menu !== dropdownMenu) {
+                            menu.classList.remove('active');
+                            menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+                
+                // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+                document.addEventListener('click', function(event) {
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnToggle = sidebarToggle.contains(event.target);
+                    
+                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Toggle de visibilidade da senha
+            const passwordToggle = document.getElementById('password-toggle');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordToggle = document.getElementById('confirm-password-toggle');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            
+            function togglePasswordVisibility(inputElement, toggleElement) {
+                if (inputElement.type === 'password') {
+                    inputElement.type = 'text';
+                    toggleElement.querySelector('i').classList.remove('fa-eye');
+                    toggleElement.querySelector('i').classList.add('fa-eye-slash');
+                } else {
+                    inputElement.type = 'password';
+                    toggleElement.querySelector('i').classList.remove('fa-eye-slash');
+                    toggleElement.querySelector('i').classList.add('fa-eye');
+                }
+            }
+            
+            if (passwordToggle && passwordInput) {
+                passwordToggle.addEventListener('click', function() {
+                    togglePasswordVisibility(passwordInput, this);
+                });
+            }
+            
+            if (confirmPasswordToggle && confirmPasswordInput) {
+                confirmPasswordToggle.addEventListener('click', function() {
+                    togglePasswordVisibility(confirmPasswordInput, this);
+                });
+            }
+            
+            // Medidor de força da senha
+            const passwordStrengthBar = document.getElementById('password-strength-bar');
+            const passwordStrengthText = document.getElementById('password-strength-text');
+            
+            function checkPasswordStrength(password) {
+                let strength = 0;
+                let feedback = '';
+                
+                // Verificações de força
+                if (password.length >= 8) strength += 1;
+                if (/[A-Z]/.test(password)) strength += 1;
+                if (/[a-z]/.test(password)) strength += 1;
+                if (/[0-9]/.test(password)) strength += 1;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+                
+                // Define a classe e o texto com base na pontuação
+                passwordStrengthBar.className = 'password-strength-bar';
+                
+                if (password.length === 0) {
+                    passwordStrengthBar.style.width = '0';
+                    passwordStrengthText.textContent = '';
+                } else if (strength < 2) {
+                    passwordStrengthBar.classList.add('strength-weak');
+                    feedback = 'Fraca';
+                } else if (strength < 3) {
+                    passwordStrengthBar.classList.add('strength-fair');
+                    feedback = 'Razoável';
+                } else if (strength < 5) {
+                    passwordStrengthBar.classList.add('strength-good');
+                    feedback = 'Boa';
+                } else {
+                    passwordStrengthBar.classList.add('strength-strong');
+                    feedback = 'Forte';
+                }
+                
+                passwordStrengthText.textContent = feedback;
+                
+                return strength;
+            }
+            
+            if (passwordInput) {
+                passwordInput.addEventListener('input', function() {
+                    checkPasswordStrength(this.value);
+                });
+            }
+            
+            // Validação do formulário
+            const form = document.getElementById('userForm');
+            const saveButton = document.getElementById('btn-save');
+            const cancelButton = document.getElementById('btn-cancel');
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const userTypeSelect = document.getElementById('user-type');
+            
+            // Funções de validação
+            function validateUsername(username) {
+                const re = /^[a-zA-Z0-9_]{4,}$/;
+                return re.test(username);
+            }
+            
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(String(email).toLowerCase());
+            }
+            
+            function validatePassword(password) {
+                return checkPasswordStrength(password) >= 3;
+            }
+            
+            function validateConfirmPassword(password, confirmPassword) {
+                return password === confirmPassword;
+            }
+            
+            function showError(fieldId, errorId, show) {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(errorId);
+                
+                if (show) {
+                    field.classList.add('invalid');
+                    errorElement.style.display = 'block';
+                } else {
+                    field.classList.remove('invalid');
+                    errorElement.style.display = 'none';
+                }
+            }
+            
+            // Validação em tempo real
+            usernameInput.addEventListener('blur', function() {
+                showError('username', 'username-error', !validateUsername(this.value));
+            });
+            
+            emailInput.addEventListener('blur', function() {
+                showError('email', 'email-error', !validateEmail(this.value));
+            });
+            
+            passwordInput.addEventListener('blur', function() {
+                showError('password', 'password-error', !validatePassword(this.value));
+            });
+            
+            confirmPasswordInput.addEventListener('blur', function() {
+                showError('confirm-password', 'confirm-password-error', 
+                    !validateConfirmPassword(passwordInput.value, this.value));
+            });
+            
+            userTypeSelect.addEventListener('change', function() {
+                showError('user-type', 'user-type-error', !this.value);
+            });
+            
+            // Toast de notificação
+            function showToast(type, title, message) {
+                const toastContainer = document.getElementById('toast-container');
+                
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                
+                const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+                
+                toast.innerHTML = `
+                    <i class="fas ${iconClass} toast-icon"></i>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <button class="toast-close">&times;</button>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Adicionar evento de fechamento
+                toast.querySelector('.toast-close').addEventListener('click', function() {
+                    toast.remove();
+                });
+                
+                // Exibir o toast com animação
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // Remover o toast automaticamente após 5 segundos
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 5000);
+            }
+            
+            // Salvar o formulário
+            saveButton.addEventListener('click', function() {
+                // Validar todos os campos
+                const usernameValid = validateUsername(usernameInput.value);
+                const emailValid = validateEmail(emailInput.value);
+                const passwordValid = validatePassword(passwordInput.value);
+                const confirmPasswordValid = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
+                const userTypeValid = userTypeSelect.value !== '';
+                
+                showError('username', 'username-error', !usernameValid);
+                showError('email', 'email-error', !emailValid);
+                showError('password', 'password-error', !passwordValid);
+                showError('confirm-password', 'confirm-password-error', !confirmPasswordValid);
+                showError('user-type', 'user-type-error', !userTypeValid);
+                
+                // Se todos os campos forem válidos, enviar o formulário
+                if (usernameValid && emailValid && passwordValid && confirmPasswordValid && userTypeValid) {
+                    // Preparar os dados para envio
+                    const formData = {
+                        username: usernameInput.value,
+                        email: emailInput.value,
+                        password: passwordInput.value,
+                        userType: userTypeSelect.value,
+                        name: document.getElementById('user-name').value || null
+                    };
+                    
+                    // Chamar a API usando fetch
+                    fetch('http://localhost:8080/api/users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            // Verifica se é um erro de validação
+                            if (response.status === 400) {
+                                return response.json().then(data => {
+                                    throw new Error(data.message || 'Erro de validação');
+                                });
+                            }
+                            throw new Error(`Erro HTTP: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Usuário cadastrado com sucesso:', data);
+                        
+                        // Limpar o formulário
+                        form.reset();
+                        
+                        // Resetar a barra de força da senha
+                        passwordStrengthBar.className = 'password-strength-bar';
+                        passwordStrengthBar.style.width = '0';
+                        passwordStrengthText.textContent = '';
+                        
+                        // Mostrar mensagem de sucesso
+                        showToast('success', 'Cadastro Realizado', 'Usuário cadastrado com sucesso!');
+                    })
+                    .catch(error => {
+                        console.error('Erro ao cadastrar usuário:', error);
+                        
+                        // Mostrar mensagem de erro
+                        showToast('error', 'Erro no Cadastro', error.message || 'Ocorreu um erro ao cadastrar o usuário. Por favor, tente novamente.');
+                    });
+                }
+            });
+            
+            // Cancelar o formulário
+            cancelButton.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja cancelar? Todas as informações não salvas serão perdidas.')) {
+                    form.reset();
+                    
+                    // Resetar a barra de força da senha
+                    passwordStrengthBar.className = 'password-strength-bar';
+                    passwordStrengthBar.style.width = '0';
+                    passwordStrengthText.textContent = '';
+                    
+                    // Remover mensagens de erro
+                    document.getElementById('username-error').style.display = 'none';
+                    document.getElementById('email-error').style.display = 'none';
+                    document.getElementById('password-error').style.display = 'none';
+                    document.getElementById('confirm-password-error').style.display = 'none';
+                    document.getElementById('user-type-error').style.display = 'none';
+                    
+                    // Remover classes de erro
+                    usernameInput.classList.remove('invalid');
+                    emailInput.classList.remove('invalid');
+                    passwordInput.classList.remove('invalid');
+                    confirmPasswordInput.classList.remove('invalid');
+                    userTypeSelect.classList.remove('invalid');
+                    
+                    // Redirecionar ou fazer outra ação
+                    // window.location.href = 'listagem-usuarios.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,23 +1,36 @@
 package sosanimais.com.example.app.controller.service;
 
 import org.springframework.stereotype.Service;
+import sosanimais.com.example.app.model.DAL.FuncionarioDAL;
 import sosanimais.com.example.app.model.DAL.PessoaDAL;
 import sosanimais.com.example.app.model.PessoaInformacao;
+import sosanimais.com.example.app.model.entity.Funcionario;
 import sosanimais.com.example.app.model.entity.Pessoa;
 
 import java.sql.ResultSet;
+import java.util.List;
 
 @Service
 public class PessoaService {
-    PessoaDAL repositorio;
+    PessoaDAL repositorio = new PessoaDAL();
 
 
     public boolean cadastro(Pessoa entidade){
         return repositorio.save(entidade);
     }
 
-    public Pessoa getById(Long id){
+    public Pessoa getId(Long id){
         return repositorio.get(id);
+    }
+
+    public List<Pessoa> getAll(String filtro){
+        return repositorio.get(filtro);
+    }
+    public boolean deletar(Pessoa entidade){
+        return repositorio.delete(entidade);
+    }
+    public boolean atualizar(Pessoa entidade){
+        return repositorio.update(entidade);
     }
 
     public PessoaInformacao getPessoaInfo(ResultSet resultSet) {
@@ -33,5 +46,18 @@ public class PessoaService {
             return null;
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

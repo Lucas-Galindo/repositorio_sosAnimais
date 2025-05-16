@@ -1,0 +1,73 @@
+package sosanimais.com.example.app.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import sosanimais.com.example.app.controller.service.PessoaService;
+import sosanimais.com.example.app.model.entity.Pessoa;
+import sosanimais.com.example.app.model.util.Erro;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(value="/apis/pessoa")
+public class PessoaController {
+
+    PessoaService pessoaService = new PessoaService();
+
+    @PostMapping
+    public ResponseEntity<Object> cadastro(@PathVariable Pessoa elemento){
+        boolean aux = pessoaService.cadastro(elemento);
+        if(aux)
+            return ResponseEntity.ok(elemento);
+        return ResponseEntity.badRequest().body( new Erro("Erro salvar Pessoa"));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
+        Pessoa aux = pessoaService.getId(id);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getPessoaLista(){
+        List<Pessoa> lista = pessoaService.getAll("");
+        if(lista!=null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
+    }
+
+    @GetMapping("/{filtro}")
+    public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
+        List<Pessoa> lista = pessoaService.getAll(filtro);
+        if(lista!=null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
+
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletar(@PathVariable Long id){
+        boolean aux = pessoaService.deletar(pessoaService.getId(id));
+        if(aux==true)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Pessoa"));
+    }
+
+
+    @PutMapping
+    public ResponseEntity<Object> atualizar(@RequestBody Pessoa entidade){
+        boolean aux = pessoaService.atualizar(entidade);
+        if(aux == true)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Pessoa"));
+    }
+
+
+
+
+
+}

@@ -9,10 +9,11 @@ import sosanimais.com.example.app.model.util.Erro;
 
 import java.util.List;
 
-@RestController("/apis/funcionario")
+@RestController
+@RequestMapping(value="/apis/funcionario")
 public class FuncionarioController {
     
-    FuncionarioService funcService;
+    FuncionarioService funcService = new FuncionarioService();
 
     @PostMapping
     public ResponseEntity<Object> cadastro(@PathVariable Funcionario elemento){

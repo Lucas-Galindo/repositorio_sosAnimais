@@ -1,13 +1,15 @@
 package sosanimais.com.example.app.controller.service;
 
+import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.model.DAL.FuncionarioDAL;
 import sosanimais.com.example.app.model.entity.Funcionario;
 
 import java.util.List;
 
+@Service
 public class FuncionarioService {
 
-    FuncionarioDAL repositorio;
+    FuncionarioDAL repositorio = new FuncionarioDAL();
 
     public boolean cadastro(Funcionario entidade){
         return repositorio.save(entidade);

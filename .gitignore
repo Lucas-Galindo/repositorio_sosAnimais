@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 /relacionados
+/Documentos-dev/TABLES-RELACIONAL.txt
+/Documentos-dev/inserts-relacional.txt
+
 
 ### STS ###
 .apt_generated
