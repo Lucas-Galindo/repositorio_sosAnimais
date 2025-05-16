@@ -34,7 +34,7 @@ public class AnimalController {
         }
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getAnimalById(@PathVariable int id){//ok
+    public ResponseEntity<Object> getAnimalById(@PathVariable Long id){//ok
         Animal aux=animalService.buscarPorId(id);
         if(aux!=null)
             return ResponseEntity.ok(aux);
@@ -60,7 +60,7 @@ public class AnimalController {
             return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar o animal"));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteAnimal(@PathVariable int id){
+    public ResponseEntity<Object> deleteAnimal(@PathVariable Long id){
         Animal aux=animalService.buscarPorId(id);
         if(aux!=null){
             boolean status=animalService.deletarAnimal(aux);

@@ -28,7 +28,7 @@ public class AnimalService {
         return animalDAL.delete(animal);
     }
 
-    public Animal buscarPorId(int id) {
+    public Animal buscarPorId(Long id) {
         return animalDAL.get(id);
     }
 

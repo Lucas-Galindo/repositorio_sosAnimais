@@ -117,7 +117,7 @@ public class AnimalDAL implements IDAL<Animal>{
     }
 */
     @Override
-    public Animal get(int id) {
+    public Animal get(Long id) {
         Animal animal = null;
         String sql = "SELECT * FROM animal WHERE ani_cod=" + id;
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
