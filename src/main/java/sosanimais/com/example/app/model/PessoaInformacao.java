@@ -6,17 +6,14 @@ public class PessoaInformacao {
     private String telefone;
     private String email;
 
-    //private Endereco adress;
 
-
-    private Endereco adress;
 
     public PessoaInformacao(String nome, String cpf, String telefone, String email) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.email = email;
-        //this.adress = adress;
+
     }
 
     public PessoaInformacao(){
@@ -54,5 +51,9 @@ public class PessoaInformacao {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
+
+
 
 }

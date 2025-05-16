@@ -12,16 +12,10 @@ public class Pessoa {
         this.pessoa = pessoa;
     }
     public Pessoa(){}
-    public PessoaInformacao getPessoa() {
-        return pessoa;
-    }
 
     public void setPessoa(PessoaInformacao pessoa) {
         this.pessoa = pessoa;
     }
-
-
-
 
     public Long getId() {
         return id;
@@ -31,4 +25,5 @@ public class Pessoa {
         this.id = id;
     }
 
+    public PessoaInformacao getPessoa(){return this.pessoa;}
 }

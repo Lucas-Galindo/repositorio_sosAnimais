@@ -35,13 +35,17 @@ public class FuncionarioController {
     @GetMapping
     public ResponseEntity<Object> getFuncLista(){
         List<Funcionario> lista = funcService.getAll("");
-        return ResponseEntity.ok(lista);
+        if(lista!=null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao listar funcionario"));
     }
 
     @GetMapping("/{filtro}")
     public ResponseEntity<Object> getFuncLista(@PathVariable String filtro){
         List<Funcionario> lista = funcService.getAll(filtro);
-        return ResponseEntity.ok(lista);
+        if(lista!=null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao listar funcionario"));
     }
 
 
