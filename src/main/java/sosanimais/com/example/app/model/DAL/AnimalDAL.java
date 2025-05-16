@@ -94,30 +94,31 @@ public class AnimalDAL implements IDAL<Animal>{
 
         return sucesso;
     }
-/*
-    @Override
-    public List<Animal> get(String) {
-        List<Animal> animals = new ArrayList<>();
-        String sql = "SELECT * FROM animal";
-        ResultSet rs = SingletonDB.getConexao().consultar(sql);
-        try {
-            while (rs.next()) {
-                Animal animal = new Animal(
-                        rs.getLong("animal_id"),
-                        rs.getInt("animal_baia"),
-                        rs.getInt("animal_acolhimento"),
-                        (AnimalInformacao) rs.getObject("animal_informacao")
-                );
-                animals.add(animal);
+
+    /*
+        @Override
+        public List<Animal> get(String) {
+            List<Animal> animals = new ArrayList<>();
+            String sql = "SELECT * FROM animal";
+            ResultSet rs = SingletonDB.getConexao().consultar(sql);
+            try {
+                while (rs.next()) {
+                    Animal animal = new Animal(
+                            rs.getLong("animal_id"),
+                            rs.getInt("animal_baia"),
+                            rs.getInt("animal_acolhimento"),
+                            (AnimalInformacao) rs.getObject("animal_informacao")
+                    );
+                    animals.add(animal);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return animals;
         }
-        return animals;
-    }
-*/
+    */
     @Override
-    public Animal get(int id) {
+    public Animal get(Long id) {
         Animal animal = null;
         String sql = "SELECT * FROM animal WHERE ani_cod=" + id;
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
