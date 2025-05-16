@@ -5,7 +5,7 @@ import sosanimais.com.example.app.model.DAL.AnimalDAL;
 import sosanimais.com.example.app.model.entity.Animal;
 
 import java.util.List;
-//@Service
+@Service
 public class AnimalService {
     @Autowired
     private AnimalDAL animalDAL;
@@ -34,7 +34,7 @@ public class AnimalService {
 
     public List<Animal> buscarTodos() {
         // Faz um cast da lista de Object para Animal
-        return (List<Animal>) animalDAL.get("");
+        return animalDAL.get("");
     }
 
     public List<Animal> buscarComFiltro(String filtroSQL) {
