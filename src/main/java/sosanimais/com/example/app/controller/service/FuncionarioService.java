@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.model.DAL.FuncionarioDAL;
 import sosanimais.com.example.app.model.entity.Funcionario;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -17,11 +18,11 @@ public class FuncionarioService {
         return repositorio.save(entidade);
     }
 
-    public Funcionario getId(Long id){
-        return repositorio.get(id);
+    public Funcionario getId(Long mat){
+        return repositorio.get(mat);
     }
 
-    public List<Funcionario> getAll(String filtro){
+    public List<Funcionario> getAll(String filtro)  {
         return repositorio.get(filtro);
     }
 
