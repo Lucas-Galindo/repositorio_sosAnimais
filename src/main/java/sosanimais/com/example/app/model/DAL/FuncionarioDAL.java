@@ -1,6 +1,8 @@
 package sosanimais.com.example.app.model.DAL;
 
 
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;

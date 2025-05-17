@@ -59,6 +59,27 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
     }
 
+    public PessoaInformacao pessoaInfo(ResultSet set){
+        try{
+            PessoaInformacao info = null;
+            if(set.next()){
+                info = new PessoaInformacao(
+                        set.getString("pess_nome"),
+                        set.getString("pess_cpf"),
+                        set.getString("pess_telefone"),
+                        set.getString("pess_email")
+                );
+            }
+
+            return info;
+
+
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+
 
     @Override
     public Pessoa get(Long id) {
@@ -70,9 +91,9 @@ public class PessoaDAL implements IDAL<Pessoa> {
         try{
             if(resultSet.next()){
 
-                pessoa =new Pessoa(resultSet.getLong("pess_id"),
-                        pessoa.getPessoa().getPessoaInfo(resultSet)
-
+                pessoa =new Pessoa(
+                        resultSet.getLong("pess_id"),
+                        pessoaInfo(resultSet)
                 );
             }
 
@@ -103,7 +124,8 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
                  pessoa = new Pessoa(
                         resultSet.getLong("pess_id"),
-                        pessoa.getPessoa().getPessoaInfo(resultSet));
+                         pessoaInfo(resultSet)
+                 );
                 lista.add(pessoa);
             }
         }
