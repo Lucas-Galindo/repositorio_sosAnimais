@@ -17,7 +17,7 @@ public class PessoaController {
     PessoaService pessoaService = new PessoaService();
 
     @PostMapping
-    public ResponseEntity<Object> cadastro(@PathVariable Pessoa elemento){
+    public ResponseEntity<Object> cadastro(@RequestBody Pessoa elemento){
         boolean aux = pessoaService.cadastro(elemento);
         if(aux)
             return ResponseEntity.ok(elemento);
