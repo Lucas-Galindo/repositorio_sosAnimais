@@ -1,5 +1,9 @@
 package sosanimais.com.example.app.model;
 
+import org.springframework.http.ResponseEntity;
+
+import java.util.Optional;
+
 public class Endereco {
     private String rua;
     private int numero;
@@ -47,6 +51,9 @@ public class Endereco {
 
     public void setComplemento(String complemento) {
         this.complemento = complemento;
+    }
+
+    public Optional<ResponseEntity<Object>> map(Object o) {
     }
 
 }

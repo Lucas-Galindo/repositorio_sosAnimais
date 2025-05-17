@@ -17,7 +17,7 @@ public class AnimalDAL implements IDAL<Animal>{
     }
 
     @Override
-    public List<Animal> get(String filtro) {
+    public List<EmpresaDAL> get(String filtro) {
         List<Animal> animals = new ArrayList<>();
         String sql = "SELECT * FROM animal";
         if (!filtro.isEmpty())

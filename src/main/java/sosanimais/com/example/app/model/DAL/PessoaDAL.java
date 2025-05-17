@@ -1,8 +1,6 @@
 package sosanimais.com.example.app.model.DAL;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
@@ -109,7 +107,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
 
     @Override
-    public List<Pessoa> get(String filtro) {
+    public List<EmpresaDAL> get(String filtro) {
 
         List<Pessoa> lista = new ArrayList<>();
         PessoaInformacao pessoaInfo =null;

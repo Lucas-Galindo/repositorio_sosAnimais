@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Sobre Nós</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos existentes - incorporando do arquivo fornecido */
+        :root {
+            /* Cores primárias */
+            --color-orange-burnt: #d37a47; /* Laranja queimado (fundo do logo) */
+            --color-brown-dark: #4a2d21;   /* Marrom escuro (silhueta do gato e texto "S.O.S.") */
+            --color-beige-light: #f2e6db;  /* Bege claro (fundo geral) */
+
+            /* Cores secundárias */
+            --color-orange-light: #e59a62; /* Laranja claro (contorno do cão) */
+            --color-gray-dark: #4d4d4d;    /* Cinza escuro (texto "Amigos de Animais") */
+
+            /* Variações para elementos de interface (opcionais) */
+            --color-orange-burnt-hover: #c06b3a; /* Versão mais escura para hover */
+            --color-orange-burnt-active: #b05d2c; /* Versão ainda mais escura para active */
+
+            /* Cores de texto */
+            --text-dark: var(--color-brown-dark);
+            --text-light: #ffffff;
+            --text-muted: var(--color-gray-dark);
+
+            /* Cores de fundo */
+            --bg-primary: var(--color-beige-light);
+            --bg-secondary: var(--color-orange-burnt);
+            --bg-accent: var(--color-orange-light);
+
+            /* Cores de borda */
+            --border-primary: var(--color-orange-burnt);
+            --border-secondary: var(--color-orange-light);
+
+            /* Cores de elementos interativos */
+            --button-primary: var(--color-orange-burnt);
+            --button-primary-hover: var(--color-orange-burnt-hover);
+            --button-secondary: var(--color-brown-dark);
+            --button-text: var(--color-beige-light);
+
+            /* Sombras */
+            --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+            --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+            --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            background-color: var(--color-orange-burnt-active);
+            padding: 1rem 4rem;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 100px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 280px;
+            height: calc(100vh - 100px); /* Altura da viewport menos a altura do header */
+            background-color: var(--color-orange-burnt);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+            top: 100px; /* Posiciona abaixo do header */
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }
+
+        footer {
+            background-color: var(--color-orange-burnt-active);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .footer-link:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .footer-copyright {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Estilos específicos para a página Sobre Nós */
+        .about-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .about-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .about-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .about-body {
+            padding: 2rem;
+        }
+
+        .contact-info {
+            background-color: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--color-orange-burnt);
+        }
+
+        .contact-info p {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .contact-info p:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-info .icon {
+            color: var(--color-orange-burnt);
+            width: 20px;
+            text-align: center;
+            margin-right: 0.5rem;
+        }
+
+        .mission-text {
+            line-height: 1.7;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: justify;
+            font-size: 1.05rem;
+        }
+
+        .mission-text p {
+            margin-bottom: 1rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            height: 400px;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        .carousel-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-primary);
+        }
+
+        .placeholder-icon {
+            font-size: 3rem;
+            color: var(--color-orange-burnt);
+            margin-bottom: 1rem;
+        }
+
+        .placeholder-text {
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 80%;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            bottom: 1rem;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-dot.active {
+            background-color: white;
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: var(--text-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            z-index: 10;
+            font-size: 1.2rem;
+        }
+
+        .carousel-arrow:hover {
+            background-color: white;
+        }
+
+        .carousel-prev {
+            left: 1rem;
+        }
+
+        .carousel-next {
+            right: 1rem;
+        }
+
+        .values-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .value-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .value-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--bg-primary);
+            color: var(--color-orange-burnt);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .value-title {
+            color: var(--text-dark);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .value-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .carousel-container {
+                height: 350px;
+            }
+
+            .values-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            footer {
+                margin-left: 0;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .carousel-container {
+                height: 300px;
+            }
+
+            .values-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .carousel-container {
+                height: 250px;
+            }
+
+            .about-header,
+            .about-body {
+                padding: 1.25rem;
+            }
+
+            .carousel-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header -->
+<header>
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo-container">
+        <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
+        <div class="title">S.O.S. Amigos de Animais</div>
+    </div>
+    <div class="header-icons">
+        <i class="fas fa-bell notification-icon fa-lg"></i>
+        <div class="profile-icon">
+            <i class="fas fa-user fa-lg"></i>
+        </div>
+    </div>
+</header>
+
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-home menu-icon"></i>
+                    Dashboard
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-chart-line"></i>
+                    Estatísticas
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Calendário
+                </a>
+            </div>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-paw menu-icon"></i>
+                    Animais
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-list"></i>
+                    Listar todos
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-plus-circle"></i>
+                    Cadastrar novo
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-search"></i>
+                    Buscar animal
+                </a>
+            </div>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-user-friends menu-icon"></i>
+                    Adoções
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    Pedidos de adoção
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-check-circle"></i>
+                    Adoções concluídas
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-user-check"></i>
+                    Verificar adotante
+                </a>
+            </div>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-heart menu-icon"></i>
+                    Doações
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    Receber doação
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-history"></i>
+                    Histórico
+                </a>
+            </div>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-file-alt menu-icon"></i>
+                    Relatórios
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-paw"></i>
+                    Animais
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-home"></i>
+                    Adoções
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-heart"></i>
+                    Doações
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-user-friends"></i>
+                    Voluntários
+                </a>
+            </div>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-info-circle menu-icon"></i>
+                    Sobre Nós
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu active">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-building"></i>
+                    Quem Somos
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-users"></i>
+                    Equipe
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-phone"></i>
+                    Contato
+                </a>
+            </div>
+        </div>
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-cog menu-icon"></i>
+                    Configurações
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-user-cog"></i>
+                    Perfil
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-users-cog"></i>
+                    Usuários
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-info-circle"></i>
+            Sobre Nós
+        </h1>
+
+        <div class="about-container">
+            <div class="about-header">
+                <h2 class="about-title">Conheça Nossa História</h2>
+                <p class="about-subtitle">Nossa missão, valores e compromisso com os animais</p>
+            </div>
+
+            <div class="about-body">
+                <!-- Informações de Contato -->
+                <div class="contact-info">
+                    <p><strong>Associação Protetora de Cães e Gatos de Pirapozinho</strong></p>
+                    <p><i class="fas fa-map-marker-alt icon"></i> Rod. Assis Chateaubriand, 36000, Pirapozinho - SP, 19200-000</p>
+                    <p><i class="fas fa-mobile-alt icon"></i> Celular: (18) 99685-6964</p>
+                </div>
+
+                <!-- Carrossel de Fotos -->
+                <div class="carousel-container" id="photo-carousel">
+                    <div class="carousel-placeholder">
+                        <i class="fas fa-images placeholder-icon"></i>
+                        <p class="placeholder-text">Aqui serão adicionadas fotos da associação e dos animais resgatados. O carrossel está pronto para receber suas imagens.</p>
+                    </div>
+
+                    <!-- Botões de navegação -->
+                    <div class="carousel-arrow carousel-prev" id="carousel-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </div>
+                    <div class="carousel-arrow carousel-next" id="carousel-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+
+                    <!-- Indicadores -->
+                    <div class="carousel-nav" id="carousel-nav">
+                        <!-- Os indicadores serão gerados via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Texto da Missão -->
+                <div class="mission-text">
+                    <p>A associação SOS animais é um grupo de voluntários, dentro do municipio de Pirapozinho, dedicados a ajudar animais abandonados e em situação de vulnerabilidade na cidade. Fundação em 2012, a iniciativa surgiu quando quatro pessoas se uniram para resgatar uma cadela e seus oito filhotes que estavam sem condições básicas. Não sao considerados uma ONG, o pilar está em volta de doações e campanhas beneficentes. O trabalho é focado no resgate, assistência médica e busca por lares para os animais. A castração é uma das bases de atuação da associação, que também promove a adoção dos animais por meio de divulgações atráves de plataformas digitais e por contato telefônico. A associação segue firme na missão de acolher, proteger e encontrar um lugar digno para os animais necessitados, contando com o apoio da comunidade para ajudar seu importante trabalho.</p>
+                </div>
+
+                <!-- Valores e Pilares -->
+                <div class="values-container">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-hands-helping"></i>
+                        </div>
+                        <h3 class="value-title">Resgate</h3>
+                        <p class="value-description">Atuamos no resgate de animais em situação de abandono e vulnerabilidade, proporcionando segurança e cuidados imediatos.</p>
+                    </div>
+
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3 class="value-title">Assistência Médica</h3>
+                        <p class="value-description">Oferecemos tratamento veterinário completo para garantir a saúde e o bem-estar dos animais resgatados.</p>
+                    </div>
+
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3 class="value-title">Castração</h3>
+                        <p class="value-description">A castração é base fundamental do nosso trabalho, controlando a população e promovendo saúde aos animais.</p>
+                    </div>
+
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 class="value-title">Adoção Responsável</h3>
+                        <p class="value-description">Trabalhamos para encontrar lares responsáveis e amorosos para todos os animais resgatados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-logo">
+        <i class="fas fa-paw" style="margin-right: 10px;"></i>
+        <div class="footer-brand">S.O.S. Amigos de Animais</div>
+    </div>
+    <div class="footer-links">
+        <a href="#" class="footer-link">Sobre nós</a>
+        <a href="#" class="footer-link">Política de Privacidade</a>
+        <a href="#" class="footer-link">Contato</a>
+    </div>
+    <div class="footer-copyright">
+        &copy; 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Menu lateral (dropdowns)
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // --- Sidebar toggle (mobile)
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        // --- Carrossel de fotos
+        const carousel = document.getElementById('photo-carousel');
+        const carouselNav = document.getElementById('carousel-nav');
+        const prevButton = document.getElementById('carousel-prev');
+        const nextButton = document.getElementById('carousel-next');
+
+        function setupCarousel(images) {
+            const placeholder = carousel.querySelector('.carousel-placeholder');
+            if (placeholder) placeholder.remove();
+
+            images.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide' + (index === 0 ? ' active' : '');
+                slide.style.backgroundImage = `url(${image})`;
+                carousel.appendChild(slide);
+
+                const dot = document.createElement('div');
+                dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+                dot.dataset.slide = index;
+                carouselNav.appendChild(dot);
+
+                dot.addEventListener('click', function () {
+                    setActiveSlide(index);
+                });
+            });
+
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', function () {
+                    const slides = carousel.querySelectorAll('.carousel-slide');
+                    let activeIndex = [...slides].findIndex(slide => slide.classList.contains('active'));
+                    let newIndex = (activeIndex - 1 + slides.length) % slides.length;
+                    setActiveSlide(newIndex);
+                });
+
+                nextButton.addEventListener('click', function () {
+                    const slides = carousel.querySelectorAll('.carousel-slide');
+                    let activeIndex = [...slides].findIndex(slide => slide.classList.contains('active'));
+                    let newIndex = (activeIndex + 1) % slides.length;
+                    setActiveSlide(newIndex);
+                });
+            }
+
+            setInterval(function () {
+                if (document.visibilityState === 'visible') {
+                    const slides = carousel.querySelectorAll('.carousel-slide');
+                    if (slides.length > 0) {
+                        let activeIndex = [...slides].findIndex(slide => slide.classList.contains('active'));
+                        let newIndex = (activeIndex + 1) % slides.length;
+                        setActiveSlide(newIndex);
+                    }
+                }
+            }, 5000);
+        }
+
+        function setActiveSlide(index) {
+            const slides = carousel.querySelectorAll('.carousel-slide');
+            const dots = carouselNav.querySelectorAll('.carousel-dot');
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        // --- 🔗 Buscar dados da API
+        fetch("/apis/sobre-nos")
+            .then(response => response.json())
+            .then(data => {
+                // Preencher contato
+                document.querySelector(".contact-info").innerHTML = `
+                    <p><strong>${data.nome}</strong></p>
+                    <p><i class="fas fa-map-marker-alt icon"></i> ${data.endereco}</p>
+                    <p><i class="fas fa-mobile-alt icon"></i> Celular: ${data.telefone}</p>
+                `;
+
+                // Preencher missão
+                document.querySelector(".mission-text").innerHTML = `<p>${data.historia}</p>`;
+
+                // Preencher valores
+                const valoresHTML = data.valores.map(valor => `
+                    <div class="value-card">
+                        <div class="value-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3 class="value-title">${valor.titulo}</h3>
+                        <p class="value-description">${valor.descricao}</p>
+                    </div>
+                `).join("");
+                document.querySelector(".values-container").innerHTML = valoresHTML;
+
+                // (Opcional) Carregar imagens no carrossel
+                if (Array.isArray(data.imagens)) {
+                    setupCarousel(data.imagens);
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao carregar dados da API:", error);
+            });
+    });
+</script>
+
+</body>
+</html>
