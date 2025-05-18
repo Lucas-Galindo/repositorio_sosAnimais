@@ -6,6 +6,7 @@ public class Conexao {
 
     private Connection connect;
     private String erro;
+
     public Conexao()
     {   erro="";
         connect=null;
@@ -29,6 +30,7 @@ public class Conexao {
         { erro="Outro erro: " + ex.toString(); }
         return conectado;
     }
+
     public String getMensagemErro()
     {
         return erro;
@@ -37,6 +39,7 @@ public class Conexao {
     public boolean getEstadoConexao() {
         return (connect!=null);
     }
+
     public boolean manipular(String sql) // inserir, alterar,excluir
     {   boolean executou=false;
         try {
@@ -51,13 +54,14 @@ public class Conexao {
         }
         return executou;
     }
+
     public ResultSet consultar(String sql)
     {   ResultSet rs=null;
         try {
             Statement statement = connect.createStatement();
             //ResultSet.TYPE_SCROLL_INSENSITIVE,
             //ResultSet.CONCUR_READ_ONLY);
-            rs = statement.executeQuery( sql );
+            rs = statement.executeQuery(sql);
             //statement.close();
         }
         catch ( SQLException sqlex )
@@ -66,6 +70,7 @@ public class Conexao {
         }
         return rs;
     }
+
     public int getMaxPK(String tabela,String chave)
     {
         String sql="select max("+chave+") from "+tabela;

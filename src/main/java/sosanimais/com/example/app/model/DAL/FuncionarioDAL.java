@@ -2,14 +2,11 @@ package sosanimais.com.example.app.model.DAL;
 
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import sosanimais.com.example.app.controller.service.PessoaService;
 import sosanimais.com.example.app.model.PessoaInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
 import sosanimais.com.example.app.model.entity.Funcionario;
-import sosanimais.com.example.app.model.entity.Pessoa;
 
 
 import java.sql.ResultSet;
@@ -19,7 +16,6 @@ import java.util.List;
 
 @Repository
 public class FuncionarioDAL implements IDAL<Funcionario> {
-
 
     public FuncionarioDAL() {
         super();
@@ -169,38 +165,5 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
 
     }
-
-
-//    public Funcionario buscarLoginPorSenha(String login, String senha) {
-//        Funcionario func = null;
-//        String sql = "SELECT * FROM funcionario f INNER JOIN pessoa p ON f.pess_id = p.pess_id " +
-//                "WHERE f.func_login = ? AND f.func_senha = ?";
-//
-//        try (PreparedStatement stmt = SingletonDB.getConexao().prepareStatement(sql)) {
-//            stmt.setString(1, login);
-//            stmt.setString(2, senha);
-//            try (ResultSet rs = stmt.executeQuery()) {
-//                if (rs.next()) {
-//                    PessoaInformacao info = new PessoaInformacao(
-//                            rs.getString("pess_nome"),
-//                            rs.getString("pess_cpf"),
-//                            rs.getString("pess_email"),
-//                            rs.getString("pess_telefone")
-//                    );
-//                    func = new Funcionario(
-//                            rs.getLong("pess_id"),
-//                            info,
-//                            rs.getInt("func_matricula"),
-//                            rs.getString("func_login"),
-//                            rs.getString("func_senha")
-//                    );
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("Erro ao validar login: " + e.getMessage());
-//        }
-//        return func;
-//    }
-
 
 }

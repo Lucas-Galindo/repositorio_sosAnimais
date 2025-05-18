@@ -1,5 +1,6 @@
 package sosanimais.com.example.app.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +66,14 @@ public class FuncionarioController {
         if(aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar funcionario"));
+    }
+
+    @GetMapping("/acesso/{login}/{senha}")
+    public ResponseEntity<Object> buscaLogin(@PathVariable String login, @PathVariable String senha){
+        boolean aux = funcService.buscaLogin(login, senha);
+        if(aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Login ou senha incorretos ou não cadastrados!"));
     }
 
 

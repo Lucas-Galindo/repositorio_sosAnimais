@@ -128,4 +128,9 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
         return lista;
     }
+
+    @Override //Função retorna sempre falso, pois o Login é verificado somenete em FuncionarioDAL
+    public boolean buscaLogin(String l, String s) {
+        return false;
+    }
 }

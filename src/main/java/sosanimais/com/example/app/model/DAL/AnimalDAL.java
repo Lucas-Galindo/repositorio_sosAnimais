@@ -167,4 +167,9 @@ public class AnimalDAL implements IDAL<Animal>{
         sql=sql.replace("#9",""+entidade.getIdBaia());
         return SingletonDB.getConexao().manipular(sql);
     }
+
+    @Override //Função retorna sempre falso, pois o Login é verificado somenete em FuncionarioDAL
+    public boolean buscaLogin(String l, String s) {
+        return false;
+    }
 }

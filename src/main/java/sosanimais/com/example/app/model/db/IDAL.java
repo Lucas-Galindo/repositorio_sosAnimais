@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IDAL<T>{
-    
 
      boolean save(T entidade);
      public boolean update(T entidade);
