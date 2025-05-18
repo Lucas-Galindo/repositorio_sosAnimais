@@ -32,7 +32,7 @@ public class PessoaController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
     }
 
-    @GetMapping
+    @GetMapping("/lista")
     public ResponseEntity<Object> getPessoaLista(){
         List<Pessoa> lista = pessoaService.getAll("");
         if(lista!=null)
@@ -40,7 +40,7 @@ public class PessoaController {
         return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
     }
 
-    @GetMapping("/{filtro}")
+    @GetMapping("/lista/{filtro}")
     public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
         List<Pessoa> lista = pessoaService.getAll(filtro);
         if(lista!=null)
@@ -58,11 +58,10 @@ public class PessoaController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Pessoa"));
     }
 
-
     @PutMapping
     public ResponseEntity<Object> atualizar(@RequestBody Pessoa entidade){
         boolean aux = pessoaService.atualizar(entidade);
-        if(aux == true)
+        if(aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Pessoa"));
     }

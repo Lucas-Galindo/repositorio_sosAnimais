@@ -21,12 +21,6 @@ import java.util.List;
 public class FuncionarioDAL implements IDAL<Funcionario> {
 
 
-    private PessoaService pessoaService;
-
-    public FuncionarioDAL(PessoaService pessoaService) {
-        this.pessoaService = pessoaService;
-    }
-
     public FuncionarioDAL() {
         super();
     }
