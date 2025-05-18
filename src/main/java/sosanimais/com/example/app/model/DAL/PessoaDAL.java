@@ -15,6 +15,9 @@ import java.util.List;
 @Repository
 public class PessoaDAL implements IDAL<Pessoa> {
 
+    public PessoaDAL(){
+        super();
+    }
 
     @Override
     public boolean save(Pessoa entidade) {
@@ -40,39 +43,35 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
     @Override
     public boolean update(Pessoa entidade) {
+//        System.out.println("***"+entidade.getId()+" "+entidade.getPessoa().getNome());
         String sql= """
-            UPDATE pessoa SET pess_nome = #2, pess_cpf = #3, pess_telefone = #4,pess_email = #5 WHERE pess_id=#1;
+            UPDATE pessoa SET pess_nome = '#2', pess_cpf = '#3', pess_email = '#5', pess_telefone = #4 WHERE pess_id = #1;
             """;
-        sql=sql.replace("#1","" +entidade.getId());
         sql=sql.replace("#2",entidade.getPessoa().getNome());
         sql=sql.replace("#3",entidade.getPessoa().getCpf());
         sql=sql.replace("#4",entidade.getPessoa().getTelefone());
         sql=sql.replace("#5",entidade.getPessoa().getEmail());
+        sql=sql.replace("#1","" +entidade.getId());
+//        System.out.println("***"+sql);
 
+//        System.out.println(SingletonDB.getConexao().manipular(sql));
         return SingletonDB.getConexao().manipular(sql);
-
     }
 
     @Override
     public boolean delete(Pessoa entidade) {
         return SingletonDB.getConexao().manipular("DELETE FROM pessoa WHERE pess_id="+entidade.getId());
-
     }
 
     public PessoaInformacao pessoaInfo(ResultSet set){
         try{
-            PessoaInformacao info = null;
-            if(set.next()){
-                info = new PessoaInformacao(
+            PessoaInformacao info = new PessoaInformacao(
                         set.getString("pess_nome"),
                         set.getString("pess_cpf"),
                         set.getString("pess_telefone"),
                         set.getString("pess_email")
-                );
-            }
-
+            );
             return info;
-
 
         }catch(Exception e){
             return null;
@@ -85,27 +84,23 @@ public class PessoaDAL implements IDAL<Pessoa> {
     public Pessoa get(Long id) {
         Pessoa pessoa=null;
 
-        PessoaInformacao pessoaInfo = null;
-        String sql = "SELECT * FROM pessoa WHERE pess_id="+id;
+        String sql = "SELECT * FROM pessoa WHERE pess_id=" + Math.toIntExact(id);
         ResultSet resultSet=SingletonDB.getConexao().consultar(sql);
         try{
             if(resultSet.next()){
-
+                PessoaInformacao aux = pessoaInfo(resultSet);
                 pessoa =new Pessoa(
                         resultSet.getLong("pess_id"),
-                        pessoaInfo(resultSet)
+                        aux
                 );
+                return pessoa;
             }
 
-            return pessoa;
-
         }catch(Exception e){
-            return null;
+            e.printStackTrace();
         }
-
-
+        return null;
     }
-
 
 
     @Override
@@ -130,7 +125,6 @@ public class PessoaDAL implements IDAL<Pessoa> {
             }
         }
         catch (Exception e){ e.printStackTrace();}
-
 
         return lista;
     }

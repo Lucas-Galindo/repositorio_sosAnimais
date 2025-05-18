@@ -59,12 +59,11 @@ public class FuncionarioController {
 
     }
 
-
     @PutMapping
     public ResponseEntity<Object> atualizar(@RequestBody Funcionario entidade){ //correto
         boolean aux = funcService.atualizar(entidade);
-        if(aux == true)
-            return ResponseEntity.ok(entidade);
+        if(aux)
+            return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar funcionario"));
     }
 
