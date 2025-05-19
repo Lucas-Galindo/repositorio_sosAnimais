@@ -11,24 +11,25 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
-@CrossOrigin
-@RequestMapping(value=("/apis/funcionario"))
+@CrossOrigin("*")
+@RequestMapping("/apis/funcionario")
 public class FuncionarioController {
-    
+
+
     FuncionarioService funcService = new FuncionarioService();
 
     @PostMapping
-    public ResponseEntity<Object> cadastro(@RequestBody Funcionario elemento){ // correto
+    public ResponseEntity<Object> cadastro(@RequestBody Funcionario elemento) { // correto
         boolean aux = funcService.cadastro(elemento);
-        if(aux)
+        if (aux)
             return ResponseEntity.ok(elemento);
-        return ResponseEntity.badRequest().body( new Erro("Erro salvar funcionario"));
+        return ResponseEntity.badRequest().body(new Erro("Erro salvar funcionario"));
     }
 
     @GetMapping("/{mat}") // correto
-    public ResponseEntity<Object> getFuncId(@PathVariable Long mat){
+    public ResponseEntity<Object> getFuncId(@PathVariable Long mat) {
         Funcionario aux = funcService.getId(mat);
-        if(aux!=null)
+        if (aux != null)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao achar funcionario"));
     }
@@ -36,7 +37,7 @@ public class FuncionarioController {
     @GetMapping("/lista") // correto
     public ResponseEntity<Object> getFuncLista() { //coreto
         List<Funcionario> lista = funcService.getAll("");
-        if(lista!=null)
+        if (lista != null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar funcionario"));
     }
@@ -44,7 +45,7 @@ public class FuncionarioController {
     @GetMapping("/lista/{filtro}")
     public ResponseEntity<Object> getFuncLista(@PathVariable String filtro) {
         List<Funcionario> lista = funcService.getAll(filtro);
-        if(lista!=null)
+        if (lista != null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar funcionario"));
     }
@@ -53,20 +54,19 @@ public class FuncionarioController {
     @DeleteMapping("/{mat}")
     public ResponseEntity<Object> deletar(@PathVariable Long mat) { //correto
         boolean aux = funcService.deletar(funcService.getId(mat));
-        if(aux)
+        if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar funcionario"));
 
     }
 
     @PutMapping
-    public ResponseEntity<Object> atualizar(@RequestBody Funcionario entidade){ //correto
+    public ResponseEntity<Object> atualizar(@RequestBody Funcionario entidade) { //correto
         boolean aux = funcService.atualizar(entidade);
-        if(aux)
+        if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar funcionario"));
     }
 
-
-
 }
+

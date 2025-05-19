@@ -12,8 +12,8 @@ import sosanimais.com.example.app.model.util.Erro;
 import java.util.List;
 
 @RestController
-@CrossOrigin
-@RequestMapping(value=("/apis/adotante"))
+@CrossOrigin("*")
+@RequestMapping("/apis/adotante")
 public class AdotanteController {
 
     AdotanteService funcService = new AdotanteService();
