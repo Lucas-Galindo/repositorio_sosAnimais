@@ -12,6 +12,7 @@ public class PessoaService {
     private PessoaDAL repositorio = new PessoaDAL();
     public PessoaService(){}
 
+    // CRUD BASICO
     public boolean cadastro(Pessoa entidade){
         return repositorio.save(entidade);
     }
@@ -25,5 +26,7 @@ public class PessoaService {
     public boolean atualizar(Pessoa entidade){
         return repositorio.update(entidade);
     }
+
+    public Pessoa getCpf(String cpf){ return repositorio.findByCPF(cpf);}
 
 }

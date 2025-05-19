@@ -24,31 +24,6 @@ public class PessoaController {
         return ResponseEntity.badRequest().body( new Erro("Erro salvar Pessoa"));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
-        Pessoa aux = pessoaService.getId(id);
-        if(aux!=null)
-            return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
-    }
-
-    @GetMapping("/lista")
-    public ResponseEntity<Object> getPessoaLista(){
-        List<Pessoa> lista = pessoaService.getAll("");
-        if(lista!=null)
-            return ResponseEntity.ok(lista);
-        return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
-    }
-
-    @GetMapping("/lista/{filtro}")
-    public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
-        List<Pessoa> lista = pessoaService.getAll(filtro);
-        if(lista!=null)
-            return ResponseEntity.ok(lista);
-        return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
-
-    }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(@PathVariable Long id){
@@ -69,5 +44,38 @@ public class PessoaController {
 
 
 
+    @GetMapping("/lista")
+    public ResponseEntity<Object> getPessoaLista(){
+        List<Pessoa> lista = pessoaService.getAll("");
+        if(lista!=null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
+    }
+
+    @GetMapping("/lista/{filtro}")
+    public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
+        List<Pessoa> lista = pessoaService.getAll(filtro);
+        if(lista!=null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
+
+    }
+
+
+    @GetMapping("/busca/{id}")
+    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
+        Pessoa aux = pessoaService.getId(id);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
+    }
+
+    @GetMapping("/busca/{cpf}")
+    public ResponseEntity<Object> getPessoaCPF(@PathVariable String cpf){
+        Pessoa aux = pessoaService.getCpf(cpf);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com cpf"));
+    }
 
 }

@@ -883,6 +883,51 @@
             }
         });
 
+        ///////////////////////  FUNÇÃO DE PESQUISAR A PESSOA  /////////////////////////////
+
+        function pesquisarCPF(pessoaData)
+        {
+            fetch('http://localhost:8080/apis/pessoa/' + pessoaData.Pess_CPF)
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Pessoa não encontrada');
+                }
+                return response.json(); // transforma a resposta em objeto JS
+            })
+            .then(pessoa => {
+                // 2. Agora temos a pessoa, com ID
+                const pessoaId = pessoa.id;
+
+                // 3. Criar Funcionario com o ID da Pessoa
+                return fetch('http://localhost:8080/apis/funcionario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    Func_Login: document.getElementById('employee-login').value,
+                    Func_Senha: document.getElementById('employee-password').value,
+                    Usu_ID: pessoaId // Aqui vai o ID real
+                })
+                });
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Erro ao salvar funcionário');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Funcionário salvo com sucesso:', data);
+            })
+            .catch(error => {
+                console.error('Erro:', error.message);
+            });
+        
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+
         // Função para enviar os dados para a API
         function savePerson(pessoaData) {
             // Primeiro, salvar a pessoa
@@ -909,9 +954,9 @@
                 
                 // Array para armazenar todas as promessas de salvamento dos tipos de pessoa
                 const savePromises = [];
-                
                 // Se for funcionário, salvar os dados de funcionário
                 if (funcionarioCheckbox.checked) {
+                    var pessoaAux = pesquisarCPF(pessoaData.Pess_CPF);
                     const funcionarioPromise = fetch('http://localhost:8080/apis/funcionario', {
                         method: 'POST',
                         headers: {
@@ -920,7 +965,7 @@
                         body: JSON.stringify({
                             Func_Login: document.getElementById('employee-login').value,
                             Func_Senha: document.getElementById('employee-password').value,
-                            Usu_ID: pessoaResponseData.Pess_ID
+                            Usu_ID: pessoaAux
                         })
                     });
                     savePromises.push(funcionarioPromise);
