@@ -5,76 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOS Amigos de Animais - Cadastro de Pessoa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
     <style>
-        /* Estilos existentes - incorporando do arquivo fornecido */
-        :root {
-            /* Cores primárias */
-            --color-orange-burnt: #d37a47; /* Laranja queimado (fundo do logo) */
-            --color-brown-dark: #4a2d21;   /* Marrom escuro (silhueta do gato e texto "S.O.S.") */
-            --color-beige-light: #f2e6db;  /* Bege claro (fundo geral) */
-
-            /* Cores secundárias */
-            --color-orange-light: #e59a62; /* Laranja claro (contorno do cão) */
-            --color-gray-dark: #4d4d4d;    /* Cinza escuro (texto "Amigos de Animais") */
-
-            /* Variações para elementos de interface (opcionais) */
-            --color-orange-burnt-hover: #c06b3a; /* Versão mais escura para hover */
-            --color-orange-burnt-active: #b05d2c; /* Versão ainda mais escura para active */
-
-            /* Cores de texto */
-            --text-dark: var(--color-brown-dark);
-            --text-light: #ffffff;
-            --text-muted: var(--color-gray-dark);
-
-            /* Cores de fundo */
-            --bg-primary: var(--color-beige-light);
-            --bg-secondary: var(--color-orange-burnt);
-            --bg-accent: var(--color-orange-light);
-
-            /* Cores de borda */
-            --border-primary: var(--color-orange-burnt);
-            --border-secondary: var(--color-orange-light);
-
-            /* Cores de elementos interativos */
-            --button-primary: var(--color-orange-burnt);
-            --button-primary-hover: var(--color-orange-burnt-hover);
-            --button-secondary: var(--color-brown-dark);
-            --button-text: var(--color-beige-light);
-
-            /* Sombras */
-            --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
-            --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
-            --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        header {
-            display: flex;
-            background-color: var(--color-orange-burnt-active);
-            padding: 1rem 4rem;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            height: 100px;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        body {
-            background-color: var(--bg-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
         .logo-container {
             display: flex;
             align-items: center;
@@ -93,10 +36,7 @@
             font-weight: bold;
         }
 
-        .header-icons {
-            display: flex;
-            align-items: center;
-        }
+       
 
         .notification-icon, .profile-icon {
             margin-left: 20px;
@@ -121,18 +61,7 @@
             flex: 1;
         }
 
-        .sidebar {
-            width: 280px;
-            height: calc(100vh - 100px); /* Altura da viewport menos a altura do header */
-            background-color: var(--color-orange-burnt);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            position: fixed;
-            top: 100px; /* Posiciona abaixo do header */
-        }
+        
 
         .menu-item {
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -218,59 +147,7 @@
         .page-title i {
             margin-right: 0.5rem;
             color: var(--color-orange-burnt);
-        }
-
-        footer {
-            background-color: var(--color-orange-burnt-active);
-            color: white;
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-            margin-left: 280px; /* Largura da sidebar */
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-brand {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-link {
-            color: white;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .footer-link:hover {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
-        .footer-copyright {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .sidebar-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
+        }        
         /* Estilos específicos para a página de cadastro */
         .form-container {
             background-color: white;
@@ -529,17 +406,7 @@
                 padding: 1.5rem;
             }
 
-            footer {
-                margin-left: 0;
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 10px;
-            }
+           
 
             .title {
                 font-size: 1.4rem;
@@ -586,169 +453,22 @@
         }
     </style>
 </head>
+
 <body>
 <!-- Header -->
-<header>
-    <button class="sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-    </button>
-    <div class="logo-container">
-        <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
-        <div class="title">S.O.S. Amigos de Animais</div>
-    </div>
-    <div class="header-icons">
-        <i class="fas fa-bell notification-icon fa-lg"></i>
-        <div class="profile-icon">
-            <i class="fas fa-user fa-lg"></i>
-        </div>
-    </div>
-</header>
-
+ <main-header></main-header>
 <!-- Main Container -->
 <div class="main-container">
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="menu-item">
-            <button class="menu-button">
-                <div class="menu-button-content">
-                    <i class="fas fa-home menu-icon"></i>
-                    Dashboard
-                </div>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-chart-line"></i>
-                    Estatísticas
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    Calendário
-                </a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <button class="menu-button">
-                <div class="menu-button-content">
-                    <i class="fas fa-paw menu-icon"></i>
-                    Animais
-                </div>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-list"></i>
-                    Listar todos
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-plus-circle"></i>
-                    Cadastrar novo
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-search"></i>
-                    Buscar animal
-                </a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <button class="menu-button">
-                <div class="menu-button-content">
-                    <i class="fas fa-user-friends menu-icon"></i>
-                    Pessoas
-                </div>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
-            <div class="dropdown-menu active">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-list"></i>
-                    Listar todas
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-plus-circle"></i>
-                    Cadastrar nova
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-search"></i>
-                    Buscar pessoa
-                </a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <button class="menu-button">
-                <div class="menu-button-content">
-                    <i class="fas fa-heart menu-icon"></i>
-                    Doações
-                </div>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-hand-holding-heart"></i>
-                    Receber doação
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-history"></i>
-                    Histórico
-                </a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <button class="menu-button">
-                <div class="menu-button-content">
-                    <i class="fas fa-file-alt menu-icon"></i>
-                    Relatórios
-                </div>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-paw"></i>
-                    Animais
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-home"></i>
-                    Adoções
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-heart"></i>
-                    Doações
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-user-friends"></i>
-                    Voluntários
-                </a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <button class="menu-button">
-                <div class="menu-button-content">
-                    <i class="fas fa-cog menu-icon"></i>
-                    Configurações
-                </div>
-                <i class="fas fa-chevron-down dropdown-icon"></i>
-            </button>
-            <div class="dropdown-menu">
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-user-cog"></i>
-                    Perfil
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-users-cog"></i>
-                    Usuários
-                </a>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Sair
-                </a>
-            </div>
-        </div>
-    </aside>
+     <main-sidebar></main-sidebar>
+    
+     
 
     <!-- Content -->
     <main class="content">
         <h1 class="page-title">
             <i class="fas fa-user-plus"></i>
-            Cadastro de Pessoa
+            Cadastro de Funcionario
         </h1>
 
         <div class="form-container">
@@ -809,29 +529,17 @@
         </div>
     </main>
 </div>
-
+<div id="footer-container"></div>
+<main-footer></main-footer>
 <!-- Toast de Notificação -->
 <div class="toast-container" id="toast-container">
     <!-- As notificações serão injetadas aqui via JavaScript -->
 </div>
 
-<!-- Footer -->
-<footer>
-    <div class="footer-logo">
-        <i class="fas fa-paw" style="margin-right: 10px;"></i>
-        <div class="footer-brand">S.O.S. Amigos de Animais</div>
-    </div>
-    <div class="footer-links">
-        <a href="#" class="footer-link">Sobre nós</a>
-        <a href="#" class="footer-link">Política de Privacidade</a>
-        <a href="#" class="footer-link">Contato</a>
-    </div>
-    <div class="footer-copyright">
-        &copy; 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.
-    </div>
-</footer>
 
 <!-- JavaScript -->
+
+<script href="./assets/carregarPage.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // JavaScript para controlar os dropdowns
@@ -878,94 +586,14 @@
         }
 
         // Formatação de CPF
-        const cpfInput = document.getElementById('person-cpf');
-        if (cpfInput) {
-            cpfInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-
-                if (value.length > 11) {
-                    value = value.substring(0, 11);
-                }
-
-                if (value.length > 9) {
-                    value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-                } else if (value.length > 6) {
-                    value = value.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
-                } else if (value.length > 3) {
-                    value = value.replace(/(\d{3})(\d{0,3})/, '$1.$2');
-                }
-
-                e.target.value = value;
-            });
-        }
-
-        // Formatação de telefone
-        const phoneInput = document.getElementById('person-phone');
-        if (phoneInput) {
-            phoneInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-
-                if (value.length > 11) {
-                    value = value.substring(0, 11);
-                }
-
-                if (value.length > 10) {
-                    value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-                } else if (value.length > 6) {
-                    value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-                } else if (value.length > 2) {
-                    value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-                }
-
-                e.target.value = value;
-            });
-        }
+       
 
         // Validação do formulário
         const form = document.getElementById('personForm');
         const saveButton = document.getElementById('btn-save');
         const cancelButton = document.getElementById('btn-cancel');
 
-        // Funções de validação
-        function validateName(name) {
-            return name.trim().length >= 3;
-        }
-
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(String(email).toLowerCase());
-        }
-
-        function validateCPF(cpf) {
-            const value = cpf.replace(/\D/g, '');
-            if (value.length !== 11) return false;
-
-            // Verificação se todos os dígitos são iguais (CPF inválido, mas com formato válido)
-            if (/^(\d)\1+$/.test(value)) return false;
-
-            // Validação do primeiro dígito verificador
-            let sum = 0;
-            for (let i = 0; i < 9; i++) {
-                sum += parseInt(value.charAt(i)) * (10 - i);
-            }
-            let remainder = sum % 11;
-            let dv1 = remainder < 2 ? 0 : 11 - remainder;
-
-            // Validação do segundo dígito verificador
-            sum = 0;
-            for (let i = 0; i < 10; i++) {
-                sum += parseInt(value.charAt(i)) * (11 - i);
-            }
-            remainder = sum % 11;
-            let dv2 = remainder < 2 ? 0 : 11 - remainder;
-
-            return (parseInt(value.charAt(9)) === dv1 && parseInt(value.charAt(10)) === dv2);
-        }
-
-        function validatePhone(phone) {
-            const value = phone.replace(/\D/g, '');
-            return value.length >= 10 && value.length <= 11;
-        }
+        
 
         function showError(fieldId, errorId, show) {
             const field = document.getElementById(fieldId);

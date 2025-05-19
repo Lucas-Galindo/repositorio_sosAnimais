@@ -1,0 +1,78 @@
+/* Estilos existentes - incorporando do arquivo fornecido */
+        :root {
+            /* Cores primárias */
+            --color-orange-burnt: #d37a47; /* Laranja queimado (fundo do logo) */
+            --color-brown-dark: #4a2d21;   /* Marrom escuro (silhueta do gato e texto "S.O.S.") */
+            --color-beige-light: #f2e6db;  /* Bege claro (fundo geral) */
+
+            /* Cores secundárias */
+            --color-orange-light: #e59a62; /* Laranja claro (contorno do cão) */
+            --color-gray-dark: #4d4d4d;    /* Cinza escuro (texto "Amigos de Animais") */
+
+            /* Variações para elementos de interface (opcionais) */
+            --color-orange-burnt-hover: #c06b3a; /* Versão mais escura para hover */
+            --color-orange-burnt-active: #b05d2c; /* Versão ainda mais escura para active */
+
+            /* Cores de texto */
+            --text-dark: var(--color-brown-dark);
+            --text-light: #ffffff;
+            --text-muted: var(--color-gray-dark);
+
+            /* Cores de fundo */
+            --bg-primary: var(--color-beige-light);
+            --bg-secondary: var(--color-orange-burnt);
+            --bg-accent: var(--color-orange-light);
+
+            /* Cores de borda */
+            --border-primary: var(--color-orange-burnt);
+            --border-secondary: var(--color-orange-light);
+
+            /* Cores de elementos interativos */
+            --button-primary: var(--color-orange-burnt);
+            --button-primary-hover: var(--color-orange-burnt-hover);
+            --button-secondary: var(--color-brown-dark);
+            --button-text: var(--color-beige-light);
+
+            /* Sombras */
+            --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+            --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+            --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            display: flex;
+            background-color: var(--color-orange-burnt-active);
+            padding: 1rem 4rem;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 100px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+body {
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
