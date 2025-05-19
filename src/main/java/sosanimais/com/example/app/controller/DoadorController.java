@@ -3,10 +3,9 @@ package sosanimais.com.example.app.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sosanimais.com.example.app.controller.service.AdotanteService;
-import sosanimais.com.example.app.controller.service.FuncionarioService;
-import sosanimais.com.example.app.model.entity.Adotante;
-import sosanimais.com.example.app.model.entity.Funcionario;
+
+import sosanimais.com.example.app.controller.service.DoadorService;
+import sosanimais.com.example.app.model.entity.Doador;
 import sosanimais.com.example.app.model.util.Erro;
 
 import java.util.List;
