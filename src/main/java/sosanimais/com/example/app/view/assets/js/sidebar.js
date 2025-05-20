@@ -52,7 +52,7 @@ class SideBar extends HTMLElement{
                     </div>
                     <i class="fas fa-chevron-down dropdown-icon"></i>
                 </button>
-                <div class="dropdown-menu active">
+                <div class="dropdown-menu">
                     <a href="#" class="dropdown-item">
                         <i class="fas fa-list"></i>
                         Listar todas
@@ -67,29 +67,7 @@ class SideBar extends HTMLElement{
                     </a>
                 </div>
             </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-user-friends menu-icon"></i>
-                        Funcionario
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu active">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-list"></i>
-                        Listar todas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-plus-circle"></i>
-                        Cadastrar nova
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-search"></i>
-                        Buscar pessoa
-                    </a>
-                </div>
-            </div>
+            
             <div class="menu-item">
                 <button class="menu-button">
                     <div class="menu-button-content">

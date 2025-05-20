@@ -24,11 +24,11 @@ public class DoadorDAL implements IDAL<Doador>{
         try{
             if(!pessSet.wasNull()){
                 sql = """
-                    INSERT INTO doador(usu_id,doador_matricula) VALUES ('#1','#2');
+                    INSERT INTO doador(usu_id) VALUES ('#1');
                     """;
 
                 sql = sql.replace("#1", "" + entidade.getId());
-                sql = sql.replace("#2", "" + entidade.getMatricula());
+                //sql = sql.replace("#2", "" + entidade.getMatricula());
 
                 return SingletonDB.getConexao().manipular(sql);
             }

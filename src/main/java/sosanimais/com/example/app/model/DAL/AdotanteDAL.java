@@ -25,11 +25,11 @@ public class AdotanteDAL implements IDAL<Adotante>{
         try{
             if(!pessSet.wasNull()){
                 sql = """
-                    INSERT INTO adotante(usu_id,adotante_matricula) VALUES ('#1','#2');
+                    INSERT INTO adotante(usu_id) VALUES ('#1');
                     """;
 
                 sql = sql.replace("#1", "" + entidade.getId());
-                sql = sql.replace("#2", "" + entidade.getMatricula());
+                //sql = sql.replace("#2", "" + entidade.getMatricula());
 
                 return SingletonDB.getConexao().manipular(sql);
             }

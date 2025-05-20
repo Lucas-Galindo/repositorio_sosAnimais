@@ -871,164 +871,186 @@
             // Se todos os campos forem válidos, enviar o formulário
             if (nameValid && emailValid && cpfValid && phoneValid && employeeValid) {
                 // Preparar os dados base da pessoa
+                //console.log("Entrou no if de campos validos");
                 const pessoaData = {
                     name: nameInput.value,
                     email: emailInput.value,
                     cpf: cpfInput.value.replace(/\D/g, ''), // Remove formatação
                     phone: phoneInput.value.replace(/\D/g, '') // Remove formatação
                 };
+                //console.log(pessoaData);
 
                 // Salvar a pessoa primeiro e depois salvar os diferentes papéis
                 savePerson(pessoaData);
             }
         });
 
-        ///////////////////////  FUNÇÃO DE PESQUISAR A PESSOA  /////////////////////////////
 
-        function pesquisarCPF(pessoaData)
-        {
-            fetch('http://localhost:8080/apis/pessoa/' + pessoaData.Pess_CPF)
-            .then(response => {
-                if (!response.ok) {
-                throw new Error('Pessoa não encontrada');
-                }
-                return response.json(); // transforma a resposta em objeto JS
-            })
-            .then(pessoa => {
-                // 2. Agora temos a pessoa, com ID
-                const pessoaId = pessoa.id;
-
-                // 3. Criar Funcionario com o ID da Pessoa
-                return fetch('http://localhost:8080/apis/funcionario', {
+        // Funções para salvar os diferentes tipos de pessoa
+        function salvarFuncionario(pessoaId) {
+            return fetch('http://localhost:8080/apis/funcionario', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    Func_Login: document.getElementById('employee-login').value,
-                    Func_Senha: document.getElementById('employee-password').value,
-                    Usu_ID: pessoaId // Aqui vai o ID real
+                    id: pessoaId,
+                    login: document.getElementById('employee-login').value,
+                    senha: document.getElementById('employee-password').value,
                 })
-                });
             })
             .then(response => {
                 if (!response.ok) {
-                throw new Error('Erro ao salvar funcionário');
+                    throw new Error('Erro ao salvar funcionário');
                 }
                 return response.json();
             })
             .then(data => {
                 console.log('Funcionário salvo com sucesso:', data);
-            })
-            .catch(error => {
-                console.error('Erro:', error.message);
+                return data;
             });
-        
+        }
 
-        ///////////////////////////////////////////////////////////////////////////////////
-
-
-        // Função para enviar os dados para a API
-        function savePerson(pessoaData) {
-            // Primeiro, salvar a pessoa
-            fetch('http://localhost:8080/apis/pessoa', {
+        function salvarAdotante(pessoaId) {
+            return fetch('http://localhost:8080/apis/adotante', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    Pess_Nome: pessoaData.name,
-                    Pess_CPF: pessoaData.cpf,
-                    Pess_Telefone: pessoaData.phone,
-                    Pess_Email: pessoaData.email
+                    id: pessoaId
+                    
                 })
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
+                    throw new Error('Erro ao salvar adotante');
                 }
                 return response.json();
             })
-            .then(pessoaResponseData => {
-                console.log('Pessoa cadastrada com sucesso:', pessoaResponseData);
-                
-                // Array para armazenar todas as promessas de salvamento dos tipos de pessoa
-                const savePromises = [];
-                // Se for funcionário, salvar os dados de funcionário
-                if (funcionarioCheckbox.checked) {
-                    var pessoaAux = pesquisarCPF(pessoaData.Pess_CPF);
-                    const funcionarioPromise = fetch('http://localhost:8080/apis/funcionario', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            Func_Login: document.getElementById('employee-login').value,
-                            Func_Senha: document.getElementById('employee-password').value,
-                            Usu_ID: pessoaAux
-                        })
-                    });
-                    savePromises.push(funcionarioPromise);
-                }
-                
-                // Se for adotante, salvar os dados de adotante
-                if (adotanteCheckbox.checked) {
-                    const adotantePromise = fetch('http://localhost:8080/apis/adotante', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            Usu_ID: pessoaResponseData.Pess_ID
-                        })
-                    });
-                    savePromises.push(adotantePromise);
-                }
-                
-                // Se for doador, salvar os dados de doador
-                if (doadorCheckbox.checked) {
-                    const doadorPromise = fetch('http://localhost:8080/apis/doador', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            Usu_Id: pessoaResponseData.Pess_ID
-                        })
-                    });
-                    savePromises.push(doadorPromise);
-                }
-                
-                // Executar todas as promessas de salvamento
-                return Promise.all(savePromises);
+            .then(data => {
+                console.log('Adotante salvo com sucesso:', data);
+                return data;
+            });
+        }
+
+        function salvarDoador(pessoaId) {
+            return fetch('http://localhost:8080/apis/doador', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                   id: pessoaId
+                })
             })
-            .then(results => {
-                console.log('Todos os registros foram salvos com sucesso:', results);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar doador');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Doador salvo com sucesso:', data);
+                return data;
+            });
+        }
+
+
+
+        // Função para enviar os dados para a API
+        async function savePerson(pessoaData) {
+            try {
+                // Cadastrar pessoa mantendo a estrutura requerida
+                const response = await fetch('http://localhost:8080/apis/pessoa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "pessoa": {
+                            nome: pessoaData.name,
+                            cpf: pessoaData.cpf,
+                            telefone: pessoaData.phone,
+                            email: pessoaData.email
+                        }
+                    })
+                });
                 
-                // Limpar o formulário
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const pessoaResponseData = await response.json();
+                console.log('Resposta da API:', pessoaResponseData);
+                
+                // Tentar acessar o ID em diferentes possíveis locais na estrutura
+                let pessoaId;  
+                //console.log("Não foi possível encontrar o ID diretamente, tentando buscar por CPF...");
+                const cpf = pessoaData.cpf;
+                const pessoaPorCPF = await pesquisarCPF(cpf);
+                pessoaId = pessoaPorCPF.id;
+                
+                
+                if (!pessoaId) {
+                    throw new Error("Não foi possível obter o ID da pessoa");
+                }
+                console.log('ID da pessoa:', pessoaId);
+                
+                // Executar em paralelo todas as operações necessárias
+                const promises = [];
+                
+                if (funcionarioCheckbox.checked) {
+                    promises.push(salvarFuncionario(pessoaId));
+                }
+                
+                if (adotanteCheckbox.checked) {
+                    promises.push(salvarAdotante(pessoaId));
+                }
+                
+                if (doadorCheckbox.checked) {
+                    promises.push(salvarDoador(pessoaId));
+                }
+                // Aguardar todas as operações
+                const resultados = promises.length > 0 ? await Promise.all(promises) : [];
+                // Concluir com sucesso
+                console.log('Cadastros realizados com sucesso:', resultados);
+                // Limpar formulário
                 document.getElementById('personForm').reset();
-                
-                // Esconder a seção de funcionário
                 employeeSection.classList.remove('active');
                 
-                // Construir a mensagem de sucesso
+                // Mensagem de sucesso
                 let tiposPessoa = [];
                 if (funcionarioCheckbox.checked) tiposPessoa.push('Funcionário');
                 if (adotanteCheckbox.checked) tiposPessoa.push('Adotante');
                 if (doadorCheckbox.checked) tiposPessoa.push('Doador');
                 
                 const tiposMsg = tiposPessoa.join(', ');
-                
-                // Mostrar mensagem de sucesso
                 showToast('success', 'Cadastro Realizado', `${pessoaData.name} cadastrado(a) com sucesso como ${tiposMsg}!`);
-            })
-            .catch(error => {
-                console.error('Erro ao cadastrar:', error);
                 
-                // Mostrar mensagem de erro
-                showToast('error', 'Erro no Cadastro', 'Ocorreu um erro ao cadastrar. Por favor, tente novamente.');
+            } catch (erro) {
+                console.error('Erro ao cadastrar:', erro);
+                showToast('error', 'Erro no Cadastro', `Ocorreu um erro ao cadastrar: ${erro.message}`);
+            }
+        }
+
+        ///////////////////////  FUNÇÃO DE PESQUISAR A PESSOA  /////////////////////////////
+
+        function pesquisarCPF(cpf) {
+            return fetch(`http://localhost:8080/apis/pessoa/buscacpf/${cpf}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ao buscar pessoa por CPF: ${response.status}`);
+                }
+                return response.json();
             });
         }
+        ///////////////////////////////////////////////////////////////////////////////////
 
         // Cancelar o formulário
         const cancelButton = document.getElementById('btn-cancel');

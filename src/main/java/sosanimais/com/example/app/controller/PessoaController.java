@@ -42,8 +42,6 @@ public class PessoaController {
     }
 
 
-
-
     @GetMapping("/lista")
     public ResponseEntity<Object> getPessoaLista(){
         List<Pessoa> lista = pessoaService.getAll("");
@@ -62,15 +60,15 @@ public class PessoaController {
     }
 
 
-    @GetMapping("/busca/{id}")
-    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
-        Pessoa aux = pessoaService.getId(id);
-        if(aux!=null)
-            return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
-    }
+//    @GetMapping("/buscaid/{id}")
+//    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
+//        Pessoa aux = pessoaService.getId(id);
+//        if(aux!=null)
+//            return ResponseEntity.ok(aux);
+//        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
+//    }
 
-    @GetMapping("/busca/{cpf}")
+    @GetMapping("/buscacpf/{cpf}")
     public ResponseEntity<Object> getPessoaCPF(@PathVariable String cpf){
         Pessoa aux = pessoaService.getCpf(cpf);
         if(aux!=null)
