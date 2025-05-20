@@ -24,13 +24,23 @@ public class PessoaController {
         return ResponseEntity.badRequest().body( new Erro("Erro salvar Pessoa"));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
-        Pessoa aux = pessoaService.getId(id);
-        if(aux!=null)
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deletar(@PathVariable Long id){
+        boolean aux = pessoaService.deletar(pessoaService.getId(id));
+        if(aux==true)
             return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Pessoa"));
     }
+
+    @PutMapping
+    public ResponseEntity<Object> atualizar(@RequestBody Pessoa entidade){
+        boolean aux = pessoaService.atualizar(entidade);
+        if(aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Pessoa"));
+    }
+
 
     @GetMapping("/lista")
     public ResponseEntity<Object> getPessoaLista(){
@@ -50,24 +60,20 @@ public class PessoaController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletar(@PathVariable Long id){
-        boolean aux = pessoaService.deletar(pessoaService.getId(id));
-        if(aux==true)
+//    @GetMapping("/buscaid/{id}")
+//    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
+//        Pessoa aux = pessoaService.getId(id);
+//        if(aux!=null)
+//            return ResponseEntity.ok(aux);
+//        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
+//    }
+
+    @GetMapping("/buscacpf/{cpf}")
+    public ResponseEntity<Object> getPessoaCPF(@PathVariable String cpf){
+        Pessoa aux = pessoaService.getCpf(cpf);
+        if(aux!=null)
             return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Pessoa"));
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com cpf"));
     }
-
-    @PutMapping
-    public ResponseEntity<Object> atualizar(@RequestBody Pessoa entidade){
-        boolean aux = pessoaService.atualizar(entidade);
-        if(aux)
-            return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Pessoa"));
-    }
-
-
-
-
 
 }

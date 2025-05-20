@@ -7,17 +7,22 @@ public class PessoaInformacao {
     private String email;
 
 
+    public PessoaInformacao(PessoaInformacao pessoa) {
+        this.nome = pessoa.nome;
+        this.cpf = pessoa.cpf;
+        this.telefone = pessoa.telefone;
+        this.email = pessoa.email;
 
-    public PessoaInformacao(String nome, String cpf, String telefone, String email) {
+    }
+
+    public PessoaInformacao(String nome, String cpf, String telefone, String email){
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.email = email;
-
     }
-
     public PessoaInformacao(){
-
+        this("","","","");
     }
 
     public String getNome() {

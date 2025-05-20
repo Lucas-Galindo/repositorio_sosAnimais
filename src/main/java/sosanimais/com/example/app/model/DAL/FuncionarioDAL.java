@@ -46,12 +46,12 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         try{
             if(!pessSet.wasNull()){
                 sql = """
-                    INSERT INTO funcionario(usu_id,func_login, func_matricula, func_senha) VALUES ('#1','#2','#3','#4');
+                    INSERT INTO funcionario(usu_id,func_login, func_senha) VALUES ('#1','#2','#4');
                     """;
 
                 sql = sql.replace("#1", "" + entidade.getId());
                 sql = sql.replace("#2", entidade.getLogin());
-                sql = sql.replace("#3", "" + entidade.getMatricula());
+                //sql = sql.replace("#3", "" + entidade.getMatricula());
                 sql = sql.replace("#4", entidade.getSenha());
                 return SingletonDB.getConexao().manipular(sql);
             }

@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class PessoaDAL implements IDAL<Pessoa> {
+public class PessoaDAL{
 
     public PessoaDAL(){
         super();
     }
 
-    @Override
+
     public boolean save(Pessoa entidade) {
 
         /*
@@ -30,35 +30,36 @@ public class PessoaDAL implements IDAL<Pessoa> {
         Pess_Telefone VARCHAR(4000) NOT NULL,
         Pess_Email VARCHAR(4000) NOT NULL*/
         String sql= """ 
-                INSERT INTO pessoa (pess_id,pess_nome, pess_cpf, pess_telefone,pess_email) VALUES ('#1','#2','#3','#4','#5'); 
+                INSERT INTO pessoa (pess_nome, pess_cpf, pess_telefone, pess_email) VALUES ('#2','#3','#4','#5'); 
                 """;
-        sql=sql.replace("#1","" +entidade.getId());
+        //sql=sql.replace("#1","" +entidade.getId());
         sql=sql.replace("#2",entidade.getPessoa().getNome());
         sql=sql.replace("#3",entidade.getPessoa().getCpf());
         sql=sql.replace("#4",entidade.getPessoa().getTelefone());
         sql=sql.replace("#5",entidade.getPessoa().getEmail());
+
 
         return SingletonDB.getConexao().manipular(sql);
     }
 
-    @Override
+
     public boolean update(Pessoa entidade) {
 //        System.out.println("***"+entidade.getId()+" "+entidade.getPessoa().getNome());
         String sql= """
-            UPDATE pessoa SET pess_nome = '#2', pess_cpf = '#3', pess_email = '#5', pess_telefone = #4 WHERE pess_id = #1;
+            UPDATE pessoa SET pess_nome = '#2', pess_cpf = '#3', pess_email = '#5', pess_telefone = #4 WHERE pess_id = '#1';
             """;
-        sql=sql.replace("#2",entidade.getPessoa().getNome());
-        sql=sql.replace("#3",entidade.getPessoa().getCpf());
-        sql=sql.replace("#4",entidade.getPessoa().getTelefone());
-        sql=sql.replace("#5",entidade.getPessoa().getEmail());
-        sql=sql.replace("#1","" +entidade.getId());
+        sql=sql.replace("'#2'",entidade.getPessoa().getNome());
+        sql=sql.replace("'#3'",entidade.getPessoa().getCpf());
+        sql=sql.replace("'#4'",entidade.getPessoa().getTelefone());
+        sql=sql.replace("'#5'",entidade.getPessoa().getEmail());
+        sql=sql.replace("'#1'","" +entidade.getId());
 //        System.out.println("***"+sql);
 
 //        System.out.println(SingletonDB.getConexao().manipular(sql));
         return SingletonDB.getConexao().manipular(sql);
     }
 
-    @Override
+
     public boolean delete(Pessoa entidade) {
         return SingletonDB.getConexao().manipular("DELETE FROM pessoa WHERE pess_id="+entidade.getId());
     }
@@ -80,7 +81,6 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
 
 
-    @Override
     public Pessoa get(Long id) {
         Pessoa pessoa=null;
 
@@ -103,7 +103,7 @@ public class PessoaDAL implements IDAL<Pessoa> {
     }
 
 
-    @Override
+
     public List<Pessoa> get(String filtro) {
 
         List<Pessoa> lista = new ArrayList<>();
@@ -116,10 +116,10 @@ public class PessoaDAL implements IDAL<Pessoa> {
         try {
             ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
             while (resultSet.next()) {
-
+                PessoaInformacao aux = pessoaInfo(resultSet);
                  pessoa = new Pessoa(
                         resultSet.getLong("pess_id"),
-                         pessoaInfo(resultSet)
+                        aux
                  );
                 lista.add(pessoa);
             }
@@ -128,4 +128,23 @@ public class PessoaDAL implements IDAL<Pessoa> {
 
         return lista;
     }
+
+    public Pessoa findByCPF(String cpf){
+        ResultSet pessSet;
+        String sql = "SELECT * FROM pessoa WHERE pess_cpf = '"+cpf+"'";
+        pessSet = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(pessSet.next() && !pessSet.wasNull()){
+                PessoaInformacao aux = pessoaInfo(pessSet);
+                return new Pessoa(
+                        pessSet.getLong("pess_id"),
+                        aux
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

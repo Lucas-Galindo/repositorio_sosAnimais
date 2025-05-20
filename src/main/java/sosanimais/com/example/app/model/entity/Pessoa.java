@@ -11,7 +11,9 @@ public class Pessoa {
         this.id = id;
         this.pessoa = pessoa;
     }
-    public Pessoa(){}
+    public Pessoa(){
+        this(0L,null);
+    }
 
     public void setPessoa(PessoaInformacao pessoa) {
         this.pessoa = pessoa;

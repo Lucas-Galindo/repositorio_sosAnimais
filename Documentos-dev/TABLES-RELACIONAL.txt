@@ -364,3 +364,9 @@ CREATE SEQUENCE animal_insumo_id_seq START 1;
 ALTER TABLE Animal_Insumo ALTER COLUMN AI_ID SET DEFAULT nextval('animal_insumo_id_seq');
 
 
+ALTER TABLE pessoa
+ADD CONSTRAINT unique_pess_cpf UNIQUE (pess_cpf);
+
+ALTER TABLE pessoa
+ADD CONSTRAINT unique_pess_email UNIQUE (pess_email);
+
