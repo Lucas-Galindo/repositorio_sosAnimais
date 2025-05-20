@@ -94,28 +94,28 @@ public class AnimalDAL implements IDAL<Animal>{
 
         return sucesso;
     }
-/*
-    @Override
-    public List<Animal> get(String) {
-        List<Animal> animals = new ArrayList<>();
-        String sql = "SELECT * FROM animal";
-        ResultSet rs = SingletonDB.getConexao().consultar(sql);
-        try {
-            while (rs.next()) {
-                Animal animal = new Animal(
-                        rs.getLong("animal_id"),
-                        rs.getInt("animal_baia"),
-                        rs.getInt("animal_acolhimento"),
-                        (AnimalInformacao) rs.getObject("animal_informacao")
-                );
-                animals.add(animal);
+    /*
+        @Override
+        public List<Animal> get(String) {
+            List<Animal> animals = new ArrayList<>();
+            String sql = "SELECT * FROM animal";
+            ResultSet rs = SingletonDB.getConexao().consultar(sql);
+            try {
+                while (rs.next()) {
+                    Animal animal = new Animal(
+                            rs.getLong("animal_id"),
+                            rs.getInt("animal_baia"),
+                            rs.getInt("animal_acolhimento"),
+                            (AnimalInformacao) rs.getObject("animal_informacao")
+                    );
+                    animals.add(animal);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return animals;
         }
-        return animals;
-    }
-*/
+    */
     @Override
     public Animal get(Long id) {
         Animal animal = null;
@@ -148,10 +148,9 @@ public class AnimalDAL implements IDAL<Animal>{
     @Override
     public boolean save(Animal entidade) {
         String sql= """
-                INSERT INTO animal(ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) VALUES
-                 (#1,'#2','#3','#4','#5',#6,'#7',#8,#9)
+                INSERT INTO animal(ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) VALUES
+                 ('#2','#3','#4','#5',#6,'#7',#8,#9)
                 """;
-        sql=sql.replace("#1",""+entidade.getId());
         sql=sql.replace("#2",entidade.getInformacao().getNome());
         sql=sql.replace("#3",entidade.getInformacao().getRaca());
         sql=sql.replace("#4",entidade.getInformacao().getDescricao());
@@ -163,7 +162,11 @@ public class AnimalDAL implements IDAL<Animal>{
         }
         else
             sql=sql.replace("#8",""+entidade.getIdAcolhimento());
-        sql=sql.replace("#9",""+entidade.getIdBaia());
+        if(entidade.getIdBaia()==0)
+            sql=sql.replace("#9","null");
+        else
+            sql=sql.replace("#9",""+entidade.getIdBaia());
+        System.out.println("Enviando o SQL: " + sql);
         return SingletonDB.getConexao().manipular(sql);
     }
 }

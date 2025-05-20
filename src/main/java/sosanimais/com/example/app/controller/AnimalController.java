@@ -60,14 +60,14 @@ public class AnimalController {
             return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar o animal"));
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteAnimal(@PathVariable Long id){
-        Animal aux=animalService.buscarPorId(id);
-        if(aux!=null){
-            boolean status=animalService.deletarAnimal(aux);
-            if(status)
+    public ResponseEntity<Object> deleteAnimal(@PathVariable Long id) {
+        Animal aux = animalService.buscarPorId(id);
+        if (aux != null) {
+            boolean status = animalService.deletarAnimal(aux);
+            if (status)
                 return ResponseEntity.ok(aux);
-            return ResponseEntity.badRequest().body(new Erro("Erro ao deletar o animal"));
+            return ResponseEntity.badRequest().body(new Erro("Animal não pode ser deletado, pois está presente na baia e/ou pertence a um acolhimento!"));
         }
-        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar o animal"));
+        return ResponseEntity.badRequest().body(new Erro("Animal não encontrado!"));
     }
 }
