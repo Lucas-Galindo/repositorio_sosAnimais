@@ -170,37 +170,24 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
 
     }
 
-
-//    public Funcionario buscarLoginPorSenha(String login, String senha) {
-//        Funcionario func = null;
-//        String sql = "SELECT * FROM funcionario f INNER JOIN pessoa p ON f.pess_id = p.pess_id " +
-//                "WHERE f.func_login = ? AND f.func_senha = ?";
-//
-//        try (PreparedStatement stmt = SingletonDB.getConexao().prepareStatement(sql)) {
-//            stmt.setString(1, login);
-//            stmt.setString(2, senha);
-//            try (ResultSet rs = stmt.executeQuery()) {
-//                if (rs.next()) {
-//                    PessoaInformacao info = new PessoaInformacao(
-//                            rs.getString("pess_nome"),
-//                            rs.getString("pess_cpf"),
-//                            rs.getString("pess_email"),
-//                            rs.getString("pess_telefone")
-//                    );
-//                    func = new Funcionario(
-//                            rs.getLong("pess_id"),
-//                            info,
-//                            rs.getInt("func_matricula"),
-//                            rs.getString("func_login"),
-//                            rs.getString("func_senha")
-//                    );
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("Erro ao validar login: " + e.getMessage());
-//        }
-//        return func;
-//    }
+    public Funcionario findByPessoaId(Long id){
+        String sql = "SELECT * FROM funcionario WHERE usu_id = "+id;
+        ResultSet set = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(!set.wasNull()){
+                return new Funcionario(
+                        set.getLong("usu_id"),
+                        null,
+                        set.getInt("func_matricula"),
+                        set.getString("func_login"),
+                        set.getString("func_senha")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

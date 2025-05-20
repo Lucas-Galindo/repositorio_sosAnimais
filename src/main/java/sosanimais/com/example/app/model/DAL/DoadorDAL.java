@@ -141,4 +141,22 @@ public class DoadorDAL implements IDAL<Doador>{
         }
 
     }
+
+    public Doador findByPessoaId(Long id){
+        String sql = "SELECT * FROM doador WHERE usu_id = "+id;
+        ResultSet set = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(!set.wasNull() && set.next()){
+                return new Doador(
+                        set.getLong("usu_id"),
+                        null,
+                        set.getInt("doador_matricula")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

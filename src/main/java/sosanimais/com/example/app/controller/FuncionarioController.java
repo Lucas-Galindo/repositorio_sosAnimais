@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sosanimais.com.example.app.controller.service.FuncionarioService;
+import sosanimais.com.example.app.model.entity.Adotante;
 import sosanimais.com.example.app.model.entity.Funcionario;
 import sosanimais.com.example.app.model.util.Erro;
 
@@ -66,6 +67,14 @@ public class FuncionarioController {
         if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar funcionario"));
+    }
+
+    @GetMapping("/busca-pessoa/{idPessoa}")
+    public ResponseEntity<Object> getPessoaId(@PathVariable Long idPessoa){
+        Funcionario aux = funcService.getPessoaId(idPessoa);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Não é adotante"));
     }
 
 }

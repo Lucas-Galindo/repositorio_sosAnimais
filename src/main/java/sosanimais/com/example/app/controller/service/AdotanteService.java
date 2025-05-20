@@ -12,22 +12,20 @@ public class AdotanteService {
     public boolean cadastro(Adotante entidade){
         return repositorio.save(entidade);
     }
-
     public Adotante getId(Long mat){
         return repositorio.get(mat);
     }
-
     public List<Adotante> getAll(String filtro)  {
         return repositorio.get(filtro);
     }
-
     public boolean deletar(Adotante entidade){
         return repositorio.delete(entidade);
     }
-
     public boolean atualizar(Adotante entidade){
         return repositorio.update(entidade);
     }
+
+    public Adotante getPessoaId(Long id){ return repositorio.findByPessoaId(id);}
 
 
 

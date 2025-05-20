@@ -15,6 +15,7 @@ public class Funcionario extends Pessoa {
         this.senha = senha;
     }
 
+
     public Funcionario(){
         this(0L,null,0,"","");
     }

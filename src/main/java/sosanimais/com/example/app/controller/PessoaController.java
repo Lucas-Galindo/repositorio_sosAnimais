@@ -76,4 +76,21 @@ public class PessoaController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com cpf"));
     }
 
+    @GetMapping("/busca-email/{email}")
+    public ResponseEntity<Object> getPessoaEmail(@PathVariable String email){
+        Pessoa aux = pessoaService.getEmail(email);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com email"));
+    }
+
+    @GetMapping("/busca-nome/{nome}")
+    public ResponseEntity<Object> getPessoaNome(@PathVariable String nome){
+        Pessoa aux = pessoaService.getNomePessoa(nome);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com nome"));
+    }
+
+
 }

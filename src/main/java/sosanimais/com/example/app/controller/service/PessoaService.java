@@ -28,5 +28,7 @@ public class PessoaService {
     }
 
     public Pessoa getCpf(String cpf){ return repositorio.findByCPF(cpf);}
+    public Pessoa getEmail(String email){ return repositorio.findByEmail(email);}
+    public Pessoa getNomePessoa(String nome){ return repositorio.findByNome(nome);}
 
 }

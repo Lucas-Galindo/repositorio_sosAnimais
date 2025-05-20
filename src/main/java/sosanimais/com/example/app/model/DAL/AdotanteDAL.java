@@ -142,4 +142,23 @@ public class AdotanteDAL implements IDAL<Adotante>{
         }
 
     }
+
+
+    public Adotante findByPessoaId(Long id){
+        String sql = "SELECT * FROM adotante WHERE usu_id = "+id;
+        ResultSet adoSet = SingletonDB.getConexao().consultar(sql);
+
+        try{
+            if(adoSet.next() && !adoSet.wasNull()){
+                return new Adotante(
+                        adoSet.getLong("usu_id"),
+                        null,
+                        adoSet.getInt("adotante_matricula")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

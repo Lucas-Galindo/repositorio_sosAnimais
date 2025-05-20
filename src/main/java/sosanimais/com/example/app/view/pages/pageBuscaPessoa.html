@@ -735,6 +735,7 @@
             });
 
             // Perform the search
+            // Atualizar a função performSearch para lidar com a função displayResults assíncrona
             function performSearch() {
                 const searchType = document.querySelector('input[name="search-type"]:checked').value;
                 let searchTerm = searchInput.value.trim();
@@ -762,9 +763,9 @@
                 let apiUrl = 'http://localhost:8080/apis/pessoa';
                 
                 if (searchType === 'name') {
-                    apiUrl = `http://localhost:8080/apis/pessoa/buscanome/${searchTerm}`;
+                    apiUrl = `http://localhost:8080/apis/pessoa/busca-nome/${searchTerm}`;
                 } else if (searchType === 'email') {
-                    apiUrl = `http://localhost:8080/apis/pessoa/buscaemail/${searchTerm}`;
+                    apiUrl = `http://localhost:8080/apis/pessoa/busca-email/${searchTerm}`;
                 } else if (searchType === 'cpf') {
                     apiUrl = `http://localhost:8080/apis/pessoa/buscacpf/${searchTerm}`;
                 }
@@ -778,8 +779,12 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Process the results
-                        displayResults(data);
+                        // Chama a função assíncrona, mas sem aguardar ela terminar
+                        displayResults(data)
+                            .catch(error => {
+                                console.error('Erro ao processar resultados:', error);
+                                showToast('error', 'Erro na Exibição', `Ocorreu um erro ao processar resultados: ${error.message}`);
+                            });
                     })
                     .catch(error => {
                         console.error('Erro ao buscar pessoas:', error);
@@ -789,7 +794,8 @@
             }
 
             // Display search results
-            function displayResults(data) {
+            
+            async function displayResults(data) {
                 // Convert to array if single object
                 const results = Array.isArray(data) ? data : [data];
                 
@@ -808,28 +814,49 @@
                 resultsTable.style.display = 'table';
                 noResults.style.display = 'none';
                 
-                // Populate table with results
-                results.forEach(person => {
+                // Para cada pessoa, buscar seus tipos de forma assíncrona
+                for (const person of results) {
                     const row = document.createElement('tr');
-                    
-                    // Define person types (for this example we'll determine them randomly)
-                    // In a real application, this would come from the API response
                     const types = [];
-                    if (person.funcionario) types.push('funcionario');
-                    if (person.adotante) types.push('adotante');
-                    if (person.doador) types.push('doador');
                     
-                    // If no types are defined, randomly assign them for this example
-                    if (types.length === 0) {
-                        const randomTypes = ['funcionario', 'adotante', 'doador'];
-                        const randomIndex = Math.floor(Math.random() * 3);
-                        types.push(randomTypes[randomIndex]);
+                    try {
+                        // Verificar cada tipo usando Promise.all para fazer as chamadas em paralelo
+                        const [adotanteResp, doadorResp, funcionarioResp] = await Promise.all([
+                            fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${person.id}`, {
+                                method: "GET",
+                                headers: { 'Content-Type': 'application/json' }
+                            }).catch(() => ({ ok: false })),
+                            
+                            fetch(`http://localhost:8080/apis/doador/busca-pessoa/${person.id}`, {
+                                method: "GET",
+                                headers: { 'Content-Type': 'application/json' }
+                            }).catch(() => ({ ok: false })),
+                            
+                            fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${person.id}`, {
+                                method: "GET",
+                                headers: { 'Content-Type': 'application/json' }
+                            }).catch(() => ({ ok: false }))
+                        ]);
+                        
+                        // Adicionar os tipos com base nas respostas
+                        if (adotanteResp.ok) types.push('adotante');
+                        if (doadorResp.ok) types.push('doador');
+                        if (funcionarioResp.ok) types.push('funcionario');
+                        
+                        // Se nenhum tipo for encontrado, adicione um padrão para visualização
+                        if (types.length === 0) {
+                            types.push('funcionario'); // Apenas para ter algo visível na interface
+                        }
+                    } catch (error) {
+                        console.error('Erro ao verificar tipos da pessoa:', error);
+                        // Em caso de erro, adicione pelo menos um tipo para visualização
+                        types.push('funcionario');
                     }
                     
                     // Create badges HTML
                     const typeBadges = types.map(type => {
                         const label = type === 'funcionario' ? 'Funcionário' : 
-                                      type === 'adotante' ? 'Adotante' : 'Doador';
+                                    type === 'adotante' ? 'Adotante' : 'Doador';
                         return `<span class="badge badge-${type}">${label}</span>`;
                     }).join('');
                     
@@ -853,7 +880,7 @@
                     `;
                     
                     resultsTbody.appendChild(row);
-                });
+                }
                 
                 // Add event listeners to action buttons
                 document.querySelectorAll('.btn-action').forEach(button => {
@@ -862,14 +889,10 @@
                         const action = this.getAttribute('title').toLowerCase();
                         
                         if (action === 'visualizar') {
-                            // Handle view action
                             showToast('success', 'Visualizar Pessoa', `Visualizando pessoa ID: ${personId}`);
-                            // In a real application, you might redirect to a detail page
                             // window.location.href = `visualizar-pessoa.html?id=${personId}`;
                         } else if (action === 'editar') {
-                            // Handle edit action
                             showToast('success', 'Editar Pessoa', `Editando pessoa ID: ${personId}`);
-                            // In a real application, you might redirect to an edit page
                             // window.location.href = `editar-pessoa.html?id=${personId}`;
                         }
                     });
