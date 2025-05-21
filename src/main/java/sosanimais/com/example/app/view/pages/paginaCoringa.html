@@ -624,7 +624,7 @@
                                 <label for="func-matricula">Matrícula</label>
                                 <input type="text" id="func-matricula" name="func-matricula" class="form-control readonly" placeholder="Matrícula do funcionário" readonly>
                                 <span class="help-text">A matrícula não pode ser alterada.</span>
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="func-login">Login</label>
                                 <input type="text" id="func-login" name="func-login" class="form-control readonly" placeholder="Login do funcionário" readonly>
@@ -647,7 +647,7 @@
                     </div>
 
                     <!-- Adotante Specific Fields (Hidden by default) -->
-                    <!--<div id="adotante-fields" class="type-section">
+                    <div id="adotante-fields" class="type-section">
                         <h3 class="section-title">Dados do Adotante</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -656,10 +656,10 @@
                                 <span class="help-text">A matrícula não pode ser alterada.</span>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
 
                     <!-- Doador Specific Fields (Hidden by default) -->
-                    <!--<div id="doador-fields" class="type-section">
+                    <div id="doador-fields" class="type-section">
                         <h3 class="section-title">Dados do Doador</h3>
                         <div class="form-row">
                             <div class="form-group">
@@ -668,7 +668,7 @@
                                 <span class="help-text">A matrícula não pode ser alterada.</span>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
 
                     <div class="form-actions">
                         <div class="form-actions-left">
@@ -927,12 +927,11 @@
             // Get person ID from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const personId = urlParams.get('id');
-            console.log('Id '+personId);
 
             if (!personId) {
                 showToast('error', 'Erro', 'ID da pessoa não fornecido!');
                 setTimeout(() => {
-                    window.location.href = 'pageBuscaPessoa.html';
+                    window.location.href = 'pesquisa-pessoa.html';
                 }, 2000);
                 return;
             }
@@ -953,7 +952,7 @@
                     };
                     
                     // Fetch basic person data
-                    const personResponse = await fetch(`http://localhost:8080/apis/pessoa/busca-id/${personId}`, requestOptions);
+                    const personResponse = await fetch(`http://localhost:8080/apis/pessoa/${personId}`, requestOptions);
                     
                     if (!personResponse.ok) {
                         throw new Error(`Erro ao buscar dados da pessoa: ${personResponse.status}`);
@@ -964,10 +963,10 @@
                     
                     // Fill in basic form fields
                     personIdInput.value = personId;
-                    nameInput.value = personData.pessoa.nome || '';
-                    cpfInput.value = formatCPF(personData.pessoa.cpf || '');
-                    emailInput.value = personData.pessoa.email || '';
-                    phoneInput.value = formatPhone(personData.pessoa.telefone || '');
+                    nameInput.value = personData.nome || '';
+                    cpfInput.value = formatCPF(personData.cpf || '');
+                    emailInput.value = personData.email || '';
+                    phoneInput.value = formatPhone(personData.telefone || '');
                     
                     // Check person types and load specific data
                     await checkPersonTypes();
@@ -1129,39 +1128,19 @@
                     };
                     
                     // Prepare basic person data
-                    /*const personData = {
+                    const personData = {
                         id: parseInt(personIdInput.value),
-
                         nome: name,
                         cpf: cpfDigits, // CPF sem formatação
                         email: email,
                         telefone: phone.replace(/\D/g, '') // Telefone sem formatação
-                    };*/
+                    };
                     
                     // Update basic person data
-                    /*const updatePersonResponse = await fetch(`http://localhost:8080/apis/pessoa/${personId}`, {
+                    const updatePersonResponse = await fetch(`http://localhost:8080/apis/pessoa/${personId}`, {
                         method: 'PUT',
                         ...requestOptions,
                         body: JSON.stringify(personData)
-                    });*/
-                    const updatePersonResponse = await fetch(`http://localhost:8080/apis/pessoa/${personId}`,{
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        mode: 'cors',
-                        body: JSON.stringify(
-                            {
-                                "id": parseInt(personIdInput.value),
-                                "pessoa": {
-                                    "nome": name,
-                                    "cpf": cpfDigits, // CPF sem formatação
-                                    "email": email,
-                                    "telefone": phone.replace(/\D/g, '') 
-                                } 
-                            }
-                        )
                     });
                     
                     if (!updatePersonResponse.ok) {
@@ -1171,10 +1150,12 @@
                     // Handle funcionario type
                     if (funcionarioCheckbox.checked) {
                         const funcionarioData = {
-                            id: parseInt(personIdInput.value),
+                            pessoa: {
+                                id: parseInt(personIdInput.value)
+                            },
                             matricula: funcMatriculaInput.value.trim(),
                             login: funcLoginInput.value.trim(),
-                            
+                            cpf: cpfDigits
                         };
                         
                         // Adicionar senha apenas se estiver preenchida
@@ -1183,31 +1164,14 @@
                         }
                         
                         // Check if already a funcionario
-                        const checkFuncionarioResponse = await fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${personId}`, { 
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            mode: 'cors',
-                        });
+                        const checkFuncionarioResponse = await fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${personId}`, requestOptions);
                         
                         if (checkFuncionarioResponse.ok) {
                             // Update existing funcionario
                             const updateFuncionarioResponse = await fetch(`http://localhost:8080/apis/funcionario/pessoa/${personId}`, {
                                 method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                mode: 'cors',
-                                body: JSON.stringify({
-                                    "id": funcionarioData.id,
-                                    "pessoa": '',
-                                    "matricula": funcionarioData.matricula,
-                                    "login": funcionarioData.login,
-                                    "senha": funcionarioData.senha
-                                })
+                                ...requestOptions,
+                                body: JSON.stringify(funcionarioData)
                             });
                             
                             if (!updateFuncionarioResponse.ok) {
@@ -1217,18 +1181,8 @@
                             // Create new funcionario
                             const createFuncionarioResponse = await fetch(`http://localhost:8080/apis/funcionario`, {
                                 method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                mode: 'cors',
-                                body: JSON.stringify({
-                                    id: funcionarioData.id,
-                                    pessoa: '',
-                                    matricula: funcionarioData.matricula,
-                                    login: funcionarioData.login,
-                                    senha: funcionarioData.senha
-                                })
+                                ...requestOptions,
+                                body: JSON.stringify(funcionarioData)
                             });
                             
                             if (!createFuncionarioResponse.ok) {
@@ -1243,7 +1197,7 @@
                             // Delete funcionario
                             const deleteFuncionarioResponse = await fetch(`http://localhost:8080/apis/funcionario/exclusao-pessoa/${personId}`, {
                                 method: 'DELETE',
-                                headers: {'Content-Type': 'application/json'}
+                                ...requestOptions
                             });
                             
                             if (!deleteFuncionarioResponse.ok) {
@@ -1255,35 +1209,22 @@
                     // Handle adotante type (sem alterar matrícula)
                     if (adotanteCheckbox.checked) {
                         const adotanteData = {
-                            id: parseInt(personIdInput.value),
-                            matricula: adotanteMatriculaInput.value.trim()
-                            
+                            pessoa: {
+                                id: parseInt(personIdInput.value)
+                            },
+                            matricula: adotanteMatriculaInput.value.trim(),
+                            cpf: cpfDigits
                         };
                         
                         // Check if already an adotante
-                        const checkAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${personId}`,
-                            {
-                                method: 'GET',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                mode: 'cors',
-                            }
-                        );
-                            
+                        const checkAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${personId}`, requestOptions);
+                        
                         if (checkAdotanteResponse.ok) {
                             // Update existing adotante (sem alterar matrícula)
                             const updateAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante/pessoa/${personId}`, {
                                 method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                mode: 'cors',
-                                body: JSON.stringify({
-                                    id: adotanteData.id
-                                })
+                                ...requestOptions,
+                                body: JSON.stringify(adotanteData)
                             });
                             
                             if (!updateAdotanteResponse.ok) {
@@ -1293,13 +1234,8 @@
                             // Create new adotante
                             const createAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante`, {
                                 method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    id: adotanteData.id
-                                    
-                                })
+                                ...requestOptions,
+                                body: JSON.stringify(adotanteData)
                             });
                             
                             if (!createAdotanteResponse.ok) {
@@ -1308,20 +1244,13 @@
                         }
                     } else {
                         // Check if was an adotante and remove if necessary
-                        const checkAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${personId}`,{ 
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            mode: 'cors',
-                        });
+                        const checkAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${personId}`, requestOptions);
                         
                         if (checkAdotanteResponse.ok) {
                             // Delete adotante
                             const deleteAdotanteResponse = await fetch(`http://localhost:8080/apis/adotante/exclusao-pessoa/${personId}`, {
                                 method: 'DELETE',
-                                headers: {'Content-Type': 'application/json'}
+                                ...requestOptions
                             });
                             
                             if (!deleteAdotanteResponse.ok) {
@@ -1333,34 +1262,21 @@
                     // Handle doador type
                     if (doadorCheckbox.checked) {
                         const doadorData = {
-                            id: parseInt(personIdInput.value),
+                            pessoa: {
+                                id: parseInt(personIdInput.value)
+                            },
                             matricula: doadorMatriculaInput.value.trim()
                         };
                         
                         // Check if already a doador
-                        const checkDoadorResponse = await fetch(`http://localhost:8080/apis/doador/busca-pessoa/${personId}`, 
-                            {
-                                method: 'GET',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                mode: 'cors',
-                            }
-                        );
+                        const checkDoadorResponse = await fetch(`http://localhost:8080/apis/doador/busca-pessoa/${personId}`, requestOptions);
                         
                         if (checkDoadorResponse.ok) {
                             // Update existing doador
                             const updateDoadorResponse = await fetch(`http://localhost:8080/apis/doador/pessoa/${personId}`, {
-                               method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                },
-                                mode: 'cors',
-                                body: JSON.stringify({
-                                    id: doadorData.id
-                                })
+                                method: 'PUT',
+                                ...requestOptions,
+                                body: JSON.stringify(doadorData)
                             });
                             
                             if (!updateDoadorResponse.ok) {
@@ -1370,12 +1286,8 @@
                             // Create new doador
                             const createDoadorResponse = await fetch(`http://localhost:8080/apis/doador`, {
                                 method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    id: doadorData.id
-                                })
+                                ...requestOptions,
+                                body: JSON.stringify(doadorData)
                             });
                             
                             if (!createDoadorResponse.ok) {
@@ -1390,7 +1302,7 @@
                             // Delete doador
                             const deleteDoadorResponse = await fetch(`http://localhost:8080/apis/doador/exclusao-pessoa/${personId}`, {
                                 method: 'DELETE',
-                                headers: {'Content-Type': 'application/json'}
+                                ...requestOptions
                             });
                             
                             if (!deleteDoadorResponse.ok) {
@@ -1403,7 +1315,7 @@
                     
                     // Redirect back to search page after successful update
                     setTimeout(() => {
-                        window.location.href = 'pageBuscaPessoa.html';
+                        window.location.href = 'pesquisa-pessoa.html';
                     }, 2000);
                     
                 } catch (error) {
@@ -1417,7 +1329,7 @@
             // Cancel button handler
             cancelButton.addEventListener('click', function() {
                 if (confirm('Tem certeza que deseja cancelar? Todas as alterações serão perdidas.')) {
-                    window.location.href = 'pageBuscaPessoa.html';
+                    window.location.href = 'pesquisa-pessoa.html';
                 }
             });
             
