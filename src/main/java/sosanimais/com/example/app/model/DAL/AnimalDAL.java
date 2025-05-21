@@ -91,7 +91,8 @@ public class AnimalDAL implements IDAL<Animal>{
         String sqlAnimal = "DELETE FROM animal WHERE ani_cod = " + entidade.getId();
         System.out.println("Animal: " + sqlAnimal);
         sucesso = SingletonDB.getConexao().manipular(sqlAnimal);
-
+        String liberaId="SELECT setval('animal_id_seq', (SELECT MAX(ani_cod) FROM animal))";
+        SingletonDB.getConexao().manipular(liberaId);
         return sucesso;
     }
     /*
