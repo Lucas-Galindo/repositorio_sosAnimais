@@ -886,20 +886,28 @@
                                 <button class="btn-action" title="Visualizar" data-id="${person.id || ''}">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn-action" title="Editar" data-id="${person.id || ''}">
+                                <button class="btn-action edit-btn" title="Alterar" data-id="${person.id || ''}">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="btn-action delete-btn" title="Excluir" data-id="${person.id || ''}">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
-                        </td>
+                        </td>>
                     `;
                     
                     // Adicionar a linha à tabela
                     resultsTbody.appendChild(row);
                 }
                 
+                // Adicionar event listeners aos botões de edição
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const personId = this.getAttribute('data-id');
+                        //window.location.href = `pageAlterarPessoa.html?id=${personId}`;
+                        window.open(`pageAlterarPessoa.html?id=${personId}`, '_blank');
+                    });
+                });
                 // Add event listeners to action buttons
                 document.querySelectorAll('.btn-action').forEach(button => {
                     button.addEventListener('click', function() {
