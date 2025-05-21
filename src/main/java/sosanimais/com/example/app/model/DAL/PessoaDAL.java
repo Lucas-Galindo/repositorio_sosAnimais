@@ -152,7 +152,7 @@ public class PessoaDAL{
         String sql = "SELECT * FROM pessoa WHERE pess_cpf = '"+cpf+"'";
         pessSet = SingletonDB.getConexao().consultar(sql);
         try{
-            if(pessSet.next() && !pessSet.wasNull()){
+            if(pessSet.next()){
                 PessoaInformacao aux = pessoaInfo(pessSet);
                 return new Pessoa(
                         pessSet.getLong("pess_id"),

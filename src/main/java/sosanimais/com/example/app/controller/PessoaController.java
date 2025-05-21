@@ -68,7 +68,7 @@ public class PessoaController {
 //        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
 //    }
 
-    @GetMapping("/buscacpf/{cpf}")
+    @GetMapping("/busca-cpf/{cpf}")
     public ResponseEntity<Object> getPessoaCPF(@PathVariable String cpf){
         Pessoa aux = pessoaService.getCpf(cpf);
         if(aux!=null)

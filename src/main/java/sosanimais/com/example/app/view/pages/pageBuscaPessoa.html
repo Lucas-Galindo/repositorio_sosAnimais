@@ -734,8 +734,7 @@
                 }
             });
 
-            // Perform the search
-            // Atualizar a função performSearch para lidar com a função displayResults assíncrona
+            // Função performSearch atualizada com endpoints corretos
             function performSearch() {
                 const searchType = document.querySelector('input[name="search-type"]:checked').value;
                 let searchTerm = searchInput.value.trim();
@@ -767,8 +766,10 @@
                 } else if (searchType === 'email') {
                     apiUrl = `http://localhost:8080/apis/pessoa/busca-email/${searchTerm}`;
                 } else if (searchType === 'cpf') {
-                    apiUrl = `http://localhost:8080/apis/pessoa/buscacpf/${searchTerm}`;
+                    apiUrl = `http://localhost:8080/apis/pessoa/busca-cpf/${searchTerm}`;
                 }
+                
+                console.log("Buscando em:", apiUrl);
                 
                 // Make API call
                 fetch(apiUrl)
@@ -779,7 +780,8 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Chama a função assíncrona, mas sem aguardar ela terminar
+                        console.log("Dados recebidos da API:", data);
+                        // Chama a função assíncrona
                         displayResults(data)
                             .catch(error => {
                                 console.error('Erro ao processar resultados:', error);
@@ -795,6 +797,7 @@
 
             // Display search results
             
+            // Versão corrigida da função displayResults
             async function displayResults(data) {
                 // Convert to array if single object
                 const results = Array.isArray(data) ? data : [data];
@@ -814,43 +817,35 @@
                 resultsTable.style.display = 'table';
                 noResults.style.display = 'none';
                 
-                // Para cada pessoa, buscar seus tipos de forma assíncrona
+                // Limpar a tabela antes de adicionar os novos resultados
+                resultsTbody.innerHTML = '';
+                
+                // Para cada pessoa nos resultados
                 for (const person of results) {
+                    // Criar uma nova linha na tabela
                     const row = document.createElement('tr');
-                    const types = [];
+                    
+                    // Define person types
+                    let types = [];
                     
                     try {
-                        // Verificar cada tipo usando Promise.all para fazer as chamadas em paralelo
-                        const [adotanteResp, doadorResp, funcionarioResp] = await Promise.all([
-                            fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${person.id}`, {
-                                method: "GET",
-                                headers: { 'Content-Type': 'application/json' }
-                            }).catch(() => ({ ok: false })),
+                        // Fazer requisições para verificar os tipos
+                        if (person.id) {
+                            const adotanteResp = await fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${person.id}`)
+                                .catch(() => ({ ok: false }));
                             
-                            fetch(`http://localhost:8080/apis/doador/busca-pessoa/${person.id}`, {
-                                method: "GET",
-                                headers: { 'Content-Type': 'application/json' }
-                            }).catch(() => ({ ok: false })),
+                            const doadorResp = await fetch(`http://localhost:8080/apis/doador/busca-pessoa/${person.id}`)
+                                .catch(() => ({ ok: false }));
                             
-                            fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${person.id}`, {
-                                method: "GET",
-                                headers: { 'Content-Type': 'application/json' }
-                            }).catch(() => ({ ok: false }))
-                        ]);
-                        
-                        // Adicionar os tipos com base nas respostas
-                        if (adotanteResp.ok) types.push('adotante');
-                        if (doadorResp.ok) types.push('doador');
-                        if (funcionarioResp.ok) types.push('funcionario');
-                        
-                        // Se nenhum tipo for encontrado, adicione um padrão para visualização
-                        if (types.length === 0) {
-                            types.push('funcionario'); // Apenas para ter algo visível na interface
+                            const funcionarioResp = await fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${person.id}`)
+                                .catch(() => ({ ok: false }));
+                            
+                            if (adotanteResp.ok) types.push('adotante');
+                            if (doadorResp.ok) types.push('doador');
+                            if (funcionarioResp.ok) types.push('funcionario');
                         }
                     } catch (error) {
                         console.error('Erro ao verificar tipos da pessoa:', error);
-                        // Em caso de erro, adicione pelo menos um tipo para visualização
-                        types.push('funcionario');
                     }
                     
                     // Create badges HTML
@@ -860,25 +855,38 @@
                         return `<span class="badge badge-${type}">${label}</span>`;
                     }).join('');
                     
+                    // Log para debug - verificar o que está nos dados
+                    console.log("Dados da pessoa:", person);
+                   
+                    // Verifica se os dados estão aninhados em um objeto 'pessoa' ou diretamente no objeto principal
+                    const pessoaData = person.pessoa || person;
+                    
+                    // Extrair dados com verificação de segurança
+                    const name = pessoaData.nome || '';
+                    const cpf = pessoaData.cpf || '';
+                    const email = pessoaData.email || '';
+                    const telefone = pessoaData.telefone || '';
+                    
                     // Populate row
                     row.innerHTML = `
-                        <td>${person.nome || ''}</td>
-                        <td>${formatCPF(person.cpf || '')}</td>
-                        <td>${person.email || ''}</td>
-                        <td>${formatPhone(person.telefone || '')}</td>
+                        <td>${name}</td>
+                        <td>${formatCPF(cpf)}</td>
+                        <td>${email}</td>
+                        <td>${formatPhone(telefone)}</td>
                         <td>${typeBadges}</td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn-action" title="Visualizar" data-id="${person.id}">
+                                <button class="btn-action" title="Visualizar" data-id="${person.id || ''}">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn-action" title="Editar" data-id="${person.id}">
+                                <button class="btn-action" title="Editar" data-id="${person.id || ''}">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </div>
                         </td>
                     `;
                     
+                    // Adicionar a linha à tabela
                     resultsTbody.appendChild(row);
                 }
                 
@@ -890,14 +898,12 @@
                         
                         if (action === 'visualizar') {
                             showToast('success', 'Visualizar Pessoa', `Visualizando pessoa ID: ${personId}`);
-                            // window.location.href = `visualizar-pessoa.html?id=${personId}`;
                         } else if (action === 'editar') {
                             showToast('success', 'Editar Pessoa', `Editando pessoa ID: ${personId}`);
-                            // window.location.href = `editar-pessoa.html?id=${personId}`;
                         }
                     });
                 });
-            }
+}
 
             // Mock data for testing
             const mockPeople = [

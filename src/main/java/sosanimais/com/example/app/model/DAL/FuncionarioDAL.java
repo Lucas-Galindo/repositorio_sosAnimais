@@ -174,7 +174,7 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         String sql = "SELECT * FROM funcionario WHERE usu_id = "+id;
         ResultSet set = SingletonDB.getConexao().consultar(sql);
         try{
-            if(!set.wasNull()){
+            if(set.next()){
                 return new Funcionario(
                         set.getLong("usu_id"),
                         null,
