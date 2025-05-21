@@ -18,14 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class FuncionarioDAL implements IDAL<Funcionario> {
+public class FuncionarioDAL{
 
 
     public FuncionarioDAL() {
         super();
     }
 
-    @Override
     public boolean save(Funcionario entidade) {
 
         /*
@@ -63,7 +62,7 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
     }
 
-    @Override
+
     public boolean update(Funcionario entidade) {
 
         String sql = """
@@ -77,10 +76,12 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         return SingletonDB.getConexao().manipular(sql);
     }
 
-    @Override
     public boolean delete(Funcionario entidade) {
-
         return SingletonDB.getConexao().manipular("DELETE FROM funcionario WHERE func_matricula=" + entidade.getMatricula());
+    }
+
+    public boolean deletePessoa(Long id){
+        return SingletonDB.getConexao().manipular("DELETE FROM funcionario WHERE usu_id="+id);
     }
 
 
@@ -104,7 +105,6 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
     }
 
-    @Override
     public Funcionario get(Long mat) {
         Funcionario func = null;
         String sql;
@@ -135,7 +135,6 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         return null;
     }
 
-    @Override
     public List<Funcionario> get(String filtro) {
 
         List<Funcionario> listaFunc = new ArrayList<>();

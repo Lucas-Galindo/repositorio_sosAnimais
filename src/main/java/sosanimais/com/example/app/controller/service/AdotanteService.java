@@ -26,7 +26,7 @@ public class AdotanteService {
     }
 
     public Adotante getPessoaId(Long id){ return repositorio.findByPessoaId(id);}
-
+    public boolean deletePess(Long id){ return repositorio.deletePessoa(id);}
 
 
 

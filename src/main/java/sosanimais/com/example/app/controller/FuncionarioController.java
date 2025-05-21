@@ -52,12 +52,21 @@ public class FuncionarioController {
     }
 
 
-    @DeleteMapping("/{mat}")
+    @DeleteMapping("/exclusao-mat/{mat}")
     public ResponseEntity<Object> deletar(@PathVariable Long mat) { //correto
         boolean aux = funcService.deletar(funcService.getId(mat));
         if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar funcionario"));
+
+    }
+
+    @DeleteMapping("/exclusao-pessoa/{id}")
+    public ResponseEntity<Object> deletarPess(@PathVariable Long id) { //correto
+        boolean aux = funcService.deletarPess(id);
+        if (aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Pessoa - funcionario"));
 
     }
 

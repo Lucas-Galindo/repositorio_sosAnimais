@@ -25,9 +25,18 @@ public class AdotanteController {
     }
 
 
-    @DeleteMapping("/{mat}")
+    @DeleteMapping("/exclusao-mat/{mat}")
     public ResponseEntity<Object> deletar(@PathVariable Long mat) { //correto
         boolean aux = adotaService.deletar(adotaService.getId(mat));
+        if(aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Adotante"));
+
+    }
+
+    @DeleteMapping("/exclusao-pessoa/{id}")
+    public ResponseEntity<Object> deletarPessoa(@PathVariable Long id) { //correto
+        boolean aux = adotaService.deletePess(id);
         if(aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Adotante"));

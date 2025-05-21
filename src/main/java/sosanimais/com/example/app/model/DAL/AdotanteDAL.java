@@ -56,8 +56,11 @@ public class AdotanteDAL implements IDAL<Adotante>{
 
     @Override
     public boolean delete(Adotante entidade) {
-
         return SingletonDB.getConexao().manipular("DELETE FROM adotante WHERE adotante_matricula=" + entidade.getMatricula());
+    }
+
+    public boolean deletePessoa(Long id) {
+        return SingletonDB.getConexao().manipular("DELETE FROM adotante WHERE usu_id=" + id);
     }
 
 

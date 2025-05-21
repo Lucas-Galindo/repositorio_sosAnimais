@@ -51,9 +51,18 @@ public class DoadorController {
     }
 
 
-    @DeleteMapping("/{mat}")
+    @DeleteMapping("/exclusao-mat/{mat}")
     public ResponseEntity<Object> deletar(@PathVariable Long mat) { //correto
         boolean aux = doadorService.deletar(doadorService.getId(mat));
+        if(aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Doador"));
+
+    }
+
+    @DeleteMapping("/exclusao-pessoa/{id}")
+    public ResponseEntity<Object> deletarPessoa(@PathVariable Long id) { //correto
+        boolean aux = doadorService.deletePess(id);
         if(aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Doador"));

@@ -25,6 +25,7 @@ public class FuncionarioService {
     }
 
     public Funcionario getPessoaId(Long id){ return repositorio.findByPessoaId(id);}
+    public boolean deletarPess(Long id){ return repositorio.deletePessoa(id);}
 
 
 
