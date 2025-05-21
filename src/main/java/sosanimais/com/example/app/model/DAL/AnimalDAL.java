@@ -91,10 +91,10 @@ public class AnimalDAL implements IDAL<Animal>{
         String sqlAnimal = "DELETE FROM animal WHERE ani_cod = " + entidade.getId();
         System.out.println("Animal: " + sqlAnimal);
         sucesso = SingletonDB.getConexao().manipular(sqlAnimal);
-
+        String liberaId="SELECT setval('animal_id_seq', (SELECT MAX(ani_cod) FROM animal))";
+        SingletonDB.getConexao().manipular(liberaId);
         return sucesso;
     }
-
     /*
         @Override
         public List<Animal> get(String) {
@@ -149,10 +149,9 @@ public class AnimalDAL implements IDAL<Animal>{
     @Override
     public boolean save(Animal entidade) {
         String sql= """
-                INSERT INTO animal(ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) VALUES
-                 (#1,'#2','#3','#4','#5',#6,'#7',#8,#9)
+                INSERT INTO animal(ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) VALUES
+                 ('#2','#3','#4','#5',#6,'#7',#8,#9)
                 """;
-        sql=sql.replace("#1",""+entidade.getId());
         sql=sql.replace("#2",entidade.getInformacao().getNome());
         sql=sql.replace("#3",entidade.getInformacao().getRaca());
         sql=sql.replace("#4",entidade.getInformacao().getDescricao());
@@ -164,7 +163,11 @@ public class AnimalDAL implements IDAL<Animal>{
         }
         else
             sql=sql.replace("#8",""+entidade.getIdAcolhimento());
-        sql=sql.replace("#9",""+entidade.getIdBaia());
+        if(entidade.getIdBaia()==0)
+            sql=sql.replace("#9","null");
+        else
+            sql=sql.replace("#9",""+entidade.getIdBaia());
+        System.out.println("Enviando o SQL: " + sql);
         return SingletonDB.getConexao().manipular(sql);
     }
 }

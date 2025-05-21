@@ -33,7 +33,6 @@ public class AnimalService {
     }
 
     public List<Animal> buscarTodos() {
-        // Faz um cast da lista de Object para Animal
         return animalDAL.get("");
     }
 
