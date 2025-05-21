@@ -6,21 +6,23 @@ public class PessoaInformacao {
     private String telefone;
     private String email;
 
-    //private Endereco adress;
 
+    public PessoaInformacao(PessoaInformacao pessoa) {
+        this.nome = pessoa.nome;
+        this.cpf = pessoa.cpf;
+        this.telefone = pessoa.telefone;
+        this.email = pessoa.email;
 
-    private Endereco adress;
+    }
 
-    public PessoaInformacao(String nome, String cpf, String telefone, String email) {
+    public PessoaInformacao(String nome, String cpf, String telefone, String email){
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.email = email;
-        //this.adress = adress;
     }
-
     public PessoaInformacao(){
-
+        this("","","","");
     }
 
     public String getNome() {
@@ -54,5 +56,9 @@ public class PessoaInformacao {
     public void setEmail(String email) {
         this.email = email;
     }
+
+
+
+
 
 }

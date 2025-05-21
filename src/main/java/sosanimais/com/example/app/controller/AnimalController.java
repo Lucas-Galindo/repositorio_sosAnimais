@@ -1,18 +1,16 @@
 package sosanimais.com.example.app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import sosanimais.com.example.app.model.entity.Animal;
-import sosanimais.com.example.app.controller.AnimalService;
+import sosanimais.com.example.app.controller.service.AnimalService;
 import sosanimais.com.example.app.model.util.Erro;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping(("/apis/animal"))
 public class AnimalController {
 
