@@ -55,20 +55,47 @@ public class BaiasController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar Baias"));
     }
 
-    @GetMapping("/lista/{filtro}")
+    @GetMapping("/lista/categoria/{filtro}")
     public ResponseEntity<Object> getBaiaLista(@PathVariable String filtro) {
-        List<Baias> lista = baiaService.getAll(filtro);
+        List<Baias> lista = baiaService.getAllByFilter(filtro);
         if (lista != null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar Baias"));
     }
 
-    @GetMapping("/busca-nome/{nome}") // correto
-    public ResponseEntity<Object> getBaia(@PathVariable String nome) { //coreto
+
+    @GetMapping("/busca-baia-nome/{nome}") // correto
+    public ResponseEntity<Object> getBaiaNome(@PathVariable String nome) { //coreto
         Baias aux = baiaService.getNomeBaia(nome);
         if (aux != null)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar Baias"));
     }
-    
+
+    @GetMapping("/busca-baia-id/{id}") // correto
+    public ResponseEntity<Object> getBaiaId(@PathVariable Long id) { //coreto
+        Baias aux = baiaService.getId(id);
+        if (aux != null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao listar Baias"));
+    }
+
+    @GetMapping("/busca-baia-categoria/{cat}/{id}") // correto
+    public ResponseEntity<Object> getBaiaId(@PathVariable String cat,@PathVariable  Long id) { //coreto
+        Baias aux = baiaService.getBaiaByIdNome(cat,id);
+        if (aux != null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao listar Baias"));
+    }
+
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<Object> getBaiasByCategoria(@PathVariable String categoria) {
+        List<Baias> lista = baiaService.getAllByFilter(categoria);
+        if (lista != null)
+            return ResponseEntity.ok(lista);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao listar Baias por categoria"));
+    }
+
+
+
 }

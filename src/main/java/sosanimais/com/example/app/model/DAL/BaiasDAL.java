@@ -25,10 +25,10 @@ public class BaiasDAL {
     public boolean save(Baias entidade) {
 
         String sql =  sql = """
-                    INSERT INTO baia(baia_nome,baia_categoria) VALUES ('#2','#3');
+                    INSERT INTO baia(baia_qtde,baia_nome,baia_categoria) VALUES ('#1','#2','#3');
                     """;
 
-        //sql = sql.replace("#1", "" + entidade.getQuantidadeAnimais());
+        sql = sql.replace("#1", "" + entidade.getQuantidadeAnimais());
         sql = sql.replace("#2", entidade.getNome());
         sql = sql.replace("#3", entidade.getCategoria());
 
@@ -119,8 +119,34 @@ public class BaiasDAL {
     }
 
 
+    public List<Baias> getAllByBaia(String filtro){
+        List<Baias> lista = new ArrayList<>();
+
+        String sql = "SELECT * FROM baia WHERE baia_categoria = '" + filtro + "'"; // Adicionadas aspas simples
+        ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
+
+        try{
+            while(resultSet.next()){
+                lista.add(
+                        new Baias(
+                                resultSet.getLong("baia_id"),
+                                resultSet.getInt("baia_qtde"),
+                                resultSet.getString("baia_nome"),
+                                resultSet.getString("baia_categoria")
+                        )
+                );
+            }
+            return lista;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
+
     public Baias findByNome(String nome){
-        String sql = "SELECT * FROM baia WHERE baia_nome = "+nome;
+        String sql = "SELECT * FROM baia WHERE baia_nome = "+nome+"';";
         ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
 
         try{
@@ -137,4 +163,25 @@ public class BaiasDAL {
         }
         return null;
     }
+
+    public Baias findBaiaByIdNome(String cat, Long id){
+        String sql = "SELECT * FROM baia WHERE baia_categoria = '" + cat + "' AND baia_id = " + id;
+        ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
+
+        try{
+            if(resultSet.next()){
+                return new Baias(
+                        resultSet.getLong("baia_id"),
+                        resultSet.getInt("baia_qtde"),
+                        resultSet.getString("baia_nome"),
+                        resultSet.getString("baia_categoria")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

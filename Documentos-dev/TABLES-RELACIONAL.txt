@@ -376,3 +376,17 @@ ADD COLUMN baia_nome VARCHAR(100) NOT NULL,
 ADD COLUMN baia_categoria VARCHAR(50) NOT NULL;
 
 
+ALTER TABLE baia RENAME COLUMN baia_cod TO baia_id;
+
+
+--Restart
+
+-- ALTER SEQUENCE nome_da_sequencia RESTART WITH novo_valor;
+
+-- ALTER SEQUENCE baia_cod_seq RESTART WITH 1;
+
+-- Renomear coluna
+
+-- ALTER TABLE nome_da_tabela RENAME COLUMN nome_da_coluna TO novo_nome_da_coluna;
+
+

@@ -21,7 +21,10 @@ public class BaiasService {
     public boolean atualizar(Baias entidade){return repositorio.update(entidade);}
 
 
-    public Baias getNomeBaia(String nome){ return repositorio.findByNome(nome);}
+    public List<Baias> getAllByFilter(String filtro) {return repositorio.getAllByBaia(filtro);}
 
+    public Baias getNomeBaia(String nome) {return repositorio.findByNome(nome);}
+
+    public Baias getBaiaByIdNome(String categoria, Long id) {return repositorio.findBaiaByIdNome(categoria, id);}
 
 }

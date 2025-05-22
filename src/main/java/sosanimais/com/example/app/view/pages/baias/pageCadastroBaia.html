@@ -478,18 +478,19 @@
                             <label for="baia-nome" class="required">Nome da Baia</label>
                             <input type="text" id="baia-nome" name="nome" class="form-control" placeholder="Digite o nome da baia" required>
                             <div class="error-text" id="nome-error" style="display: none;">Por favor, informe o nome da baia.</div>
-                            <span class="help-text">Exemplo: Baia A1, Baia Central, etc.</span>
+                            <span class="help-text">Insira nome padrão como Baia_Categoria_numero. Exemplo: Baia_Comum_2</span>
                         </div>
 
                         <div class="form-group">
-                            <label for="baia-tipo" class="required">Tipo da Baia</label>
-                            <select id="baia-tipo" name="tipo" class="form-control" required>
-                                <option value="">Selecione o tipo</option>
+                            <label for="baia-categoria" class="required">Categoria da Baia</label>
+                            <select id="baia-categoria" name="categoria" class="form-control" required>
+                                <option value="">Selecione a categoria</option>
                                 <option value="Comum">Comum</option>
                                 <option value="Medica">Médica</option>
+                                <option value="Definitiva">Definitiva</option>
                             </select>
-                            <div class="error-text" id="tipo-error" style="display: none;">Por favor, selecione o tipo da baia.</div>
-                            <span class="help-text">Comum para acomodação geral, Médica para tratamentos veterinários.</span>
+                            <div class="error-text" id="categoria-error" style="display: none;">Por favor, selecione a categoria da baia.</div>
+                            <span class="help-text">Categoria define o tipo de uso da baia.</span>
                         </div>
                     </div>
 
@@ -572,8 +573,8 @@
             return nome.trim().length > 0;
         }
 
-        function validateTipo(tipo) {
-            return tipo !== '';
+        function validateCategoria(categoria) {
+            return categoria !== '';
         }
 
         function showError(fieldId, errorId, show) {
@@ -594,8 +595,9 @@
             showError('baia-nome', 'nome-error', !validateNome(this.value));
         });
 
-        document.getElementById('baia-tipo').addEventListener('change', function() {
-            showError('baia-tipo', 'tipo-error', !validateTipo(this.value));
+        document.getElementById('baia-categoria').addEventListener('change', function() {
+            console.log('Categoria selecionada:', this.value); // Debug
+            showError('baia-categoria', 'categoria-error', !validateCategoria(this.value));
         });
 
         // Toast de notificação
@@ -640,19 +642,25 @@
         // Função para enviar os dados para a API
         async function saveBaia(baiaData) {
             try {
-                const response = await fetch('http://localhost:8080/apis/baia', {
+                console.log('Enviando dados para API:', baiaData); // Debug
+
+                const response = await fetch('http://localhost:8080/apis/baias', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        qtde: 0, // Valor padrão para quantidade
                         nome: baiaData.nome,
-                        tipo: baiaData.tipo
+                        categoria: baiaData.categoria, // Enviando para ambos os campos conforme estrutura do banco
+                         // Adicionando o nome da baia
                     })
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
+                    const errorData = await response.text();
+                    console.error('Erro na resposta da API:', errorData);
+                    throw new Error(`Erro HTTP: ${response.status} - ${errorData}`);
                 }
 
                 const responseData = await response.json();
@@ -662,7 +670,7 @@
                 document.getElementById('baiaForm').reset();
 
                 // Mensagem de sucesso
-                showToast('success', 'Cadastro Realizado', `Baia "${baiaData.nome}" do tipo "${baiaData.tipo}" cadastrada com sucesso!`);
+                showToast('success', 'Cadastro Realizado', `Baia "${baiaData.nome}" da categoria "${baiaData.categoria}" cadastrada com sucesso!`);
 
             } catch (erro) {
                 console.error('Erro ao cadastrar baia:', erro);
@@ -674,24 +682,34 @@
         const saveButton = document.getElementById('btn-save');
         saveButton.addEventListener('click', function() {
             const nomeInput = document.getElementById('baia-nome');
-            const tipoInput = document.getElementById('baia-tipo');
+            const categoriaInput = document.getElementById('baia-categoria');
+
+            console.log('Valores capturados:', {
+                nome: nomeInput.value,
+                categoria: categoriaInput.value
+            }); // Debug
 
             // Validar todos os campos
             const nomeValid = validateNome(nomeInput.value);
-            const tipoValid = validateTipo(tipoInput.value);
+            const categoriaValid = validateCategoria(categoriaInput.value);
 
             showError('baia-nome', 'nome-error', !nomeValid);
-            showError('baia-tipo', 'tipo-error', !tipoValid);
+            showError('baia-categoria', 'categoria-error', !categoriaValid);
 
             // Se todos os campos forem válidos, enviar o formulário
-            if (nomeValid && tipoValid) {
+            if (nomeValid && categoriaValid) {
                 const baiaData = {
                     nome: nomeInput.value.trim(),
-                    tipo: tipoInput.value
+                    categoria: categoriaInput.value
                 };
 
                 console.log('Dados da baia a serem enviados:', baiaData);
                 saveBaia(baiaData);
+            } else {
+                console.log('Validação falhou:', {
+                    nomeValid,
+                    categoriaValid
+                });
             }
         });
 
