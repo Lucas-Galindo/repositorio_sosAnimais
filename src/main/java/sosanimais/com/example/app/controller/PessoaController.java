@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sosanimais.com.example.app.controller.service.PessoaService;
+import sosanimais.com.example.app.model.DefineFiltro;
 import sosanimais.com.example.app.model.entity.Pessoa;
 import sosanimais.com.example.app.model.util.Erro;
 
@@ -52,7 +53,8 @@ public class PessoaController {
 
     @GetMapping("/lista/{filtro}")
     public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
-        List<Pessoa> lista = pessoaService.getAll(filtro);
+        DefineFiltro define = new DefineFiltro(filtro);
+        List<Pessoa> lista = pessoaService.getAll(define.getFiltro());
         if(lista!=null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));

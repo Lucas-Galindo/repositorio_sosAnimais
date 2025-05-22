@@ -112,7 +112,7 @@ public class PessoaDAL{
 
         String sql="SELECT * FROM pessoa";
         if(!filtro.isEmpty())
-            sql+=" WHERE "+filtro;
+            sql+=" ORDER BY "+filtro;
         try {
             ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
             while (resultSet.next()) {

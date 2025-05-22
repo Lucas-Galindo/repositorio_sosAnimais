@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS Amigos de Animais - Listagem de Pessoas</title>
+    <title>SOS Amigos de Animais - Relatório de Pessoas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
     <!-- PARTE DOS COMPONENTES -->
     <link rel="stylesheet" href="../assets/css/header.css">
     <script src="../assets/js/header.js"></script>
@@ -14,31 +15,120 @@
     <script src="../assets/js/footer.js"></script>
     <link rel="stylesheet" href="../assets/css/sidebar.css">
     <script src="../assets/js/sidebar.js"></script>
+    
     <style>
-        :root {
-            --color-orange-light: #e19c66;
-            --color-orange-burnt: #d37a47;
-            --color-brown-dark: #8d5b3f;
-            --text-dark: #333;
-            --text-muted: #666;
-            --button-primary: #d37a47;
-            --button-primary-hover: #c06b3a;
-            --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.1);
-            --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+        .logo-container {
+            display: flex;
+            align-items: center;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f5f2;
-            color: var(--text-dark);
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
         }
 
         .main-container {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
         }
 
         .page-title {
@@ -55,7 +145,7 @@
         }
 
         /* Containers */
-        .container {
+        .form-container {
             background-color: white;
             border-radius: 8px;
             box-shadow: var(--shadow-small);
@@ -63,7 +153,7 @@
             overflow: hidden;
         }
 
-        .container-header {
+        .form-header {
             background-color: var(--color-orange-light);
             color: white;
             padding: 1rem 1.5rem;
@@ -72,12 +162,12 @@
             align-items: center;
         }
 
-        .container-title {
+        .form-title {
             font-size: 1.2rem;
             font-weight: bold;
         }
 
-        .container-body {
+        .form-body {
             padding: 1.5rem;
         }
 
@@ -89,49 +179,6 @@
             flex-wrap: wrap;
         }
 
-        .search-input-group {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--color-orange-burnt);
-            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
-        }
-
-        .search-type {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .search-type-option {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .search-type-option input {
-            margin-right: 0.5rem;
-            cursor: pointer;
-        }
-
-        .search-type-option label {
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         /* Filter section */
         .filter-section {
             margin-top: 1.5rem;
@@ -139,10 +186,12 @@
             padding-top: 1.5rem;
         }
 
-        .filter-title {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
         }
 
         .filter-group {
@@ -164,6 +213,7 @@
 
         .filter-option label {
             cursor: pointer;
+            font-weight: bold;
         }
 
         /* Buttons */
@@ -216,8 +266,17 @@
             color: var(--text-dark);
         }
 
+        /* Estilo zebrado para a tabela */
+        .results-table tbody tr:nth-child(even) {
+            background-color: #f9f7f5; /* Cor que combina com a paleta */
+        }
+
+        .results-table tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
         .results-table tr:hover {
-            background-color: #f9f9f9;
+            background-color: #f0ede8; /* Cor de hover que combina com a paleta */
         }
 
         /* Badges */
@@ -243,32 +302,6 @@
         .badge-doador {
             background-color: #fff8e1;
             color: #ffa000;
-        }
-
-        /* Action buttons */
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-action {
-            background: none;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--color-orange-burnt);
-            padding: 0.25rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-action:hover {
-            background-color: rgba(211, 122, 71, 0.1);
-        }
-
-        .btn-action.delete-btn:hover {
-            background-color: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
         }
 
         /* No results message */
@@ -346,13 +379,25 @@
             margin-left: 0.75rem;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .search-form {
-                flex-direction: column;
-            }
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
-            .action-buttons {
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .search-form {
                 flex-direction: column;
             }
 
@@ -362,113 +407,195 @@
                 gap: 0.75rem;
             }
         }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <!-- <main-header></main-header> -->
-     <!--
-    
-    Faça uma versao que nao tenha os botoes de ação, somente dados, preciso que voce devolva o ID dele do banco (dentro da tabela) com as outras informações, detalhe importante, preciso que a tabela tenha uma caracteritica de exibição zebrada, utilize uma cor que combine a paleta que esta disposta. Outro detalhe importante, no codigo abaixo(que vou te enviar) possui componentes como ,  e . Preciso que eles sejam mantidos e posicionados nos locais corretos. Modifique de listagem geral e retorne com as correções.
-    
-     -->
+    <!-- Header -->
+    <main-header></main-header>
+
+    <!-- Main Container -->
     <div class="main-container">
-        
-        <h1 class="page-title">
-            <i class="fas fa-users"></i>
-            Relatório de Pessoas
-        </h1>
-        <!--<main-sidebar></main-sidebar> -->
-        <!-- Filter Container -->
-        <div class="container">
-            <div class="container-header">
-                <div class="container-title">Relatório Geral de Pessoas</div>
-            </div>
-            
-            <div class="container-body">
-                <!-- Listar Section -->
-                <div class="search-form">
-                    <button type="button" id="btn-list-all" class="btn btn-primary">
-                        <i class="fas fa-list"></i>
-                        Listar Todas as Pessoas
-                    </button>
+        <!-- Sidebar -->
+        <main-sidebar></main-sidebar>
+
+        <!-- Content -->
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-clipboard-list"></i>
+                Relatório de Pessoas
+            </h1>
+
+            <!-- Filter Container -->
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-title">Relatório Geral de Pessoas</div>
                 </div>
                 
-                <!-- Filter Section -->
-                <div class="filter-section">
-                    <div class="filter-title">Filtros</div>
-                    
-                    <div class="filter-group">
-                        <div class="filter-option">
-                            <label><b>Ordenar por Nome:</b></label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="radio" id="sort-az" name="sort-order" value="az" checked>
-                            <label for="sort-az">A-Z</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="radio" id="sort-za" name="sort-order" value="za">
-                            <label for="sort-za">Z-A</label>
-                        </div>
+                <div class="form-body">
+                    <!-- Listar Section -->
+                    <div class="search-form">
+                        <button type="button" id="btn-list-all" class="btn btn-primary">
+                            <i class="fas fa-list"></i>
+                            Listar Todas as Pessoas
+                        </button>
                     </div>
                     
-                    <div class="filter-group">
-                        <div class="filter-option">
-                            <label><b>Filtrar por Tipo:</b></label>
+                    <!-- Filter Section -->
+                    <div class="filter-section">
+                        <h3 class="section-title">Filtros</h3>
+                        
+                        <div class="filter-group">
+                            <div class="filter-option">
+                                <label><b>Ordenar por Nome:</b></label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="sort-az" name="sort-order" value="az" checked>
+                                <label for="sort-az">A-Z</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="radio" id="sort-za" name="sort-order" value="za">
+                                <label for="sort-za">Z-A</label>
+                            </div>
                         </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="filter-funcionario" name="filter-type" value="funcionario" checked>
-                            <label for="filter-funcionario">Funcionário</label>
+                        
+                        <div class="filter-group">
+                            <div class="filter-option">
+                                <label><b>Filtrar por Tipo:</b></label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-funcionario" name="filter-type" value="funcionario" checked>
+                                <label for="filter-funcionario">Funcionário</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-adotante" name="filter-type" value="adotante" checked>
+                                <label for="filter-adotante">Adotante</label>
+                            </div>
+                            <div class="filter-option">
+                                <input type="checkbox" id="filter-doador" name="filter-type" value="doador" checked>
+                                <label for="filter-doador">Doador</label>
+                            </div>
                         </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="filter-adotante" name="filter-type" value="adotante" checked>
-                            <label for="filter-adotante">Adotante</label>
-                        </div>
-                        <div class="filter-option">
-                            <input type="checkbox" id="filter-doador" name="filter-type" value="doador" checked>
-                            <label for="filter-doador">Doador</label>
-                        </div>
+                        
+                        <button type="button" id="btn-apply-filters" class="btn btn-primary">
+                            <i class="fas fa-filter"></i>
+                            Aplicar Filtros
+                        </button>
                     </div>
-                    
-                    <button type="button" id="btn-apply-filters" class="btn btn-primary">
-                        <i class="fas fa-filter"></i>
-                        Aplicar Filtros
-                    </button>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Results Container -->
-        <div class="container" id="results-container" style="display: none;">
-            <div class="container-header">
-                <div class="container-title">Resultados da Pesquisa</div>
-                <div class="results-count" id="results-count">0 pessoas encontradas</div>
             </div>
             
-            <div class="container-body">
-                <table class="results-table" id="results-table">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>CPF</th>
-                            <th>E-mail</th>
-                            <th>Telefone</th>
-                            <th>Tipo</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="results-tbody">
-                        <!-- Results will be inserted here via JavaScript -->
-                    </tbody>
-                </table>
+            <!-- Results Container -->
+            <div class="form-container" id="results-container" style="display: none;">
+                <div class="form-header">
+                    <div class="form-title">Resultados do Relatório</div>
+                    <div class="results-count" id="results-count">0 pessoas encontradas</div>
+                </div>
                 
-                <div class="no-results" id="no-results">
-                    <i class="fas fa-search"></i>
-                    <h3>Nenhum resultado encontrado</h3>
-                    <p>Tente outro termo de busca ou verifique os filtros aplicados.</p>
+                <div class="form-body">
+                    <table class="results-table" id="results-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-tbody">
+                            <!-- Results will be inserted here via JavaScript -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="no-results" id="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhum resultado encontrado</h3>
+                        <p>Tente alterar os filtros aplicados.</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
+
+    <!-- Footer -->
+    <main-footer></main-footer>
     
     <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
@@ -489,8 +616,9 @@
             
             // Format CPF function
             function formatCPF(cpf) {
+                if (!cpf) return '';
                 // Remove any non-numeric characters
-                cpf = cpf.replace(/\D/g, '');
+                cpf = cpf.toString().replace(/\D/g, '');
                 
                 // Format as XXX.XXX.XXX-XX
                 if (cpf.length === 11) {
@@ -502,8 +630,9 @@
 
             // Format phone function
             function formatPhone(phone) {
+                if (!phone) return '';
                 // Remove any non-numeric characters
-                phone = phone.replace(/\D/g, '');
+                phone = phone.toString().replace(/\D/g, '');
                 
                 // Format based on length
                 if (phone.length === 11) {
@@ -522,8 +651,20 @@
                 const toast = document.createElement('div');
                 toast.className = `toast toast-${type}`;
 
-                const iconClass = type === 'success' ? 'fa-check-circle' : 
-                                type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+                let iconClass;
+                switch(type) {
+                    case 'success':
+                        iconClass = 'fa-check-circle';
+                        break;
+                    case 'error':
+                        iconClass = 'fa-exclamation-circle';
+                        break;
+                    case 'info':
+                        iconClass = 'fa-info-circle';
+                        break;
+                    default:
+                        iconClass = 'fa-info-circle';
+                }
 
                 toast.innerHTML = `
                     <i class="fas ${iconClass} toast-icon"></i>
@@ -573,7 +714,11 @@
                 resultsContainer.style.display = 'block';
                 resultsTable.style.display = 'none';
                 noResults.style.display = 'none';
-                resultsCount.textContent = 'Carregando...';
+                resultsCount.innerHTML = '<div class="loading"></div> Carregando...';
+                
+                // Disable button during loading
+                listAllButton.disabled = true;
+                listAllButton.innerHTML = '<div class="loading"></div> Carregando...';
                 
                 // API endpoint for all people
                 const apiUrl = 'http://localhost:8080/apis/pessoa/lista';
@@ -581,29 +726,40 @@
                 console.log("Buscando em:", apiUrl);
                 
                 // Make API call
-                fetch(apiUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Erro HTTP: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("Dados recebidos da API:", data);
-                        // Convert to array if single object
-                        allPeople = Array.isArray(data) ? data : [data];
-                        
-                        // Apply filters to the data
-                        applyFilters();
-                    })
-                    .catch(error => {
-                        console.error('Erro ao buscar pessoas:', error);
-                        showToast('error', 'Erro na Consulta', `Ocorreu um erro ao buscar pessoas: ${error.message}`);
-                        resultsContainer.style.display = 'none';
-                    });
+                fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erro HTTP: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Dados recebidos da API:", data);
+                    // Convert to array if single object
+                    allPeople = Array.isArray(data) ? data : [data];
+                    
+                    // Apply filters to the data
+                    applyFilters();
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar pessoas:', error);
+                    showToast('error', 'Erro na Consulta', `Ocorreu um erro ao buscar pessoas: ${error.message}`);
+                    resultsContainer.style.display = 'none';
+                })
+                .finally(() => {
+                    // Re-enable button
+                    listAllButton.disabled = false;
+                    listAllButton.innerHTML = '<i class="fas fa-list"></i> Listar Todas as Pessoas';
+                });
             }
             
-            // Apply filters and display results
+            // Apply filters and display results - FUNÇÃO CORRIGIDA
             async function applyFilters() {
                 try {
                     // Get filter values
@@ -611,10 +767,12 @@
                     const selectedTypes = Array.from(document.querySelectorAll('input[name="filter-type"]:checked'))
                         .map(checkbox => checkbox.value);
                     
+                    console.log('Tipos selecionados para filtro:', selectedTypes);
+                    
                     // Show loading state
                     resultsTable.style.display = 'none';
                     noResults.style.display = 'none';
-                    resultsCount.textContent = 'Filtrando...';
+                    resultsCount.innerHTML = '<div class="loading"></div> Filtrando...';
                     
                     // If no types selected, show no results
                     if (selectedTypes.length === 0) {
@@ -624,22 +782,28 @@
                         return;
                     }
                     
-                    // Process each person to add their types
+                    // Process each person to add their types and filter
                     const peopleWithTypes = [];
                     
                     for (const person of allPeople) {
-                        const types = await getPersonTypes(person.id);
+                        const personId = person.id;
+                        if (!personId) continue;
                         
-                        // Only include if person has at least one of the selected types
-                        // or if we're not filtering by type (all types selected)
-                        if (types.some(type => selectedTypes.includes(type)) || 
-                            selectedTypes.length === document.querySelectorAll('input[name="filter-type"]').length) {
+                        const types = await getPersonTypes(personId);
+                        console.log(`Pessoa ID ${personId} tem tipos:`, types);
+                        
+                        // CORREÇÃO: Verificar se a pessoa tem pelo menos um dos tipos selecionados
+                        const hasSelectedType = types.some(type => selectedTypes.includes(type));
+                        
+                        if (hasSelectedType) {
                             peopleWithTypes.push({
                                 ...person,
                                 types: types
                             });
                         }
                     }
+                    
+                    console.log('Pessoas após filtro por tipo:', peopleWithTypes.length);
                     
                     // Sort the people
                     peopleWithTypes.sort((a, b) => {
@@ -686,40 +850,26 @@
                         // Get person data safely
                         const pessoaData = person.pessoa || person;
                         
-                        // Extract data with safety checks
-                        const name = pessoaData.nome || '';
-                        const cpf = pessoaData.cpf || '';
-                        const email = pessoaData.email || '';
-                        const telefone = pessoaData.telefone || '';
+                        // Extract data with safety checks and multiple fallbacks
+                        const personId = person.id || person.pess_ID || person.Pess_ID || '';
+                        const name = pessoaData.nome || pessoaData.pess_Nome || pessoaData.Pess_Nome || '';
+                        const cpf = pessoaData.cpf || pessoaData.pess_CPF || pessoaData.Pess_CPF || '';
+                        const email = pessoaData.email || pessoaData.pess_Email || pessoaData.Pess_Email || '';
+                        const telefone = pessoaData.telefone || pessoaData.pess_Telefone || pessoaData.Pess_Telefone || '';
                         
-                        // Populate row
+                        // Populate row (sem botões de ação, apenas dados)
                         row.innerHTML = `
+                            <td>${personId}</td>
                             <td>${name}</td>
                             <td>${formatCPF(cpf)}</td>
                             <td>${email}</td>
                             <td>${formatPhone(telefone)}</td>
-                            <td>${typeBadges}</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action" title="Visualizar" data-id="${person.id || ''}">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn-action edit-btn" title="Alterar" data-id="${person.id || ''}">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn-action delete-btn" title="Excluir" data-id="${person.id || ''}">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
-                            </td>
+                            <td>${typeBadges || '<span class="badge" style="background-color: #f0f0f0; color: #666;">N/A</span>'}</td>
                         `;
                         
                         // Add the row to the table
                         resultsTbody.appendChild(row);
                     }
-                    
-                    // Add event listeners to buttons
-                    addButtonEventListeners();
                     
                 } catch (error) {
                     console.error('Erro ao aplicar filtros:', error);
@@ -727,28 +877,30 @@
                 }
             }
             
-            // Get person types (funcionario, adotante, doador)
+            // Get person types (funcionario, adotante, doador) - FUNÇÃO CORRIGIDA
             async function getPersonTypes(personId) {
                 if (!personId) return [];
                 
                 try {
                     const types = [];
                     
-                    // Make requests to check the types
-                    const [adotanteResp, doadorResp, funcionarioResp] = await Promise.all([
+                    // Make requests to check the types with better error handling
+                    const typeChecks = await Promise.allSettled([
                         fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${personId}`)
-                            .catch(() => ({ ok: false })),
+                            .then(response => ({ ok: response.ok, type: 'adotante' })),
                         
                         fetch(`http://localhost:8080/apis/doador/busca-pessoa/${personId}`)
-                            .catch(() => ({ ok: false })),
+                            .then(response => ({ ok: response.ok, type: 'doador' })),
                         
                         fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${personId}`)
-                            .catch(() => ({ ok: false }))
+                            .then(response => ({ ok: response.ok, type: 'funcionario' }))
                     ]);
                     
-                    if (adotanteResp.ok) types.push('adotante');
-                    if (doadorResp.ok) types.push('doador');
-                    if (funcionarioResp.ok) types.push('funcionario');
+                    typeChecks.forEach(result => {
+                        if (result.status === 'fulfilled' && result.value.ok) {
+                            types.push(result.value.type);
+                        }
+                    });
                     
                     return types;
                 } catch (error) {
@@ -757,119 +909,10 @@
                 }
             }
             
-            // Add event listeners to action buttons
-            function addButtonEventListeners() {
-                // View button event listeners
-                document.querySelectorAll('.btn-action[title="Visualizar"]').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const personId = this.getAttribute('data-id');
-                        showToast('info', 'Visualizar Pessoa', `Visualizando pessoa ID: ${personId}`);
-                        // Implement view functionality here
-                    });
-                });
-                
-                // Edit button event listeners
-                document.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const personId = this.getAttribute('data-id');
-                        window.open(`pageAlterarPessoa.html?id=${personId}`, '_blank');
-                    });
-                });
-                
-                // Delete button event listeners
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', async function() {
-                        const personId = this.getAttribute('data-id');
-                        
-                        if (confirm('Tem certeza que deseja excluir esta pessoa? Esta ação não pode ser desfeita.')) {
-                            try {
-                                // Show loading toast
-                                showToast('info', 'Processando', 'Excluindo registros...');
-                                
-                                // First check which types the person has
-                                const types = await getPersonTypes(personId);
-                                console.log("Tipos da pessoa:", types);
-                                
-                                // Delete specialized types first (in sequence to avoid dependency issues)
-                                const deletePromises = [];
-                                
-                                if (types.includes('adotante')) {
-                                    deletePromises.push(
-                                        fetch(`http://localhost:8080/apis/adotante/exclusao-pessoa/${personId}`, {
-                                            method: 'DELETE',
-                                            headers: {'Content-Type': 'application/json'}
-                                        }).then(response => {
-                                            if (!response.ok) throw new Error(`Erro ao excluir adotante: ${response.status}`);
-                                            console.log("Adotante excluído com sucesso");
-                                        })
-                                    );
-                                }
-                                
-                                if (types.includes('doador')) {
-                                    deletePromises.push(
-                                        fetch(`http://localhost:8080/apis/doador/exclusao-pessoa/${personId}`, {
-                                            method: 'DELETE',
-                                            headers: {'Content-Type': 'application/json'}
-                                        }).then(response => {
-                                            if (!response.ok) throw new Error(`Erro ao excluir doador: ${response.status}`);
-                                            console.log("Doador excluído com sucesso");
-                                        })
-                                    );
-                                }
-                                
-                                if (types.includes('funcionario')) {
-                                    deletePromises.push(
-                                        fetch(`http://localhost:8080/apis/funcionario/exclusao-pessoa/${personId}`, {
-                                            method: 'DELETE',
-                                            headers: {'Content-Type': 'application/json'}
-                                        }).then(response => {
-                                            if (!response.ok) throw new Error(`Erro ao excluir funcionário: ${response.status}`);
-                                            console.log("Funcionário excluído com sucesso");
-                                        })
-                                    );
-                                }
-                                
-                                // Wait for all type deletions to complete
-                                await Promise.all(deletePromises);
-                                
-                                // Finally delete the person
-                                const response = await fetch(`http://localhost:8080/apis/pessoa/${personId}`, {
-                                    method: 'DELETE',
-                                    headers: {'Content-Type': 'application/json'}
-                                });
-                                
-                                if (!response.ok) {
-                                    throw new Error(`Erro ao excluir pessoa: ${response.status}`);
-                                }
-                                
-                                // Show success message
-                                showToast('success', 'Sucesso', 'Pessoa excluída com sucesso!');
-                                
-                                // Remove the row from the table without needing to reload
-                                const row = button.closest('tr');
-                                row.remove();
-                                
-                                // Remove from allPeople array
-                                allPeople = allPeople.filter(person => person.id != personId);
-                                
-                                // Update the results count
-                                const count = resultsTbody.children.length;
-                                resultsCount.textContent = `${count} ${count === 1 ? 'pessoa encontrada' : 'pessoas encontradas'}`;
-                                
-                            } catch (error) {
-                                console.error('Erro durante o processo de exclusão:', error);
-                                showToast('error', 'Erro na Exclusão', `Ocorreu um erro: ${error.message}`);
-                            }
-                        }
-                    });
-                });
-            }
-            
-            // Initialize: Load all people when page loads
-            document.addEventListener('DOMContentLoaded', function() {
-                // Automatically load all people when the page loads
+            // Initialize: Load all people when page loads automatically
+            setTimeout(() => {
                 loadAllPeople();
-            });
+            }, 1000); // Pequeno delay para garantir que os componentes carregaram
         });
     </script>
 </body>
