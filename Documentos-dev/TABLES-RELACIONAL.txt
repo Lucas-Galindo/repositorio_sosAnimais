@@ -122,8 +122,11 @@ CREATE TABLE Acolhimento (
     aco_cod INTEGER PRIMARY KEY,
     aco_data DATE NOT NULL,
     funcionario_func_mat Integer,
+    adotante_Ado_cod INTEGER,
     Animal_ani_cod INTEGER NOT NULL,
-    CONSTRAINT Acolhimento_funcionario_FK FOREIGN KEY (funcionario_func_mat) REFERENCES funcionario(func_matricula)
+    
+    CONSTRAINT Acolhimento_funcionario_FK FOREIGN KEY (funcionario_func_mat) REFERENCES funcionario(func_matricula),
+    CONSTRAINT Acolhimento_adotante_FK FOREIGN KEY (adotante_Ado_cod) REFERENCES adotante(Adotante_Matricula)
 );
 
 
@@ -368,4 +371,24 @@ ADD CONSTRAINT unique_pess_email UNIQUE (pess_email);
 
 ALTER TABLE animal
 ALTER COLUMN acolhimento_aco_cod DROP NOT NULL;
+
+
+ALTER TABLE Baia
+ADD COLUMN baia_nome VARCHAR(100) NOT NULL,
+ADD COLUMN baia_categoria VARCHAR(50) NOT NULL;
+
+
+ALTER TABLE baia RENAME COLUMN baia_cod TO baia_id;
+
+
+--Restart
+
+-- ALTER SEQUENCE nome_da_sequencia RESTART WITH novo_valor;
+
+-- ALTER SEQUENCE baia_cod_seq RESTART WITH 1;
+
+-- Renomear coluna
+
+-- ALTER TABLE nome_da_tabela RENAME COLUMN nome_da_coluna TO novo_nome_da_coluna;
+
 
