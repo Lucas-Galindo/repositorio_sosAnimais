@@ -13,9 +13,20 @@ public class AcolhimentoService {
     private AcolhimentoDAL acolhimentoDAL;
 
     public Acolhimento salvarAcolhimento(Acolhimento ac) {
+        Acolhimento existe=acolhimentoDAL.buscarPorAnimal(ac.getIdAnimal());
+        if(existe!=null){
+            throw new IllegalStateException("Este animal já possui acolhimento (id="
+                    + existe.getId() + ").");
+        }
         boolean save = acolhimentoDAL.save(ac);
-        if(save==true)
-            return ac;
+        if(save){
+            Long idGerado=acolhimentoDAL.obterUltimoIdPorAnimal(ac.getIdAnimal());
+            System.out.println("Id gerado: "+idGerado);
+            if(idGerado!=null){
+                ac.setId(idGerado);
+                return ac;
+            }
+        }
         return null;
     }
 
