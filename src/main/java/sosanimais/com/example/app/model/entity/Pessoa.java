@@ -11,6 +11,9 @@ public class Pessoa {
         this.id = id;
         this.pessoa = pessoa;
     }
+    public Pessoa(Long id){
+        this.id = id;
+    }
     public Pessoa(){
         this(0L,null);
     }

@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sosanimais.com.example.app.controller.service.FuncionarioService;
+import sosanimais.com.example.app.model.entity.Adotante;
 import sosanimais.com.example.app.model.entity.Funcionario;
 import sosanimais.com.example.app.model.util.Erro;
 
@@ -51,12 +52,21 @@ public class FuncionarioController {
     }
 
 
-    @DeleteMapping("/{mat}")
+    @DeleteMapping("/exclusao-mat/{mat}")
     public ResponseEntity<Object> deletar(@PathVariable Long mat) { //correto
         boolean aux = funcService.deletar(funcService.getId(mat));
         if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar funcionario"));
+
+    }
+
+    @DeleteMapping("/exclusao-pessoa/{id}")
+    public ResponseEntity<Object> deletarPess(@PathVariable Long id) { //correto
+        boolean aux = funcService.deletarPess(id);
+        if (aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Pessoa - funcionario"));
 
     }
 
@@ -66,6 +76,14 @@ public class FuncionarioController {
         if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar funcionario"));
+    }
+
+    @GetMapping("/busca-pessoa/{idPessoa}")
+    public ResponseEntity<Object> getPessoaId(@PathVariable Long idPessoa){
+        Funcionario aux = funcService.getPessoaId(idPessoa);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Não é adotante"));
     }
 
 }

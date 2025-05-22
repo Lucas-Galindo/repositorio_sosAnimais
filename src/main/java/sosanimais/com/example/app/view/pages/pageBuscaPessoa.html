@@ -523,6 +523,12 @@
                 gap: 0.5rem;
             }
         }
+
+
+        .btn-action.delete-btn:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
     </style>
 </head>
 
@@ -734,7 +740,7 @@
                 }
             });
 
-            // Perform the search
+            // Função performSearch atualizada com endpoints corretos
             function performSearch() {
                 const searchType = document.querySelector('input[name="search-type"]:checked').value;
                 let searchTerm = searchInput.value.trim();
@@ -762,12 +768,14 @@
                 let apiUrl = 'http://localhost:8080/apis/pessoa';
                 
                 if (searchType === 'name') {
-                    apiUrl = `http://localhost:8080/apis/pessoa/buscanome/${searchTerm}`;
+                    apiUrl = `http://localhost:8080/apis/pessoa/busca-nome/${searchTerm}`;
                 } else if (searchType === 'email') {
-                    apiUrl = `http://localhost:8080/apis/pessoa/buscaemail/${searchTerm}`;
+                    apiUrl = `http://localhost:8080/apis/pessoa/busca-email/${searchTerm}`;
                 } else if (searchType === 'cpf') {
-                    apiUrl = `http://localhost:8080/apis/pessoa/buscacpf/${searchTerm}`;
+                    apiUrl = `http://localhost:8080/apis/pessoa/busca-cpf/${searchTerm}`;
                 }
+                
+                console.log("Buscando em:", apiUrl);
                 
                 // Make API call
                 fetch(apiUrl)
@@ -778,8 +786,13 @@
                         return response.json();
                     })
                     .then(data => {
-                        // Process the results
-                        displayResults(data);
+                        console.log("Dados recebidos da API:", data);
+                        // Chama a função assíncrona
+                        displayResults(data)
+                            .catch(error => {
+                                console.error('Erro ao processar resultados:', error);
+                                showToast('error', 'Erro na Exibição', `Ocorreu um erro ao processar resultados: ${error.message}`);
+                            });
                     })
                     .catch(error => {
                         console.error('Erro ao buscar pessoas:', error);
@@ -789,7 +802,9 @@
             }
 
             // Display search results
-            function displayResults(data) {
+            
+            // Versão corrigida da função displayResults
+            async function displayResults(data) {
                 // Convert to array if single object
                 const results = Array.isArray(data) ? data : [data];
                 
@@ -808,53 +823,91 @@
                 resultsTable.style.display = 'table';
                 noResults.style.display = 'none';
                 
-                // Populate table with results
-                results.forEach(person => {
+                // Limpar a tabela antes de adicionar os novos resultados
+                resultsTbody.innerHTML = '';
+                
+                // Para cada pessoa nos resultados
+                for (const person of results) {
+                     // Criar uma nova linha na tabela
                     const row = document.createElement('tr');
                     
-                    // Define person types (for this example we'll determine them randomly)
-                    // In a real application, this would come from the API response
-                    const types = [];
-                    if (person.funcionario) types.push('funcionario');
-                    if (person.adotante) types.push('adotante');
-                    if (person.doador) types.push('doador');
+                    // Define person types
+                    let types = [];
                     
-                    // If no types are defined, randomly assign them for this example
-                    if (types.length === 0) {
-                        const randomTypes = ['funcionario', 'adotante', 'doador'];
-                        const randomIndex = Math.floor(Math.random() * 3);
-                        types.push(randomTypes[randomIndex]);
+                    try {
+                        // Fazer requisições para verificar os tipos
+                        if (person.id) {
+                            const adotanteResp = await fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${person.id}`)
+                                .catch(() => ({ ok: false }));
+                            
+                            const doadorResp = await fetch(`http://localhost:8080/apis/doador/busca-pessoa/${person.id}`)
+                                .catch(() => ({ ok: false }));
+                            
+                            const funcionarioResp = await fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${person.id}`)
+                                .catch(() => ({ ok: false }));
+                            
+                            if (adotanteResp.ok) types.push('adotante');
+                            if (doadorResp.ok) types.push('doador');
+                            if (funcionarioResp.ok) types.push('funcionario');
+                        }
+                    }
+                    catch (error){
+                        console.error('Erro ao verificar tipos da pessoa:', error);
                     }
                     
                     // Create badges HTML
                     const typeBadges = types.map(type => {
                         const label = type === 'funcionario' ? 'Funcionário' : 
-                                      type === 'adotante' ? 'Adotante' : 'Doador';
+                                    type === 'adotante' ? 'Adotante' : 'Doador';
                         return `<span class="badge badge-${type}">${label}</span>`;
                     }).join('');
                     
+                    // Log para debug - verificar o que está nos dados
+                    console.log("Dados da pessoa:", person);
+                   
+                    // Verifica se os dados estão aninhados em um objeto 'pessoa' ou diretamente no objeto principal
+                    const pessoaData = person.pessoa || person;
+                    
+                    // Extrair dados com verificação de segurança
+                    const name = pessoaData.nome || '';
+                    const cpf = pessoaData.cpf || '';
+                    const email = pessoaData.email || '';
+                    const telefone = pessoaData.telefone || '';
+                    
                     // Populate row
                     row.innerHTML = `
-                        <td>${person.nome || ''}</td>
-                        <td>${formatCPF(person.cpf || '')}</td>
-                        <td>${person.email || ''}</td>
-                        <td>${formatPhone(person.telefone || '')}</td>
+                        <td>${name}</td>
+                        <td>${formatCPF(cpf)}</td>
+                        <td>${email}</td>
+                        <td>${formatPhone(telefone)}</td>
                         <td>${typeBadges}</td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn-action" title="Visualizar" data-id="${person.id}">
+                                <button class="btn-action" title="Visualizar" data-id="${person.id || ''}">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn-action" title="Editar" data-id="${person.id}">
+                                <button class="btn-action edit-btn" title="Alterar" data-id="${person.id || ''}">
                                     <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action delete-btn" title="Excluir" data-id="${person.id || ''}">
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
                         </td>
                     `;
                     
+                    // Adicionar a linha à tabela
                     resultsTbody.appendChild(row);
-                });
+                }
                 
+                // Adicionar event listeners aos botões de edição
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const personId = this.getAttribute('data-id');
+                        //window.location.href = `pageAlterarPessoa.html?id=${personId}`;
+                        window.open(`pageAlterarPessoa.html?id=${personId}`, '_blank');
+                    });
+                });
                 // Add event listeners to action buttons
                 document.querySelectorAll('.btn-action').forEach(button => {
                     button.addEventListener('click', function() {
@@ -862,56 +915,128 @@
                         const action = this.getAttribute('title').toLowerCase();
                         
                         if (action === 'visualizar') {
-                            // Handle view action
                             showToast('success', 'Visualizar Pessoa', `Visualizando pessoa ID: ${personId}`);
-                            // In a real application, you might redirect to a detail page
-                            // window.location.href = `visualizar-pessoa.html?id=${personId}`;
                         } else if (action === 'editar') {
-                            // Handle edit action
                             showToast('success', 'Editar Pessoa', `Editando pessoa ID: ${personId}`);
-                            // In a real application, you might redirect to an edit page
-                            // window.location.href = `editar-pessoa.html?id=${personId}`;
+                        }
+                    });
+                });
+                // Adicionar event listeners aos botões de exclusão
+                // Adicionar event listeners aos botões de exclusão
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', async function() {
+                        const personId = this.getAttribute('data-id');
+                        
+                        if (confirm('Tem certeza que deseja excluir esta pessoa? Esta ação não pode ser desfeita.')) {
+                            try {
+                                // Mostrar toast de carregamento
+                                showToast('info', 'Processando', 'Excluindo registros...');
+                                
+                                // 1. Primeiro verificar quais tipos a pessoa possui
+                                const types = await checkPersonTypes(personId);
+                                console.log("Tipos da pessoa:", types);
+                                
+                                // 2. Excluir dos tipos especializados primeiro (em sequência para evitar problemas de dependência)
+                                const deletePromises = [];
+                                
+                                if (types.includes('adotante')) {
+                                    deletePromises.push(
+                                        fetch(`http://localhost:8080/apis/adotante/exclusao-pessoa/${personId}`, {
+                                            method: 'DELETE',
+                                            headers: {'Content-Type': 'application/json'}
+                                        }).then(response => {
+                                            if (!response.ok) throw new Error(`Erro ao excluir adotante: ${response.status}`);
+                                            console.log("Adotante excluído com sucesso");
+                                        })
+                                    );
+                                }
+                                
+                                if (types.includes('doador')) {
+                                    deletePromises.push(
+                                        fetch(`http://localhost:8080/apis/doador/exclusao-pessoa/${personId}`, {
+                                            method: 'DELETE',
+                                            headers: {'Content-Type': 'application/json'}
+                                        }).then(response => {
+                                            if (!response.ok) throw new Error(`Erro ao excluir doador: ${response.status}`);
+                                            console.log("Doador excluído com sucesso");
+                                        })
+                                    );
+                                }
+                                
+                                if (types.includes('funcionario')) {
+                                    deletePromises.push(
+                                        fetch(`http://localhost:8080/apis/funcionario/exclusao-pessoa/${personId}`, {
+                                            method: 'DELETE',
+                                            headers: {'Content-Type': 'application/json'}
+                                        }).then(response => {
+                                            if (!response.ok) throw new Error(`Erro ao excluir funcionário: ${response.status}`);
+                                            console.log("Funcionário excluído com sucesso");
+                                        })
+                                    );
+                                }
+                                
+                                // Aguardar todas as exclusões de tipos completarem
+                                await Promise.all(deletePromises);
+                                
+                                // 3. Finalmente excluir a pessoa
+                                const response = await fetch(`http://localhost:8080/apis/pessoa/${personId}`, {
+                                    method: 'DELETE',
+                                    headers: {'Content-Type': 'application/json'}
+                                });
+                                
+                                if (!response.ok) {
+                                    throw new Error(`Erro ao excluir pessoa: ${response.status}`);
+                                }
+                                
+                                // Mostrar mensagem de sucesso
+                                showToast('success', 'Sucesso', 'Pessoa excluída com sucesso!');
+                                
+                                // Remover a linha da tabela sem precisar recarregar
+                                const row = button.closest('tr');
+                                row.remove();
+                                
+                                // Atualizar o contador de resultados
+                                const count = resultsTbody.children.length;
+                                resultsCount.textContent = `${count} ${count === 1 ? 'pessoa encontrada' : 'pessoas encontradas'}`;
+                                
+                            } catch (error) {
+                                console.error('Erro durante o processo de exclusão:', error);
+                                showToast('error', 'Erro na Exclusão', `Ocorreu um erro: ${error.message}`);
+                            }
                         }
                     });
                 });
             }
 
-            // Mock data for testing
-            const mockPeople = [
-                {
-                    id: 1,
-                    nome: "João Silva",
-                    cpf: "12345678901",
-                    email: "joao@example.com",
-                    telefone: "11987654321",
-                    funcionario: true,
-                    adotante: false,
-                    doador: true
-                },
-                {
-                    id: 2,
-                    nome: "Maria Oliveira",
-                    cpf: "98765432109",
-                    email: "maria@example.com",
-                    telefone: "11912345678",
-                    funcionario: false,
-                    adotante: true,
-                    doador: false
-                },
-                {
-                    id: 3,
-                    nome: "Carlos Santos",
-                    cpf: "45678912301",
-                    email: "carlos@example.com",
-                    telefone: "11955556666",
-                    funcionario: false,
-                    adotante: false,
-                    doador: true
-                }
-            ];
 
-            // For testing purposes, you can uncomment this to display mock data
-            // displayResults(mockPeople);
+            // Função para verificar os tipos de uma pessoa
+            async function checkPersonTypes(personId) {
+                try {
+                    const types = [];
+                    
+                    // Fazer requisições para verificar os tipos
+                    const [adotanteResp, doadorResp, funcionarioResp] = await Promise.all([
+                        fetch(`http://localhost:8080/apis/adotante/busca-pessoa/${personId}`)
+                            .catch(() => ({ ok: false })),
+                        
+                        fetch(`http://localhost:8080/apis/doador/busca-pessoa/${personId}`)
+                            .catch(() => ({ ok: false })),
+                        
+                        fetch(`http://localhost:8080/apis/funcionario/busca-pessoa/${personId}`)
+                            .catch(() => ({ ok: false }))
+                    ]);
+                    
+                    if (adotanteResp.ok) types.push('adotante');
+                    if (doadorResp.ok) types.push('doador');
+                    if (funcionarioResp.ok) types.push('funcionario');
+                    
+                    return types;
+                } catch (error) {
+                    console.error('Erro ao verificar tipos da pessoa:', error);
+                    return [];
+                }
+            }
+            
         });
     </script>
 </body>

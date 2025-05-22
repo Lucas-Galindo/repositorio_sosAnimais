@@ -18,14 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class FuncionarioDAL implements IDAL<Funcionario> {
+public class FuncionarioDAL{
 
 
     public FuncionarioDAL() {
         super();
     }
 
-    @Override
     public boolean save(Funcionario entidade) {
 
         /*
@@ -63,7 +62,7 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
     }
 
-    @Override
+
     public boolean update(Funcionario entidade) {
 
         String sql = """
@@ -77,10 +76,12 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         return SingletonDB.getConexao().manipular(sql);
     }
 
-    @Override
     public boolean delete(Funcionario entidade) {
-
         return SingletonDB.getConexao().manipular("DELETE FROM funcionario WHERE func_matricula=" + entidade.getMatricula());
+    }
+
+    public boolean deletePessoa(Long id){
+        return SingletonDB.getConexao().manipular("DELETE FROM funcionario WHERE usu_id="+id);
     }
 
 
@@ -104,7 +105,6 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         }
     }
 
-    @Override
     public Funcionario get(Long mat) {
         Funcionario func = null;
         String sql;
@@ -135,7 +135,6 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
         return null;
     }
 
-    @Override
     public List<Funcionario> get(String filtro) {
 
         List<Funcionario> listaFunc = new ArrayList<>();
@@ -170,37 +169,24 @@ public class FuncionarioDAL implements IDAL<Funcionario> {
 
     }
 
-
-//    public Funcionario buscarLoginPorSenha(String login, String senha) {
-//        Funcionario func = null;
-//        String sql = "SELECT * FROM funcionario f INNER JOIN pessoa p ON f.pess_id = p.pess_id " +
-//                "WHERE f.func_login = ? AND f.func_senha = ?";
-//
-//        try (PreparedStatement stmt = SingletonDB.getConexao().prepareStatement(sql)) {
-//            stmt.setString(1, login);
-//            stmt.setString(2, senha);
-//            try (ResultSet rs = stmt.executeQuery()) {
-//                if (rs.next()) {
-//                    PessoaInformacao info = new PessoaInformacao(
-//                            rs.getString("pess_nome"),
-//                            rs.getString("pess_cpf"),
-//                            rs.getString("pess_email"),
-//                            rs.getString("pess_telefone")
-//                    );
-//                    func = new Funcionario(
-//                            rs.getLong("pess_id"),
-//                            info,
-//                            rs.getInt("func_matricula"),
-//                            rs.getString("func_login"),
-//                            rs.getString("func_senha")
-//                    );
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("Erro ao validar login: " + e.getMessage());
-//        }
-//        return func;
-//    }
+    public Funcionario findByPessoaId(Long id){
+        String sql = "SELECT * FROM funcionario WHERE usu_id = "+id;
+        ResultSet set = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(set.next()){
+                return new Funcionario(
+                        set.getLong("usu_id"),
+                        null,
+                        set.getInt("func_matricula"),
+                        set.getString("func_login"),
+                        set.getString("func_senha")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 }

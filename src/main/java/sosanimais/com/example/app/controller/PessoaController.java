@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sosanimais.com.example.app.controller.service.PessoaService;
+import sosanimais.com.example.app.model.DefineFiltro;
 import sosanimais.com.example.app.model.entity.Pessoa;
 import sosanimais.com.example.app.model.util.Erro;
 
@@ -52,7 +53,8 @@ public class PessoaController {
 
     @GetMapping("/lista/{filtro}")
     public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
-        List<Pessoa> lista = pessoaService.getAll(filtro);
+        DefineFiltro define = new DefineFiltro(filtro);
+        List<Pessoa> lista = pessoaService.getAll(define.getFiltro());
         if(lista!=null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
@@ -60,20 +62,37 @@ public class PessoaController {
     }
 
 
-//    @GetMapping("/buscaid/{id}")
-//    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
-//        Pessoa aux = pessoaService.getId(id);
-//        if(aux!=null)
-//            return ResponseEntity.ok(aux);
-//        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
-//    }
+    @GetMapping("/busca-id/{id}")
+    public ResponseEntity<Object> getPessoaId(@PathVariable Long id){
+        Pessoa aux = pessoaService.getId(id);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa"));
+    }
 
-    @GetMapping("/buscacpf/{cpf}")
+    @GetMapping("/busca-cpf/{cpf}")
     public ResponseEntity<Object> getPessoaCPF(@PathVariable String cpf){
         Pessoa aux = pessoaService.getCpf(cpf);
         if(aux!=null)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com cpf"));
     }
+
+    @GetMapping("/busca-email/{email}")
+    public ResponseEntity<Object> getPessoaEmail(@PathVariable String email){
+        Pessoa aux = pessoaService.getEmail(email);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com email"));
+    }
+
+    @GetMapping("/busca-nome/{nome}")
+    public ResponseEntity<Object> getPessoaNome(@PathVariable String nome){
+        Pessoa aux = pessoaService.getNomePessoa(nome);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Pessoa com nome"));
+    }
+
 
 }

@@ -112,7 +112,7 @@ public class PessoaDAL{
 
         String sql="SELECT * FROM pessoa";
         if(!filtro.isEmpty())
-            sql+=" WHERE "+filtro;
+            sql+=" ORDER BY "+filtro;
         try {
             ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
             while (resultSet.next()) {
@@ -129,9 +129,46 @@ public class PessoaDAL{
         return lista;
     }
 
+    public Pessoa findByEmail(String email){
+        ResultSet pessSet;
+        String sql = "SELECT * FROM pessoa WHERE pess_email = '"+email+"'";
+        pessSet = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(pessSet.next() && !pessSet.wasNull()){
+                PessoaInformacao aux = pessoaInfo(pessSet);
+                return new Pessoa(
+                        pessSet.getLong("pess_id"),
+                        aux
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Pessoa findByCPF(String cpf){
         ResultSet pessSet;
         String sql = "SELECT * FROM pessoa WHERE pess_cpf = '"+cpf+"'";
+        pessSet = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(pessSet.next()){
+                PessoaInformacao aux = pessoaInfo(pessSet);
+                return new Pessoa(
+                        pessSet.getLong("pess_id"),
+                        aux
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public Pessoa findByNome(String nome){
+        ResultSet pessSet;
+        String sql = "SELECT * FROM pessoa WHERE pess_nome = '"+nome+"'";
         pessSet = SingletonDB.getConexao().consultar(sql);
         try{
             if(pessSet.next() && !pessSet.wasNull()){

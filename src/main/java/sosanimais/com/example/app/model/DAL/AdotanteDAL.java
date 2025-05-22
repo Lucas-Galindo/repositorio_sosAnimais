@@ -56,8 +56,11 @@ public class AdotanteDAL implements IDAL<Adotante>{
 
     @Override
     public boolean delete(Adotante entidade) {
-
         return SingletonDB.getConexao().manipular("DELETE FROM adotante WHERE adotante_matricula=" + entidade.getMatricula());
+    }
+
+    public boolean deletePessoa(Long id) {
+        return SingletonDB.getConexao().manipular("DELETE FROM adotante WHERE usu_id=" + id);
     }
 
 
@@ -141,5 +144,24 @@ public class AdotanteDAL implements IDAL<Adotante>{
             return new ArrayList<>();
         }
 
+    }
+
+
+    public Adotante findByPessoaId(Long id){
+        String sql = "SELECT * FROM adotante WHERE usu_id = "+id;
+        ResultSet adoSet = SingletonDB.getConexao().consultar(sql);
+
+        try{
+            if(adoSet.next() && !adoSet.wasNull()){
+                return new Adotante(
+                        adoSet.getLong("usu_id"),
+                        null,
+                        adoSet.getInt("adotante_matricula")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -9,12 +9,12 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoadorDAL implements IDAL<Doador>{
+public class DoadorDAL{
     public DoadorDAL() {
         super();
     }
 
-    @Override
+
     public boolean save(Doador entidade) {
 
         String sql = "";
@@ -40,7 +40,7 @@ public class DoadorDAL implements IDAL<Doador>{
         }
     }
 
-    @Override
+
     public boolean update(Doador entidade) {
 
 //        String sql = """
@@ -53,10 +53,13 @@ public class DoadorDAL implements IDAL<Doador>{
         return false;
     }
 
-    @Override
-    public boolean delete(Doador entidade) {
 
+    public boolean delete(Doador entidade) {
         return SingletonDB.getConexao().manipular("DELETE FROM doador WHERE doador_matricula=" + entidade.getMatricula());
+    }
+
+    public boolean deletePessoa(Long id) {
+        return SingletonDB.getConexao().manipular("DELETE FROM doador WHERE usu_id=" + id);
     }
 
 
@@ -80,7 +83,7 @@ public class DoadorDAL implements IDAL<Doador>{
         }
     }
 
-    @Override
+
     public Doador get(Long mat) {
 
         String sql;
@@ -109,7 +112,7 @@ public class DoadorDAL implements IDAL<Doador>{
         return null;
     }
 
-    @Override
+
     public List<Doador> get(String filtro) {
 
         List<Doador> listaFunc = new ArrayList<>();
@@ -141,4 +144,22 @@ public class DoadorDAL implements IDAL<Doador>{
         }
 
     }
+
+    public Doador findByPessoaId(Long id){
+        String sql = "SELECT * FROM doador WHERE usu_id = "+id;
+        ResultSet set = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(!set.wasNull() && set.next()){
+                return new Doador(
+                        set.getLong("usu_id"),
+                        null,
+                        set.getInt("doador_matricula")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
