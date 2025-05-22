@@ -7,7 +7,7 @@ import sosanimais.com.example.app.model.entity.Empresa;
 
 @Service
 public class EmpresaService {
-
+/*
     @Autowired
     private EmpresaDAL repositorio;
 
@@ -30,6 +30,6 @@ public class EmpresaService {
 
         return repositorio.buscarUnicaEmpresa();
     }
-
+*/
 
 }

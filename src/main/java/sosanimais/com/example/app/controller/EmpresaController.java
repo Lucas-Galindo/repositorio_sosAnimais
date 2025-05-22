@@ -12,7 +12,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/apis/empresa")
 public class EmpresaController {
-
+/*
     @Autowired
     private EmpresaDAL empresaDAL;
     private EmpresaService empresaService;
@@ -74,5 +74,5 @@ public class EmpresaController {
             return ResponseEntity.noContent().build();
     }
 
-
+*/
 }
