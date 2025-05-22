@@ -19,6 +19,8 @@ import java.util.List;
 public class AcolhimentoController {
     @Autowired
     private AcolhimentoService acolhimentoService;
+    @Autowired
+    private AnimalService animalService;
 
     @GetMapping
     public ResponseEntity<Object> getAllAcolhimentos(){//ok
@@ -48,8 +50,14 @@ public class AcolhimentoController {
     @PostMapping
     public ResponseEntity<Object> addAcolhimento(@RequestBody Acolhimento ac){//ok
         Acolhimento aux=acolhimentoService.salvarAcolhimento(ac);
-        if(aux!=null)
+        if(aux!=null){
+            Animal animal=animalService.buscarPorId(aux.getIdAnimal());
+            System.out.println("id Animal: "+aux.getIdAnimal());
+            animal.setIdAcolhimento(aux.getId());
+            System.out.println("id Acolhimento para animal: "+aux.getId());
+            animalService.atualizarAnimal(animal);
             return ResponseEntity.ok(aux);
+        }
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao salvar o acolhimento"));
     }
@@ -74,4 +82,5 @@ public class AcolhimentoController {
         }
         return ResponseEntity.badRequest().body(new Erro("Erro ao deletar o acolhimento!"));
     }
+
 }
