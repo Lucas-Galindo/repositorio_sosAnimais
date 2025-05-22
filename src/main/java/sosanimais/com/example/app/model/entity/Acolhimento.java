@@ -3,22 +3,24 @@ package sosanimais.com.example.app.model.entity;
 import java.sql.Date;
 
 public class Acolhimento {
-    private int id;
+    private Long id;
     private Date data;
-    private int idFunc;
+    private Long idFunc;
+    private Long idAnimal;
 
-    public Acolhimento(int id, Date data, int func){
+    public Acolhimento(Long id, Date data, Long func , Long animal) {
         this.id=id;
         this.data = data;
         this.idFunc=func;
+        this.idAnimal=animal;
         
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -30,11 +32,19 @@ public class Acolhimento {
         this.data = data;
     }
 
-    public int getIdFunc() {
+    public Long getIdFunc() {
         return idFunc;
     }
 
-    public void setIdFunc(int idFunc) {
+    public void setIdFunc(Long idFunc) {
         this.idFunc = idFunc;
+    }
+
+    public Long getIdAnimal() {
+        return idAnimal;
+    }
+
+    public void setIdAnimal(Long idAnimal) {
+        this.idAnimal = idAnimal;
     }
 }

@@ -19,7 +19,6 @@ public class AnimalController {
         this.animalService = animalService;
     }
 
-
     @GetMapping
     public ResponseEntity<Object>getAllAnimals(){//ok
         List<Animal> animalList=new ArrayList<>();
