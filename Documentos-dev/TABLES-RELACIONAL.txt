@@ -99,7 +99,6 @@ CREATE TABLE definitiva (
 CREATE TABLE Doacao_Insumos (
     doa_id INTEGER PRIMARY KEY,
     doa_data DATE,
-    
     Usuario_Usu_ID INTEGER,
     CONSTRAINT Doacao_Insumos_Usuario_FK FOREIGN KEY (Usuario_Usu_ID) REFERENCES Pessoa(Pess_ID)
 );
@@ -108,7 +107,7 @@ CREATE TABLE Doacao_Insumos (
 CREATE TABLE adotante (
     Usu_id Integer PRIMARY KEY,
     Adotante_Matricula INTEGER UNIQUE,
-    
+
     CONSTRAINT adotante_Usuario_FK FOREIGN KEY (Usu_id) REFERENCES Pessoa(Pess_ID)
 );
 
@@ -161,7 +160,7 @@ CREATE TABLE Adocao_Animal (
 DROP TABLE Adocao_Animal_temp;
 
 -- Add FK constraint to adotante table - correto
-ALTER TABLE adotante 
+ALTER TABLE adotante
 ADD COLUMN Adocao_Animal_adota_cod INTEGER,
 ADD CONSTRAINT adotante_Adocao_Animal_FK FOREIGN KEY (Adocao_Animal_adota_cod) REFERENCES Adocao_Animal(adota_cod);
 
@@ -369,6 +368,9 @@ ADD CONSTRAINT unique_pess_cpf UNIQUE (pess_cpf);
 
 ALTER TABLE pessoa
 ADD CONSTRAINT unique_pess_email UNIQUE (pess_email);
+
+ALTER TABLE animal
+ALTER COLUMN acolhimento_aco_cod DROP NOT NULL;
 
 
 ALTER TABLE Baia

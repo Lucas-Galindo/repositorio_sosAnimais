@@ -256,20 +256,20 @@ INSERT INTO adotante (Usu_id, Adotante_Matricula)
 VALUES (15, 30005);
 
 -- 15. INSERTS PARA ACOLHIMENTO - correto
-INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
-VALUES (1, '2025-04-15', 20001, 30001, 1);
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, Animal_ani_cod)
+VALUES (1, '2025-04-15', 20001, 1);
 
-INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
-VALUES (2, '2025-04-16', 20003, 30002, 2);
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, Animal_ani_cod)
+VALUES (2, '2025-04-16', 20003, 2);
 
-INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
-VALUES (3, '2025-04-17', 20001, 30003, 3);
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, Animal_ani_cod)
+VALUES (3, '2025-04-17', 20001, 3);
 
-INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
-VALUES (4, '2025-04-18', 20005, 30004, 4);
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, Animal_ani_cod)
+VALUES (4, '2025-04-18', 20005, 4);
 
-INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, adotante_Ado_cod, Animal_ani_cod) 
-VALUES (5, '2025-04-19', 20003, 30005, 5);
+INSERT INTO Acolhimento (aco_cod, aco_data, funcionario_func_mat, Animal_ani_cod)
+VALUES (5, '2025-04-19', 20003, 5);
 
 -- 16. INSERTS PARA ANIMAL - correto
 INSERT INTO Animal (ani_cod, ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) 
