@@ -195,6 +195,8 @@ CREATE TABLE tranferirDefinitiva (
     CONSTRAINT tranferirDefinitiva_definitiva_FK FOREIGN KEY (definitiva_baia_cod) REFERENCES definitiva(baia_cod)
 );
 
+
+
 -- Create executa table - correto
 CREATE TABLE executa (
 	exe_id integer primary key,
@@ -377,8 +379,33 @@ ALTER TABLE Baia
 ADD COLUMN baia_nome VARCHAR(100) NOT NULL,
 ADD COLUMN baia_categoria VARCHAR(50) NOT NULL;
 
-
 ALTER TABLE baia RENAME COLUMN baia_cod TO baia_id;
+
+ALTER TABLE Transferir_Baia RENAME TO Transferencia;
+DROP TABLE TransferirMedica;
+DROP TABLE TransferirDefinitiva;
+
+ALTER TABLE Transferencia RENAME COLUMN tb_cod TO tb_id;
+ALTER TABLE Transferencia DROP COLUMN funcionario_Func_Login;
+ALTER TABLE Transferencia DROP COLUMN funcionario_Func_Logi
+ALTER TABLE Transferencia DROP COLUMN Adocao_Animal_adota_cod INTEGER,
+ALTER TABLE Transferencia DROP COLUMN Func_Matricula INTEGER,
+    ALTER TABLE Transferencia DROP CONSTRAINT Transferir_Baia_funcionario_FK FOREIGN KEY (Func_Matricula) REFERENCES funcionario(Func_Matricula),
+    CONSTRAINT Transferir_Baia_Ado
+
+-- NOVAS TABELAS
+
+-- Transfere_to_baia - ttb
+CREATE TABLE Transferir_to_Baia (
+    TTB_id INTEGER PRIMARY KEY NOT NULL,
+    Transferir_Baia_tb_cod INTEGER,
+    baia_cod INTEGER,
+    CONSTRAINT Transferir_Baia_FK FOREIGN KEY (Transferir_Baia_tb_cod) REFERENCES Transferir_Baia(tb_cod),
+    
+);
+
+CREATE SEQUENCE Transferir_to_Baia_id_seq START 1;
+ALTER TABLE Transferir_to_Baia ALTER COLUMN TTB_id SET DEFAULT nextval('Transferir_to_Baia_id_seq');
 
 
 --Restart
@@ -391,4 +418,4 @@ ALTER TABLE baia RENAME COLUMN baia_cod TO baia_id;
 
 -- ALTER TABLE nome_da_tabela RENAME COLUMN nome_da_coluna TO novo_nome_da_coluna;
 
-
+-- ALTER TABLE nome_da_tabela DROP COLUMN nome_da_coluna;
