@@ -370,3 +370,9 @@ ADD CONSTRAINT unique_pess_cpf UNIQUE (pess_cpf);
 ALTER TABLE pessoa
 ADD CONSTRAINT unique_pess_email UNIQUE (pess_email);
 
+
+ALTER TABLE Baia
+ADD COLUMN baia_nome VARCHAR(100) NOT NULL,
+ADD COLUMN baia_categoria VARCHAR(50) NOT NULL;
+
+

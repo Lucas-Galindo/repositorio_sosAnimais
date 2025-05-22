@@ -25,21 +25,21 @@ public class BaiasDAL {
     public boolean save(Baias entidade) {
 
         String sql =  sql = """
-                    INSERT INTO baias(baia_qtde,baia_nome,baia_categoria) VALUES ('#1','#2','#3');
+                    INSERT INTO baia(baia_nome,baia_categoria) VALUES ('#2','#3');
                     """;
-        
-        sql = sql.replace("#1", "" + entidade.getQuantidadeAnimais());
+
+        //sql = sql.replace("#1", "" + entidade.getQuantidadeAnimais());
         sql = sql.replace("#2", entidade.getNome());
         sql = sql.replace("#3", entidade.getCategoria());
-        
+
         return SingletonDB.getConexao().manipular(sql);
     }
 
-   
+
     public boolean update(Baias entidade) {
 
         String sql = """
-                UPDATE baias SET baia_qtde = #2', baia_nome = '#3', baia_categoria = '#4' WHERE baia_id =#1;
+                UPDATE baia SET baia_qtde = #2', baia_nome = '#3', baia_categoria = '#4' WHERE baia_id =#1;
                 """;
         sql = sql.replace("#2",""+ entidade.getQuantidadeAnimais());
         sql = sql.replace("#3", entidade.getNome());
@@ -47,12 +47,12 @@ public class BaiasDAL {
         sql = sql.replace("#1",""+ entidade.getId());
 
         return SingletonDB.getConexao().manipular(sql);
-        
+
     }
-    
-    
+
+
     public boolean delete(Baias entidade) {
-        return SingletonDB.getConexao().manipular("DELETE FROM baias WHERE baia_id=" + entidade.getId());
+        return SingletonDB.getConexao().manipular("DELETE FROM baia WHERE baia_id=" + entidade.getId());
     }
 
     public Baias get(Long id) {
@@ -62,7 +62,7 @@ public class BaiasDAL {
 //        int aux;
 //        aux = Math.toIntExact(mat);
 
-        sql = "SELECT * FROM Baias WHERE baia_id =" + Math.toIntExact(id);
+        sql = "SELECT * FROM baia WHERE baia_id =" + Math.toIntExact(id);
         resultSet = SingletonDB.getConexao().consultar(sql);
         try {
             if (resultSet.next()) {
@@ -91,7 +91,7 @@ public class BaiasDAL {
         ResultSet resultSet;
 
         try {
-            String sql = "SELECT * FROM Baias";
+            String sql = "SELECT * FROM baia";
 
             if(!filtro.isEmpty())
                 sql+=" WHILE"+filtro;
@@ -120,7 +120,7 @@ public class BaiasDAL {
 
 
     public Baias findByNome(String nome){
-        String sql = "SELECT * FROM Baias WHERE baia_nome = "+nome;
+        String sql = "SELECT * FROM baia WHERE baia_nome = "+nome;
         ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
 
         try{
