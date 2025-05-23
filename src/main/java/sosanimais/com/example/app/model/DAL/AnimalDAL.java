@@ -5,6 +5,7 @@ import sosanimais.com.example.app.model.AnimalInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
 import sosanimais.com.example.app.model.entity.Animal;
+import sosanimais.com.example.app.model.entity.Baias;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -170,4 +171,7 @@ public class AnimalDAL implements IDAL<Animal>{
         System.out.println("Enviando o SQL: " + sql);
         return SingletonDB.getConexao().manipular(sql);
     }
+
+
+
 }

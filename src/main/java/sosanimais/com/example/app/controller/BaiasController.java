@@ -37,9 +37,17 @@ public class BaiasController {
 
 
     
-    @PutMapping
-    public ResponseEntity<Object> atualizar(@RequestBody Baias entidade) {
-        boolean aux = baiaService.atualizar(entidade);
+    @PutMapping("/atualizar-objeto/{entidade}")
+    public ResponseEntity<Object> atualizarElemento(@RequestBody Baias entidade) {
+        boolean aux = baiaService.atualizarObjeto(entidade);
+        if (aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Baias"));
+    }
+
+    @PutMapping("/atualizar-quantidade/{id}")
+    public ResponseEntity<Object> atualizarQtde(@PathVariable Long id) {
+        boolean aux = baiaService.atualizarQuantidade(id);
         if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Baias"));

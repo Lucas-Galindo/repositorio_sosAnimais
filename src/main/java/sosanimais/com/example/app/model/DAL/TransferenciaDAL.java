@@ -1,11 +1,13 @@
 package sosanimais.com.example.app.model.DAL;
 
+import sosanimais.com.example.app.model.Transfere_to_Baia;
 import sosanimais.com.example.app.model.Transferencia;
 import sosanimais.com.example.app.model.db.SingletonDB;
 import sosanimais.com.example.app.model.entity.Baias;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TransferenciaDAL {
@@ -33,7 +35,7 @@ public class TransferenciaDAL {
         super();
     }
 
-    public boolean save(Transferencia elemento){
+    public boolean saveTransfere(Transferencia elemento){
         String sql = """
                 INSERT INTO transferencia(tb_date, func_matricula) values ('#1','#2');
                 """;
@@ -44,10 +46,22 @@ public class TransferenciaDAL {
         return SingletonDB.getConexao().manipular(sql);
     }
 
+    public boolean saveAssociativa(Transfere_to_Baia elemento){
+        String sql = """
+                INSERT INTO transferir_to_Baia(transfId,baia_Destino,baia_Origem) VALUES ('#1','#2','#3');
+                """;
+
+        sql = sql.replace("#1", ""+elemento.getTransfId());
+        sql = sql.replace("#2", ""+elemento.getBaiaDestino());
+        sql = sql.replace("#3", ""+elemento.getBaiaOrigem());
+        return SingletonDB.getConexao().manipular(sql);
+    }
+
+
     public boolean update(Transferencia entidade) {
 
         String sql = """
-                UPDATE transferencia SET tb_date = #2', func_mat = '#3'  WHERE tb_id = #1;
+                UPDATE transferencia SET tb_date = #2, func_mat = '#3'  WHERE tb_id = #1;
                 """;
         sql = sql.replace("#2",""+ entidade.getData());
         sql = sql.replace("#3", ""+entidade.getMatFunc());
@@ -56,6 +70,8 @@ public class TransferenciaDAL {
         return SingletonDB.getConexao().manipular(sql);
 
     }
+
+
 
     public boolean delete(Transferencia entidade) {
         return SingletonDB.getConexao().manipular("DELETE FROM transferencia WHERE tb_id =" + entidade.getId());
@@ -123,6 +139,25 @@ public class TransferenciaDAL {
         }
 
     }
+
+
+    public Transferencia findByDate(Date data){
+        String sql = "SELECT * FROM transferencia WHERE tb_date = "+data;
+        ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
+        try{
+            if(resultSet.next()){
+                return new Transferencia(
+                        resultSet.getLong("tb_id"),
+                        resultSet.getDate("tb_date"),
+                        resultSet.getInt("func_mat")
+                );
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 
 

@@ -1,4 +1,5 @@
 package sosanimais.com.example.app.model.DAL;
+import sosanimais.com.example.app.model.Transferencia;
 import sosanimais.com.example.app.model.entity.Baias;
 import sosanimais.com.example.app.model.db.SingletonDB;
 
@@ -48,6 +49,14 @@ public class BaiasDAL {
 
         return SingletonDB.getConexao().manipular(sql);
 
+    }
+
+    public boolean updateQtde(Long id){
+        String sql = """
+                UPDATE UPDATE baia SET baia_qtde = baia_qtde + 1  WHERE baia_id = #1;
+                """;
+        sql = sql.replace("#1",""+ id);
+        return SingletonDB.getConexao().manipular(sql);
     }
 
 

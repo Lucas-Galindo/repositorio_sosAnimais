@@ -1,56 +1,42 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Variáveis globais
     let selectedBaiaType = '';
     let selectedBaiaId = null;
     let selectedBaiaName = '';
 
-    // Dados simulados das baias (em produção, viriam de uma API)
-    /*const baiasData = {
-        comum: [
-            { id: 1, nome: 'Baia_Comum_01', ocupada: false, categoria: 'Comum' },
-            { id: 2, nome: 'Baia_Comum_02', ocupada: true, categoria: 'Comum' },
-            { id: 3, nome: 'Baia_Comum_03', ocupada: false, categoria: 'Comum' },
-            { id: 4, nome: 'Baia_Comum_04', ocupada: false, categoria: 'Comum' },
-            { id: 5, nome: 'Baia_Comum_05', ocupada: true, categoria: 'Comum' }
-        ],
-        medica: [
-            { id: 6, nome: 'Baia_Medica_01', ocupada: false, categoria: 'Médica' },
-            { id: 7, nome: 'Baia_Medica_02', ocupada: false, categoria: 'Médica' },
-            { id: 8, nome: 'Baia_Medica_03', ocupada: true, categoria: 'Médica' },
-            { id: 9, nome: 'Baia_Medica_04', ocupada: false, categoria: 'Médica' }
-        ]
-    };*/
-
+    // Array para armazenar os dados das baias
     const baiasData = [];
 
-    const medica = fetch(`http://localhost:8080/apis/baias/categoria/Medica`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
-            }
-            return response.json();
-        })
-    });
+    try {
+        const [medicaResponse, comumResponse] = await Promise.all([
+            fetch(`http://localhost:8080/apis/baias/categoria/Medica`),
+            fetch(`http://localhost:8080/apis/baias/categoria/Comum`)
+        ]);
 
-    baiasData.push(medica);
-
-    const comum = fetch(`http://localhost:8080/apis/baias/categoria/Comum`,{
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+        if (!medicaResponse.ok || !comumResponse.ok) {
+            throw new Error('Erro em uma das requisições');
         }
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
-            }
-            return response.json();
-        })
-    });
-    baiasData.push(comum);
+
+        const [medicaData, comumData] = await Promise.all([
+            medicaResponse.json(),
+            comumResponse.json()
+        ]);
+
+        baiasData.push(
+            {categoria: 'Medica', dados: medicaData},
+            {categoria: 'Comum', dados: comumData}
+        );
+
+        console.log('Dados carregados:', baiasData);
+        
+    } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        // Fallback com dados vazios em caso de erro
+        baiasData.push(
+            {categoria: 'Medica', dados: []},
+            {categoria: 'Comum', dados: []}
+        );
+    }   
 
     // Inicialização
     init();
@@ -62,58 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Configurar todos os event listeners
     function setupEventListeners() {
-        setupMenuDropdowns();
-        setupSidebarToggle();
         setupFormValidation();
         setupBaiaTypeSelector();
         setupFormActions();
-    }
-
-    // JavaScript para controlar os dropdowns do menu
-    function setupMenuDropdowns() {
-        const menuButtons = document.querySelectorAll('.menu-button');
-
-        menuButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const dropdownMenu = this.nextElementSibling;
-                const dropdownIcon = this.querySelector('.dropdown-icon');
-
-                if (dropdownMenu && dropdownIcon) {
-                    dropdownMenu.classList.toggle('active');
-                    dropdownIcon.classList.toggle('active');
-
-                    // Fecha outros dropdowns abertos
-                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                        if (menu !== dropdownMenu) {
-                            menu.classList.remove('active');
-                            menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
-                        }
-                    });
-                }
-            });
-        });
-    }
-
-    // Toggle para sidebar em dispositivos móveis
-    function setupSidebarToggle() {
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-
-        if (sidebarToggle && sidebar) {
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('active');
-            });
-
-            // Fechar a sidebar quando clicar fora dela
-            document.addEventListener('click', function(event) {
-                const isClickInsideSidebar = sidebar.contains(event.target);
-                const isClickOnToggle = sidebarToggle.contains(event.target);
-
-                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                }
-            });
-        }
     }
 
     // Configurar validação em tempo real
@@ -175,10 +112,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('data-transferencia').value = now.toISOString().slice(0, 16);
     }
 
-    // Carregar baias do tipo selecionado
+    // FUNÇÃO CORRIGIDA: Carregar baias do tipo selecionado
     function loadBaias(tipo) {
         const baiaList = document.getElementById('baia-list');
-        const baias = baiasData[tipo] || [];
+        
+        // Encontrar os dados do tipo selecionado na nova estrutura
+        const tipoCapitalizado = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+        const categoriaBaias = baiasData.find(item => 
+            item.categoria.toLowerCase() === tipo.toLowerCase() || 
+            item.categoria === tipoCapitalizado
+        );
+        
+        const baias = categoriaBaias ? categoriaBaias.dados : [];
 
         // Limpar seleção anterior
         selectedBaiaId = null;
@@ -189,14 +134,24 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        baiaList.innerHTML = baias.map(baia => `
-            <div class="baia-card ${baia.ocupada ? 'disabled' : ''}" data-baia-id="${baia.id}" data-baia-name="${baia.nome}">
-                <div class="baia-name">${baia.nome}</div>
-                <div class="baia-info">
-                    ${baia.ocupada ? 'Ocupada' : 'Disponível'}
+        // Mapear os dados da API para o formato esperado pelo front-end
+        baiaList.innerHTML = baias.map(baia => {
+            console.log(baia);
+            const baiaId = baia.id;
+            const baiaNome = baia.nome || '';
+            const quantidade = baia.quantidadeAnimais || 0;
+            
+            return `
+                <div class="baia-card" 
+                     data-baia-id="${baiaId}" 
+                     data-baia-name="${baiaNome}">
+                    <div class="baia-name">${baiaNome}</div>
+                    <div class="baia-info">
+                        ${quantidade} animais
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         // Adicionar event listeners aos cards das baias
         const baiaCards = baiaList.querySelectorAll('.baia-card:not(.disabled)');
@@ -315,34 +270,115 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 
-    // Função para enviar dados para a API
+    // FUNÇÃO COMPLETAMENTE CORRIGIDA: Buscar dados do animal
+    async function buscarAnimal(animalId) {
+        try {
+            const response = await fetch(`http://localhost:8080/apis/animal/${animalId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Animal com ID ${animalId} não encontrado`);
+            }
+
+            const animalData = await response.json();
+            console.log('Animal encontrado:', animalData);
+            return animalData;
+            
+        } catch (error) {
+            console.error('Erro ao buscar animal:', error);
+            throw error;
+        }
+    }
+
+    // FUNÇÃO COMPLETAMENTE CORRIGIDA: Enviar dados para a API
     async function saveTransferencia(transferenciaData) {
         try {
-            console.log('Enviando dados para API:', transferenciaData);
+            console.log('Iniciando processo de transferência...');
 
-            const response = await fetch('http://localhost:8080/apis/transferencias', {
+            // ETAPA 1: Buscar dados do animal para obter baia origem
+            console.log('1. Buscando dados do animal...');
+            const animalData = await buscarAnimal(transferenciaData.animalId);
+            
+            // Assumindo que o animal retorna o campo da baia atual
+            // Ajuste o nome do campo conforme sua API retorna
+            const baiaOrigem = animalData.baiaId || animalData.baia_cod || animalData.Baia_baia_cod;
+            
+            if (!baiaOrigem) {
+                throw new Error('Não foi possível determinar a baia atual do animal');
+            }
+
+            // ETAPA 2: Criar transferência básica
+            console.log('2. Salvando transferência básica...');
+            const jsonTransferencia = {
+                data: transferenciaData.data,
+                matFunc: transferenciaData.matFunc
+            };
+
+            console.log('Enviando dados para API de Transferência:', jsonTransferencia);
+
+            const responseTransf = await fetch('http://localhost:8080/apis/transferencias/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(transferenciaData)
+                body: JSON.stringify(jsonTransferencia)
             });
 
-            if (!response.ok) {
-                const errorData = await response.text();
+            if (!responseTransf.ok) {
+                const errorData = await responseTransf.text();
                 console.error('Erro na resposta da API:', errorData);
-                throw new Error(`Erro HTTP: ${response.status} - ${errorData}`);
+                throw new Error(`Erro HTTP: ${responseTransf.status} - ${errorData}`);
             }
 
-            const responseData = await response.json();
-            console.log('Transferência realizada com sucesso:', responseData);
+            const transferenciaResponse = await responseTransf.json();
+            console.log('Transferência básica criada:', transferenciaResponse);
+
+            // ETAPA 3: Obter ID da transferência criada
+            console.log('3. Obtendo ID da transferência...');
+            const transferenciaCriada = await buscarUltimaTransferencia(transferenciaData.matFunc);
+            
+            if (!transferenciaCriada || !transferenciaCriada.id) {
+                throw new Error('Não foi possível obter o ID da transferência criada');
+            }
+
+            // ETAPA 4: Criar registro associativo
+            console.log('4. Salvando dados associativos...');
+            const jsonTransferenciaToBaia = {
+                transfId: transferenciaCriada.id,
+                aniId: parseInt(transferenciaData.animalId),
+                baiaOrigem: parseInt(baiaOrigem),
+                baiaDestino: parseInt(transferenciaData.baiaDestino)
+            };
+
+            console.log('Salvando dados associativos:', jsonTransferenciaToBaia);
+
+            const responseDados = await fetch('http://localhost:8080/apis/transferencias/salvarDadosTransferencia/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonTransferenciaToBaia)
+            });
+
+            if (!responseDados.ok) {
+                const errorData = await responseDados.text();
+                console.error('Erro na resposta da API de dados associativos:', errorData);
+                throw new Error(`Erro HTTP: ${responseDados.status} - ${errorData}`);
+            }
+
+            const responseDataAssoc = await responseDados.json();
+            console.log('Dados associativos salvos:', responseDataAssoc);
 
             // Limpar formulário
             resetForm();
 
             // Mensagem de sucesso
             showToast('success', 'Transferência Realizada', 
-                `Animal "${transferenciaData.animalId}" transferido para "${selectedBaiaName}" com sucesso!`);
+                `Animal "${transferenciaData.animalId}" transferido de "${baiaOrigem}" para "${selectedBaiaName}" com sucesso!`);
 
         } catch (erro) {
             console.error('Erro ao realizar transferência:', erro);
@@ -351,8 +387,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Handler para salvar
-    function handleSave() {
+    // FUNÇÃO AUXILIAR: Buscar última transferência criada por um funcionário
+    async function buscarUltimaTransferencia(matFunc) {
+        try {
+            // Buscar todas as transferências (você pode precisar ajustar este endpoint)
+            const response = await fetch('http://localhost:8080/apis/transferencias/lista', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao buscar transferências');
+            }
+
+            const transferencias = await response.json();
+            
+            // Encontrar a transferência mais recente do funcionário
+            const transferenciasDoFunc = transferencias.filter(t => t.matFunc === matFunc);
+            
+            if (transferenciasDoFunc.length === 0) {
+                throw new Error('Nenhuma transferência encontrada para este funcionário');
+            }
+
+            // Ordenar por data/ID e pegar a mais recente
+            transferenciasDoFunc.sort((a, b) => {
+                if (a.id && b.id) return b.id - a.id;
+                return new Date(b.data) - new Date(a.data);
+            });
+
+            return transferenciasDoFunc[0];
+            
+        } catch (error) {
+            console.error('Erro ao buscar última transferência:', error);
+            throw error;
+        }
+    }
+
+    // Handler para salvar - CORRIGIDO
+    async function handleSave() {
         const animalInput = document.getElementById('animal-identificacao');
         const dataInput = document.getElementById('data-transferencia');
         const matriculaInput = document.getElementById('matricula-funcionario');
@@ -377,18 +451,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (animalValid && dataValid && matriculaValid && tipoValid && baiaValid) {
             // Preparar dados conforme estrutura backend
             const transferenciaData = {
-                // id será gerado automaticamente no backend
                 data: new Date(dataInput.value).toISOString(),
                 matFunc: parseInt(matriculaInput.value),
-                // Dados adicionais para contexto (não necessariamente enviados ao backend)
                 animalId: animalInput.value.trim(),
-                baiaDestino: selectedBaiaId,
-                baiaNome: selectedBaiaName,
-                tipoBaia: selectedBaiaType
+                baiaDestino: selectedBaiaId
             };
 
             console.log('Dados da transferência a serem enviados:', transferenciaData);
-            saveTransferencia(transferenciaData);
+            await saveTransferencia(transferenciaData);
         } else {
             console.log('Validação falhou:', {
                 animalValid,
@@ -438,7 +508,4 @@ document.addEventListener('DOMContentLoaded', function() {
         // Resetar data padrão
         setDefaultDateTime();
     }
-
-    // Carregar baias iniciais (opcional - pode ser chamado na inicialização se necessário)
-    // loadBaias('comum');
 });

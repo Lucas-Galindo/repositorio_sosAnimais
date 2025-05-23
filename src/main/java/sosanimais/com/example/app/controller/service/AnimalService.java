@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.model.DAL.AnimalDAL;
 import sosanimais.com.example.app.model.entity.Animal;
+import sosanimais.com.example.app.model.entity.Baias;
 
 import java.util.List;
 @Service
@@ -39,4 +40,5 @@ public class AnimalService {
     public List<Animal> buscarComFiltro(String filtroSQL) {
         return animalDAL.get(filtroSQL);
     }
+
 }
