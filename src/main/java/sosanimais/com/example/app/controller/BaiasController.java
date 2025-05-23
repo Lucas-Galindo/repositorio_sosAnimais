@@ -1,8 +1,8 @@
-package sosanimais.com.example.app.controller.service;
+package sosanimais.com.example.app.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sosanimais.com.example.app.model.entity.Baias;
+import sosanimais.com.example.app.controller.service.BaiasService;
 import sosanimais.com.example.app.model.entity.Baias;
 import sosanimais.com.example.app.model.util.Erro;
 

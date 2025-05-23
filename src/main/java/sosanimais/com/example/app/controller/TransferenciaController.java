@@ -11,10 +11,8 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/apis/transfere")
+@RequestMapping("/apis/transferencias")
 public class TransferenciaController {
-
-
 
     TransferenciaService transfereService = new TransferenciaService();
 
@@ -50,16 +48,6 @@ public class TransferenciaController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar Transferencia"));
     }
 
-
-
-    @DeleteMapping("/exclusao-transfere/{id}")
-    public ResponseEntity<Object> deletarPess(@PathVariable Long id) { //correto
-        boolean aux = transfereService.deletarPess(id);
-        if (aux)
-            return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao deletar Transferencia"));
-
-    }
 
     @PutMapping
     public ResponseEntity<Object> atualizar(@RequestBody Transferencia entidade) { //correto

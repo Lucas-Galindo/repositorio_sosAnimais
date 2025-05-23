@@ -39,7 +39,7 @@ public class BaiasDAL {
     public boolean update(Baias entidade) {
 
         String sql = """
-                UPDATE baia SET baia_qtde = #2', baia_nome = '#3', baia_categoria = '#4' WHERE baia_id =#1;
+                UPDATE baia SET baia_qtde = #2', baia_nome = '#3', baia_categoria = '#4' WHERE baia_id = #1;
                 """;
         sql = sql.replace("#2",""+ entidade.getQuantidadeAnimais());
         sql = sql.replace("#3", entidade.getNome());

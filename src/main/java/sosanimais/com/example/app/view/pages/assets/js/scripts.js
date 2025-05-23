@@ -1,8 +1,4 @@
 // Funções de validação
-
-
-
-
 function validateName(name) {
     return name.trim().length >= 3;
 }
@@ -83,3 +79,47 @@ if (phoneInput) {
         e.target.value = value;
     });
 }
+document.addEventListener('DOMContentLoaded', function() {
+ // JavaScript para controlar os dropdowns
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Encontra o dropdown-menu associado a este botão
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                // Toggle da classe active
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                // Opcional: Fecha outros dropdowns abertos
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+    });

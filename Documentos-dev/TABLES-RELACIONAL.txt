@@ -381,21 +381,42 @@ ADD COLUMN baia_categoria VARCHAR(50) NOT NULL;
 
 ALTER TABLE baia RENAME COLUMN baia_cod TO baia_id;
 
+
+
+
+
+-- Renomear a coluna tb_cod para tb_id
+ALTER TABLE Transferir_Baia RENAME COLUMN tb_cod TO tb_id;
+
+-- Renomear Func_Matricula para func_mat
+ALTER TABLE Transferir_Baia RENAME COLUMN Func_Matricula TO func_mat;
+
+-- Remover coluna funcionario_Func_Login
+ALTER TABLE Transferir_Baia DROP COLUMN funcionario_Func_Login;
+
+-- Remover a coluna Adocao_Animal_adota_cod
+ALTER TABLE Transferir_Baia DROP COLUMN Adocao_Animal_adota_cod;
+
+-- Remover a constraint de chave estrangeira antiga (nome exato pode variar, ver abaixo)
+ALTER TABLE Transferir_Baia DROP CONSTRAINT IF EXISTS Transferir_Baia_Adocao_Animal_FK;
+
+-- Remover a constraint antiga que referenciava Func_Matricula (vamos recriar depois com o nome correto)
+ALTER TABLE Transferir_Baia DROP CONSTRAINT IF EXISTS Transferir_Baia_funcionario_FK;
+
+-- Adicionar novamente a constraint correta
+ALTER TABLE Transferir_Baia ADD CONSTRAINT Transferir_Baia_funcionario_FK
+FOREIGN KEY (func_mat) REFERENCES funcionario(Func_Matricula);
+
+
 ALTER TABLE Transferir_Baia RENAME TO Transferencia;
 DROP TABLE TransferirMedica;
 DROP TABLE TransferirDefinitiva;
 
-ALTER TABLE Transferencia RENAME COLUMN tb_cod TO tb_id;
-ALTER TABLE Transferencia DROP COLUMN funcionario_Func_Login;
-ALTER TABLE Transferencia DROP COLUMN funcionario_Func_Logi
-ALTER TABLE Transferencia DROP COLUMN Adocao_Animal_adota_cod INTEGER,
-ALTER TABLE Transferencia DROP COLUMN Func_Matricula INTEGER,
-    ALTER TABLE Transferencia DROP CONSTRAINT Transferir_Baia_funcionario_FK FOREIGN KEY (Func_Matricula) REFERENCES funcionario(Func_Matricula),
-    CONSTRAINT Transferir_Baia_Ado
+
 
 -- NOVAS TABELAS
 
--- Transfere_to_baia - ttb
+-- Transfere_to_baia - ttb - associativa
 CREATE TABLE Transferir_to_Baia (
     TTB_id INTEGER PRIMARY KEY NOT NULL,
     Transferir_Baia_tb_cod INTEGER,
