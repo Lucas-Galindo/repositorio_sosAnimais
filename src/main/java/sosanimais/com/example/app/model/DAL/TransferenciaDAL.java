@@ -36,7 +36,7 @@ public class TransferenciaDAL {
         String sql = """
                 INSERT INTO transferencia(tb_date, func_matricula) values ('#1','#2');
                 """;
-        
+
         sql = sql.replace("#1",elemento.getData());
         sql = sql.replace("#2", ""+elemento.getMatFunc());
 
