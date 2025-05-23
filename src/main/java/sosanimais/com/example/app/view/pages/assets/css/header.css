@@ -1,0 +1,19 @@
+
+header {
+    display: flex;
+    background-color: var(--color-orange-burnt-active);
+    padding: 1rem 4rem;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 100px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+ .header-icons {
+            display: flex;
+            align-items: center;
+        }
