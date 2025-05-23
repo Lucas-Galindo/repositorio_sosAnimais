@@ -49,27 +49,40 @@ public class AcolhimentoController {
 
     @PostMapping
     public ResponseEntity<Object> addAcolhimento(@RequestBody Acolhimento ac){//ok
-        Acolhimento aux=acolhimentoService.salvarAcolhimento(ac);
-        if(aux!=null){
-            Animal animal=animalService.buscarPorId(aux.getIdAnimal());
-            System.out.println("id Animal: "+aux.getIdAnimal());
-            animal.setIdAcolhimento(aux.getId());
-            System.out.println("id Acolhimento para animal: "+aux.getId());
-            animalService.atualizarAnimal(animal);
-            return ResponseEntity.ok(aux);
+        try{
+            Acolhimento aux=acolhimentoService.salvarAcolhimento(ac);
+            Animal ani=animalService.buscarPorId(aux.getIdAnimal());
+            if(ani==null)
+                return ResponseEntity.badRequest().body(new Erro("Animal com id " + aux.getIdAnimal() + " não encontrado."));
+            if(aux!=null){
+                Animal animal=animalService.buscarPorId(aux.getIdAnimal());
+                System.out.println("id Animal: "+aux.getIdAnimal());
+                animal.setIdAcolhimento(aux.getId());
+                System.out.println("id Acolhimento para animal: "+aux.getId());
+                animalService.atualizarAnimal(animal);
+                return ResponseEntity.ok(aux);
+            }
+            else
+                return ResponseEntity.badRequest().body(new Erro("Erro ao salvar o acolhimento"));
         }
-        else
-            return ResponseEntity.badRequest().body(new Erro("Erro ao salvar o acolhimento"));
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(new Erro(e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")//ok
     public ResponseEntity<Object> updateAcolhimento(@PathVariable Long id, @RequestBody Acolhimento ac){
-        ac.setId(id);
-        Acolhimento aux=acolhimentoService.atualizarAcolhimento(ac);
-        if(aux!=null)
-            return ResponseEntity.ok(aux);
-        else
-            return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar o acolhimento"));
+        try{
+            ac.setId(id);
+            Acolhimento aux=acolhimentoService.atualizarAcolhimento(ac);
+            if(aux!=null)
+                return ResponseEntity.ok(aux);
+            else
+                return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar o acolhimento"));
+        }
+        catch(Exception e){
+            return ResponseEntity.badRequest().body(new Erro(e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
