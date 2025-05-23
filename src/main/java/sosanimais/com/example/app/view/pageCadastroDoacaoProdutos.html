@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>S.O.S. Amigos de Animais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* === SEU CSS INTEGRADO === */
+        :root {
+            --color-orange-burnt: #d37a47;
+            --color-orange-burnt-hover: #c06b3a;
+            --color-orange-burnt-active: #b05d2c;
+            --color-brown-dark: #4a2d21;
+            --color-beige-light: #f2e6db;
+            --text-dark: var(--color-brown-dark);
+            --text-light: #ffffff;
+            --button-text: var(--color-beige-light);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--color-beige-light);
+            min-height: 100vh;
+        }
+        header {
+            background-color: var(--color-orange-burnt-active);
+            padding: 1rem 4rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            width: 100%;
+            height: 100px;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .main-container {
+            display: flex;
+            margin-top: 100px;
+            flex: 1;
+        }
+        .sidebar {
+            width: 280px;
+            background-color: var(--color-orange-burnt);
+            color: white;
+            height: calc(100vh - 100px);
+            position: fixed;
+            top: 100px;
+            left: 0;
+            overflow-y: auto;
+        }
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+        .menu-icon {
+            margin-right: 10px;
+        }
+        .dropdown-menu {
+            background-color: var(--color-brown-dark);
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+        .form-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: var(--color-orange-burnt);
+            color: var(--button-text);
+        }
+        .btn-primary:hover {
+            background-color: var(--color-orange-burnt-hover);
+        }
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-orange-burnt);
+            color: var(--color-orange-burnt);
+        }
+        footer {
+            background-color: var(--color-orange-burnt-active);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-left: 280px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo-container">
+        <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
+        <div class="title">S.O.S. Amigos de Animais</div>
+    </div>
+    <div class="header-icons">
+        <i class="fas fa-bell notification-icon fa-lg"></i>
+        <div class="profile-icon">
+            <i class="fas fa-user fa-lg"></i>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+    <aside class="sidebar" id="sidebar">
+        <div class="menu-item">
+            <button class="menu-button">
+                <div class="menu-button-content">
+                    <i class="fas fa-home menu-icon"></i>
+                    Dashboard
+                </div>
+                <i class="fas fa-chevron-down dropdown-icon"></i>
+            </button>
+            <div class="dropdown-menu">
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-chart-line"></i>
+                    Estatísticas
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Calendário
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="content">
+        <div class="form-container">
+            <h2>Nova Doação</h2>
+            <form id="donationForm">
+                <div class="form-group">
+                    <label for="donor-name">Nome do Doador</label>
+                    <input type="text" id="donor-name" name="nomeDoador" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="donor-email">Email</label>
+                    <input type="email" id="donor-email" name="email" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="donation-type">Tipo de Doação</label>
+                    <select id="donation-type" name="tipo" class="form-control" required>
+                        <option value="">Selecione</option>
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="remedios">Remédios</option>
+                        <option value="comida">Comida</option>
+                        <option value="produtos">Produtos de limpeza</option>
+                    </select>
+                </div>
+                <div class="form-group" id="valor-group" style="display: none;">
+                    <label for="donation-value">Valor (R$)</label>
+                    <input type="number" id="donation-value" name="valor" class="form-control" step="0.01" />
+                </div>
+                <div class="form-group" id="produto-group" style="display: none;">
+                    <label for="produto-nome">Nome do Produto</label>
+                    <input type="text" id="produto-nome" name="produtoNome" class="form-control" />
+                    <label for="produto-validade">Data de Validade</label>
+                    <input type="date" id="produto-validade" name="produtoValidade" class="form-control" />
+                    <label for="produto-desc">Descrição</label>
+                    <textarea id="produto-desc" name="produtoDescricao" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="donation-message">Mensagem</label>
+                    <textarea id="donation-message" name="mensagem" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="donation-date">Data da Doação</label>
+                    <input type="date" id="donation-date" name="dataDoacao" class="form-control" required />
+                </div>
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-outline">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.</p>
+        <p>
+            <a href="#">Política de Privacidade</a> |
+            <a href="#">Termos de Uso</a> |
+            <a href="#">Contato</a>
+        </p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('donationForm');
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            // Coleta dos campos
+            const nome = document.getElementById('donor-name').value.trim();
+            const email = document.getElementById('donor-email').value.trim();
+            const tipo = document.getElementById('donation-type').value;
+            const valor = parseFloat(document.getElementById('donation-value').value) || 0;
+            const produtoNome = document.getElementById('produto-nome').value.trim();
+            const produtoValidade = document.getElementById('produto-validade').value;
+            const produtoDescricao = document.getElementById('produto-desc').value.trim();
+            const mensagem = document.getElementById('donation-message').value.trim();
+            const dataDoacao = document.getElementById('donation-date').value;
+
+            // Validações básicas
+            if (nome.length < 3) return showToast('error', 'Erro', 'Nome do doador deve ter pelo menos 3 caracteres.');
+            if (!validateEmail(email)) return showToast('error', 'Erro', 'Email inválido.');
+            if (!tipo) return showToast('error', 'Erro', 'Selecione um tipo de doação.');
+            if (!dataDoacao) return showToast('error', 'Erro', 'Informe a data da doação.');
+
+            if (tipo === 'dinheiro' && valor <= 0) {
+                return showToast('error', 'Erro', 'Valor da doação deve ser maior que zero.');
+            }
+
+            if (['remedios', 'comida', 'produtos'].includes(tipo)) {
+                if (produtoNome.length < 2 || produtoDescricao.length < 5 || !produtoValidade) {
+                    return showToast('error', 'Erro', 'Preencha corretamente os campos do produto.');
+                }
+            }
+
+// Monta o objeto da doação
+            const donationData = {
+                nomeDoador: nome,
+                email: email,
+                tipo: tipo,
+                valor: tipo === 'dinheiro' ? valor : null,
+                produto: ['remedios', 'comida', 'produtos'].includes(tipo)
+                    ? {
+                        nome: produtoNome,
+                        validade: produtoValidade,
+                        descricao: produtoDescricao
+                    }
+                    : null,
+                mensagem: mensagem,
+                dataDoacao: dataDoacao
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/apis/doacoes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(donationData)
+                });
+
+                if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+
+                showToast('success', 'Sucesso', 'Doação registrada com sucesso!');
+                form.reset();
+                document.getElementById('valor-group').style.display = 'none';
+                document.getElementById('produto-group').style.display = 'none';
+            } catch (error) {
+                console.error(error);
+                showToast('error', 'Erro', 'Falha ao enviar doação. Tente novamente.');
+            }
+        });
+
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function showToast(type, title, message) {
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+                toastContainer.style.position = 'fixed';
+                toastContainer.style.top = '20px';
+                toastContainer.style.right = '20px';
+                toastContainer.style.zIndex = '9999';
+                document.body.appendChild(toastContainer);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+             <strong>${title}</strong><br />
+             <span>${message}</span>
+             <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+         `;
+
+            toast.style.cssText = `
+        background: ${type === 'success' ? '#4CAF50' : '#F44336'};
+        color: white;
+        padding: 10px 15px;
+        margin-top: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        `;
+
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+    });
+</script>
+
+</body>
+</html>

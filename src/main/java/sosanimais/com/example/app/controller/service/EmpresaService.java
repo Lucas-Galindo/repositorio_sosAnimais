@@ -2,12 +2,12 @@ package sosanimais.com.example.app.controller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import sosanimais.com.example.app.model.DAL.EmpresaDAL;
 import sosanimais.com.example.app.model.entity.Empresa;
 
 @Service
 public class EmpresaService {
-/*
+
     @Autowired
     private EmpresaDAL repositorio;
 
@@ -30,6 +30,5 @@ public class EmpresaService {
 
         return repositorio.buscarUnicaEmpresa();
     }
-*/
 
 }

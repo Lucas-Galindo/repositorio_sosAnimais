@@ -11,6 +11,9 @@ public class ProdutoInformacao {
         this.preco = preco;
     }
 
+    public ProdutoInformacao() {
+    }
+
     public String getNome() {
         return nome;
     }

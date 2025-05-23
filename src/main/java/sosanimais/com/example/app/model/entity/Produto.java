@@ -1,6 +1,5 @@
 package sosanimais.com.example.app.model.entity;
 
-
 import sosanimais.com.example.app.model.ProdutoInformacao;
 
 public class Produto {
@@ -8,9 +7,11 @@ public class Produto {
     private ProdutoInformacao produto;
 
     public Produto(int id, ProdutoInformacao produto) {
-
         this.id = id;
         this.produto = produto;
+    }
+
+    public Produto() {
     }
 
     public int getId() {
@@ -20,7 +21,6 @@ public class Produto {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public ProdutoInformacao getProduto() {
         return produto;

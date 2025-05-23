@@ -3,7 +3,6 @@ package sosanimais.com.example.app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sosanimais.com.example.app.controller.service.EmpresaService;
 import sosanimais.com.example.app.model.DAL.EmpresaDAL;
 import sosanimais.com.example.app.model.entity.Empresa;
 
@@ -12,10 +11,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/apis/empresa")
 public class EmpresaController {
-/*
+
     @Autowired
     private EmpresaDAL empresaDAL;
-    private EmpresaService empresaService;
+
 
     @GetMapping("/buscar-por-cnpj/{cnpj}")
     public ResponseEntity<Empresa> buscarPorCnpj(@PathVariable String cnpj) {
@@ -67,12 +66,12 @@ public class EmpresaController {
 
     @GetMapping("/verificar")
     public ResponseEntity<Empresa> verificarEmpresa() {
-        Empresa empresa = empresaService.verificarEmpresaExistente();
+        Empresa empresa = empresaDAL.buscarUnicaEmpresa();
         if (empresa != null)
             return ResponseEntity.ok(empresa);
         else
             return ResponseEntity.noContent().build();
     }
 
-*/
+
 }
