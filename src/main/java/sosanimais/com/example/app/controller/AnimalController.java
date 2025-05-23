@@ -30,7 +30,7 @@ public class AnimalController {
             return ResponseEntity.badRequest().body(new Erro("Erro ao buscar os animais"));
         }
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Object> getAnimalById(@PathVariable Long id){//ok
         Animal aux=animalService.buscarPorId(id);
         if(aux!=null)
@@ -38,6 +38,18 @@ public class AnimalController {
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao buscar o animal de id: "+id));
     }
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Object> getAnimalByName(@PathVariable String nome){
+        List<Animal> animalList=new ArrayList<>();
+        animalList = animalService.buscarComFiltro("ani_nome = '" + nome.replace("'", "''") + "'");
+        if(!animalList.isEmpty()){
+            return ResponseEntity.ok(animalList);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new Erro("Nenhum animal com o nome "+nome));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Object> addAnimal(@RequestBody Animal animal){//ok
         Animal aux=animalService.salvarAnimal(animal);
