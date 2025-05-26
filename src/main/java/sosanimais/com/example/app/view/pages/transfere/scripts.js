@@ -238,106 +238,119 @@
 
     
     async function configurarAnimal(valor){
-        const animal = buscarAnimal(valor.aniId);
-        const response = fetch(`http://localhost:8080/apis/animal/${animal.id}`,{
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({               
-                "idBaia": valor.baiaDestino,
-                "idAcolhimento": animal.idAcolhimento,
-                "informacao": {
-                    "raca": animal.informacao.raca,
-                    "nome": animal.informacao.nome,
-                    "idade": animal.informacao.idade,
-                    "status": animal.informacao.status,
-                    "statusVida": animal.informacao.statusVida
-                }
+        try{
+            const animal = await buscarAnimal(valor.aniId,"id");
+         
+            if (!animal || !animal.id) { // ← VERIFICAÇÃO ADEQUADA
+                showToast('error', 'Animal não encontrado', `Animal com ID "${valor.aniId}" não foi localizado.`);
+                return null;
+            }
+            const response = await fetch(`http://localhost:8080/apis/animal/${animal.id}`,{
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({               
+                    "idBaia": valor.baiaDestino,
+                    "idAcolhimento": animal.idAcolhimento,
+                    "informacao": {
+                        "raca": animal.informacao.raca,
+                        "nome": animal.informacao.nome,
+                        "idade": animal.informacao.idade,
+                        "status": animal.informacao.status,
+                        "statusVida": animal.informacao.statusVida
+                    }
 
-            })
-            
-        });
+                })
+                
+            });
 
-        if(!response.ok){
-            showToast('error', 'Animal não disponível', `Animal com ID "${transferenciaData.animalId}" não foi localizado.`);
-            return; 
+            if(!response.ok){
+                showToast('error', 'Animal não disponível', `Animal com ID não foi localizado.`);
+                return; 
+            }
+
+            return await response.json();
+
+        }catch (erro){
+            showError('animal-error', erro.message);
+            return null;
         }
-
-        return await response.json();
+        
     }
 
     //Provavelmente tem que colocar um request body tambem la no controller 
     async function atualizarBaia(id,condicao){
-        if(condicao.equals("Decremento")){
-            const responseOrigem = fetch(`http://localhost:8080/apis/baia/atualizar-ocupacao/menos/${id}`,{
+
+        try{
+
+            let url;
+            if(condicao === "Decremento"){
+                url = `http://localhost:8080/apis/baia/atualizar-ocupacao/menos/${id}`;
+            }
+            else if(condicao === "Incremento")
+                url = `http://localhost:8080/apis/baia/atualizar-ocupacao/mais/${id}`;
+
+            const response = await fetch(url,{
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
             });
-            if(responseOrigem.ok){
-                //showToast('success', 'Atualização Or');
-                return await responseOrigem.json();
+            
+            if(!response.ok){
+                const errorText = await response.text();
+                showToast('error','Erro ao atualizar a baia',`Erro: ${errorText}`);
+                return null;
             }
-            else{
-                showToast('error', 'Erro ao atualizar baia origem');
-                return; 
-            }
+        }catch(erro){
+            showToast('error','Problemas ao atuaizar baia')
+            return;
         }
-        else{
-            const responseDestino = fetch(`http://localhost:8080/apis/baia/atualizar-ocupacao/mais/${id}`,{
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-            });
-            if(responseDestino.ok){
-                return await responseDestino.json();
-            }
-            else{
-                showToast('error', 'Erro ao atualizar baia destino');
-                return; 
-            }
-        }
+        
         
     }
 
 
     //Aqui ele carrega o json 
     async function configurarBaia(valor){
-        const responseOrigem = fetch(`http://localhost:8080/apis/baia/${valor.baiaOrigem}`,{
+        const responseOrigem = await fetch(`http://localhost:8080/apis/baia/${valor.baiaOrigem}`,{
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
-        if(responseOrigem.ok){
-            
-            const retornoBaiaOrigem = await atualizarBaia(valor.baiaOrigem,"Decremento");
-            if(retornoBaiaOrigem.ok){
-                console.log("Decremento realizado");
-                return retornoBaiaOrigem;
-            }
+        if(!responseOrigem.ok){
             showToast('error', 'Erro ao decrementar');
             return;
         }
-        else{
-            showToast('error', 'Erro ao encontrar baia origem');
-            console.log('ERRO BAIA ORIGEM - ATUALIZAÇÃO')
+       
+        const retornoBaiaOrigem = await atualizarBaia(valor.baiaOrigem,"Decremento");
+        if(!retornoBaiaOrigem.ok){
+            console.log("Decremento nao feito");
+            return;
         }
-
+        console.log("Decremento realizado");
+        
 
         //Destino
         const responseDestino = fetch(`http://localhost:8080/apis/baia/${valor.baiaDestino}`,{
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
-         if(responseDestino.ok){
-            const retornoBaiaDestino = await atualizarBaia(valor.baiaOrigem,"Incremento");
-            if(retornoBaiaDestino.ok){
-                console.log("Incremento realizado");
-                return retornoBaiaDestino;
-            }
-            showToast('error', 'Erro ao incrementar baia destino');
-            return retornoBaiaDestino;
+
+        if(!responseDestino.ok){
+           showToast('error', 'Erro ao encontrar baia');
+           return null;
         }
-        else{
-            showToast('error', 'Erro ao encontrar baia destino');
-            console.log('ERRO BAIA DESTINO - ATUALIZAÇÃO')
-            return;
+        const retornoBaiaDestino = await atualizarBaia(valor.baiaDestino,"Incremento");
+        if(!retornoBaiaDestino){
+            //Isso aqui é para caso der errado ele incrementa a baia origem la
+            showToast('error', 'Erro ao incrementar baia destino');
+            await atualizar(valor.baiaOrigem,"Incremento");
+            return null;
+        }
+        console.log("Incremento realizado");
+
+        
+        return {
+            origem: retornoBaiaOrigem,
+            destino: retornoBaiaDestino,
+            sucesso: true
         }
 
 

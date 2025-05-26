@@ -56,7 +56,7 @@ public class AnimalDAL implements IDAL<Animal>{
     public boolean update(Animal entidade) {
         String sql = """
                 UPDATE animal SET ani_nome='#2', ani_raca='#3', ani_desc='#4', ani_status='#5', ani_idade='#6',
-                ani_statusvida='#7', acolhimento_aco_cod=#8, baia_baia_cod=#9
+                ani_statusvida='#7', acolhimento_aco_cod=#8, baia_cod=#9
                 WHERE ani_cod='#1'
                 """;
 
