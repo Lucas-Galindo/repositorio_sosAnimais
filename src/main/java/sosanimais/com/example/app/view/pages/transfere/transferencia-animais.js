@@ -1,10 +1,34 @@
+
+/**
+ * 
+    FLUXO Usuario: 
+    1- Inserir animal ou por codigo ou por nome
+    2- Inserir data de ocorrencia
+    3- Inserir codigo de funcionario (no caso o correto é carregar a sessão, mas ainda ta desativada aqui) 25/05/25 
+    4- Escolher baia para mudança
+    5- mover animal
+
+    FLUXO Sistema:
+    1- Recebe as informacoes ao apertar salvar
+    2- Valida se os campos de inserção estao corretos
+    2.1- Se animal existe
+    2.2- Se animal esta dispinivel
+    3- Realiza a transferencia para a baia de destino
+    3.1- atualiza a quantidade dentro da baia, a baia destino aumenta a sua quantidade
+    3.2- muda o local que esta dentro de animal
+    3.3- atualiza a baia origem do animal, diminui a sua quantidade
+    4- carrega os dados na associativa, colocando o id da transferencia, animal e data.
+
+ */ 
+
 document.addEventListener('DOMContentLoaded', async function() {
+    
     // Variáveis globais
     let selectedBaiaType = '';
     let selectedBaiaId = null;
     let selectedBaiaName = '';
 
-    // Array para armazenar os dados das baias
+    // carregando as baias
     const baiasData = [];
 
     try {
@@ -175,9 +199,38 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Funções de validação
     function validateAnimalId(value) {
-        const isValid = value.trim().length > 0;
-        showError('animal-error', !isValid);
-        return isValid;
+        const trimmedValue = value.trim();
+        var status = [];
+        // Verificar se o campo não está vazio
+        if (trimmedValue.length === 0) {
+            showError('animal-error', true);
+            return false;
+        }
+
+        // Verificar se é um número (ID)
+        if (!isNaN(trimmedValue) && Number.isInteger(parseFloat(trimmedValue))) {
+            const id = parseInt(trimmedValue);
+            const isValidId = id > 0;
+            showError('animal-error', !isValidId);
+            status.push('valido');
+            statsus.push('numero')
+            return status;
+        }
+        
+        // Verificar se é uma string válida (Nome)
+        if (isNaN(trimmedValue)) {
+            // Validar nome: apenas letras, espaços, números e alguns caracteres especiais
+            const nomeRegex = /^[a-zA-ZÀ-ÿ0-9\s\-\_\.]+$/;
+            const isValidNome = nomeRegex.test(trimmedValue) && trimmedValue.length >= 2;
+            showError('animal-error', !isValidNome);
+            status.push('valido');
+            statsus.push('nome')
+            return status;
+        }
+
+        // Se chegou até aqui, é inválido
+        showError('animal-error', true);
+        return false
     }
 
     function validateDataTransferencia(value) {
@@ -270,28 +323,67 @@ document.addEventListener('DOMContentLoaded', async function() {
         }, 5000);
     }
 
-    // FUNÇÃO COMPLETAMENTE CORRIGIDA: Buscar dados do animal
-    async function buscarAnimal(animalId) {
+    // FUNÇÃO CORRIGIDA: Buscar dados do animal
+    async function buscarAnimal(animal,condicao) {
         try {
-            const response = await fetch(`http://localhost:8080/apis/animal/${animalId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
+            var response;
+            var animalData;
+            if(condicao == "id"){
+                response = await fetch(`http://localhost:8080/apis/animal/id/${animal}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Animal com ID ${animal} não encontrado`);
                 }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Animal com ID ${animalId} não encontrado`);
+                animalData = await response.json()
             }
+            else{
+                response = await fetch(`http://localhost:8080/apis/animal/nome/${animal}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
 
-            const animalData = await response.json();
-            console.log('Animal encontrado:', animalData);
+                if (!response.ok) {
+                    throw new Error(`Animal com ID ${animal} não encontrado`);
+                }
+                animalData = await response.json();
+            }
+            console.log('Animal encontrado: ', animalData);
             return animalData;
-            
+                                                 
         } catch (error) {
             console.error('Erro ao buscar animal:', error);
             throw error;
         }
+    }
+    //Aqui ele deve retornar o objeto inteiro - id, data e func
+    async function salvarRegistroTransferencia(data){
+        let response = await fetch('http://localhost:8080/apis/transferencias/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return response;
+    }
+
+    async function salvarDadosMovimentados(data){
+        let response = await fetch(`http://localhost:8080/apis/transferencias/salvarDadosTransf/`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return response;
     }
 
     // FUNÇÃO COMPLETAMENTE CORRIGIDA: Enviar dados para a API
@@ -301,84 +393,70 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             // ETAPA 1: Buscar dados do animal para obter baia origem
             console.log('1. Buscando dados do animal...');
-            const animalData = await buscarAnimal(transferenciaData.animalId);
+            console.log("ID animal antes de busca:", transferenciaData.animalId);
+            const animalData = await buscarAnimal(transferenciaData.animalId,"id");
             
-            // Assumindo que o animal retorna o campo da baia atual
-            // Ajuste o nome do campo conforme sua API retorna
-            const baiaOrigem = animalData.baiaId || animalData.baia_cod || animalData.Baia_baia_cod;
+            if(animalData){
+                const baiaOrigem = animalData.idBaia;
+                if (!baiaOrigem) {
+                    throw new Error('Não foi possível determinar a baia atual do animal');
+                }
+                console.log('Baia atual do '+animalData.id+'encontrada:', baiaOrigem);
+
+
+
+                console.log('2. Salvando transferência básica...');
+                const jsonTransferencia = {
+                    data: transferenciaData.data,
+                    matFunc: transferenciaData.matFunc
+                };
+                console.log('Enviando dados para API de Transferência:', jsonTransferencia);
+
+                const responseTransf = await salvarRegistroTransferencia(jsonTransferencia);
+
+                if (!responseTransf.ok) {
+                    const errorData = await responseTransf.text();
+                    console.error('Erro na resposta da API:', errorData);
+                    throw new Error(`Erro HTTP: ${responseTransf.status} - ${errorData}`);
+                }
+
+                const transferenciaResponse = await responseTransf.json();
+                console.log('Dados de transferencia:', transferenciaResponse);
+
+                // ETAPA 3: Buscar a transferência recém-criada para obter o ID
+                console.log('3. Salvar registro do que foi movimentado');
             
-            if (!baiaOrigem) {
-                throw new Error('Não foi possível determinar a baia atual do animal');
+                if (!transferenciaResponse || !transferenciaResponse.id) {
+                    throw new Error('ID da transferência não foi retornado pela API');
+                }
+                const jsonTransferenciaToBaia = {
+                    transfId: transferenciaResponse.id,
+                    aniId: parseInt(transferenciaData.animalId),
+                    baiaOrigem: parseInt(baiaOrigem),
+                    baiaDestino: parseInt(transferenciaData.baiaDestino)
+                };
+               
+                console.log('Dados a serem salvos:', jsonTransferenciaToBaia);
+                const respostaSaveDados = await salvarDadosMovimentados(jsonTransferenciaToBaia);
+                if (!respostaSaveDados.ok) {
+                    const errorData = await respostaSaveDados.text();
+                    console.error('Erro na resposta da API de dados associativos:', errorData);
+                    throw new Error(`Erro HTTP: ${respostaSaveDados.status} - ${errorData}`);
+                }
+
+                const responseDataAssoc = await respostaSaveDados.json();
+                console.log('Dados associativos salvos:', responseDataAssoc);
+                // Limpar formulário
+                resetForm();
+
+                // MENSAGEM DE SUCESSO CORRIGIDA
+                showToast('success', 'Transferência Realizada', 
+                    `Animal "${transferenciaData.animalId}" transferido da baia "${baiaOrigem}" para "${selectedBaiaName}" com sucesso!`);
+
+
             }
-
-            // ETAPA 2: Criar transferência básica
-            console.log('2. Salvando transferência básica...');
-            const jsonTransferencia = {
-                data: transferenciaData.data,
-                matFunc: transferenciaData.matFunc
-            };
-
-            console.log('Enviando dados para API de Transferência:', jsonTransferencia);
-
-            const responseTransf = await fetch('http://localhost:8080/apis/transferencias/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonTransferencia)
-            });
-
-            if (!responseTransf.ok) {
-                const errorData = await responseTransf.text();
-                console.error('Erro na resposta da API:', errorData);
-                throw new Error(`Erro HTTP: ${responseTransf.status} - ${errorData}`);
-            }
-
-            const transferenciaResponse = await responseTransf.json();
-            console.log('Transferência básica criada:', transferenciaResponse);
-
-            // ETAPA 3: Obter ID da transferência criada
-            console.log('3. Obtendo ID da transferência...');
-            const transferenciaCriada = await buscarUltimaTransferencia(transferenciaData.matFunc);
-            
-            if (!transferenciaCriada || !transferenciaCriada.id) {
-                throw new Error('Não foi possível obter o ID da transferência criada');
-            }
-
-            // ETAPA 4: Criar registro associativo
-            console.log('4. Salvando dados associativos...');
-            const jsonTransferenciaToBaia = {
-                transfId: transferenciaCriada.id,
-                aniId: parseInt(transferenciaData.animalId),
-                baiaOrigem: parseInt(baiaOrigem),
-                baiaDestino: parseInt(transferenciaData.baiaDestino)
-            };
-
-            console.log('Salvando dados associativos:', jsonTransferenciaToBaia);
-
-            const responseDados = await fetch('http://localhost:8080/apis/transferencias/salvarDadosTransferencia/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonTransferenciaToBaia)
-            });
-
-            if (!responseDados.ok) {
-                const errorData = await responseDados.text();
-                console.error('Erro na resposta da API de dados associativos:', errorData);
-                throw new Error(`Erro HTTP: ${responseDados.status} - ${errorData}`);
-            }
-
-            const responseDataAssoc = await responseDados.json();
-            console.log('Dados associativos salvos:', responseDataAssoc);
-
-            // Limpar formulário
-            resetForm();
-
-            // Mensagem de sucesso
-            showToast('success', 'Transferência Realizada', 
-                `Animal "${transferenciaData.animalId}" transferido de "${baiaOrigem}" para "${selectedBaiaName}" com sucesso!`);
+            else
+                showToast('error', 'Erro ao achar animal',`Ocorreu um erro ao buscar animal " ${transferenciaData.animalId}".Digite novamente..."`);            
 
         } catch (erro) {
             console.error('Erro ao realizar transferência:', erro);
@@ -387,45 +465,37 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // FUNÇÃO AUXILIAR: Buscar última transferência criada por um funcionário
-    async function buscarUltimaTransferencia(matFunc) {
-        try {
-            // Buscar todas as transferências (você pode precisar ajustar este endpoint)
-            const response = await fetch('http://localhost:8080/apis/transferencias/lista', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao buscar transferências');
-            }
-
-            const transferencias = await response.json();
-            
-            // Encontrar a transferência mais recente do funcionário
-            const transferenciasDoFunc = transferencias.filter(t => t.matFunc === matFunc);
-            
-            if (transferenciasDoFunc.length === 0) {
-                throw new Error('Nenhuma transferência encontrada para este funcionário');
-            }
-
-            // Ordenar por data/ID e pegar a mais recente
-            transferenciasDoFunc.sort((a, b) => {
-                if (a.id && b.id) return b.id - a.id;
-                return new Date(b.data) - new Date(a.data);
-            });
-
-            return transferenciasDoFunc[0];
-            
-        } catch (error) {
-            console.error('Erro ao buscar última transferência:', error);
-            throw error;
+    async function retornaAnimal(valor){   
+        const valorLimpo = valor.trim();
+        
+        if (valorLimpo.length === 0) {
+            exibirErro('animal-error', 'Campo obrigatório');
+            return false;
         }
-    }
 
-    // Handler para salvar - CORRIGIDO
+        // Verificar se é um ID (número)
+        if (VALIDATION_PATTERNS.id.test(valorLimpo)) {
+            const id = parseInt(valorLimpo);
+            const valido = id > 0;
+            
+            if (!valido) {
+                exibirErro('animal-error', 'ID deve ser um número positivo');
+            } else {
+                ocultarErro('animal-error');
+            }
+            return valido;
+        }
+        
+        // Verificar se é um nome válido
+        if (VALIDATION_PATTERNS.nome.test(valorLimpo) && valorLimpo.length >= 1) {
+            ocultarErro('animal-error');
+            return true;
+        }
+        
+        exibirErro('animal-error', 'Digite um ID válido ou nome do animal');
+        return false;
+    };
+    // Handler para salvar - FINAL
     async function handleSave() {
         const animalInput = document.getElementById('animal-identificacao');
         const dataInput = document.getElementById('data-transferencia');
@@ -441,7 +511,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         // Validar todos os campos
-        const animalValid = validateAnimalId(animalInput.value);
+        var status = [];
+        status = validateAnimalId(animalInput.value);
+        const condicaoAnimal = status[1];
+        const animalValid = status[0];
         const dataValid = validateDataTransferencia(dataInput.value);
         const matriculaValid = validateMatricula(matriculaInput.value);
         const tipoValid = validateTipoBaia();
@@ -449,11 +522,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Se todos os campos forem válidos, enviar o formulário
         if (animalValid && dataValid && matriculaValid && tipoValid && baiaValid) {
+
+            var refAnimal = await retornaAnimal(animalInput.value);
+            console.log('Valores refAnimal: '+ refAnimal.id);
+
             // Preparar dados conforme estrutura backend
             const transferenciaData = {
                 data: new Date(dataInput.value).toISOString(),
                 matFunc: parseInt(matriculaInput.value),
-                animalId: animalInput.value.trim(),
+                animalId: refAnimal.id,
                 baiaDestino: selectedBaiaId
             };
 

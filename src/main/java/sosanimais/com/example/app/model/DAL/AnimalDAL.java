@@ -5,7 +5,6 @@ import sosanimais.com.example.app.model.AnimalInformacao;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
 import sosanimais.com.example.app.model.entity.Animal;
-import sosanimais.com.example.app.model.entity.Baias;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +23,8 @@ public class AnimalDAL implements IDAL<Animal>{
         if (!filtro.isEmpty())
             sql += " WHERE " + filtro;
 
+        System.out.println("SQL consulta get: " + sql);
+
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
         try {
             while (rs.next()) {
@@ -38,8 +39,8 @@ public class AnimalDAL implements IDAL<Animal>{
 
                 Animal animal = new Animal(
                         rs.getLong("ani_cod"),
-                        rs.getInt("baia_baia_cod"),
-                        rs.getInt("acolhimento_aco_cod"),
+                        rs.getLong("baia_baia_cod"),
+                        rs.getLong("acolhimento_aco_cod"),
                         info
                 );
 
@@ -55,7 +56,7 @@ public class AnimalDAL implements IDAL<Animal>{
     public boolean update(Animal entidade) {
         String sql = """
                 UPDATE animal SET ani_nome='#2', ani_raca='#3', ani_desc='#4', ani_status='#5', ani_idade='#6',
-                ani_statusvida='#7', acolhimento_aco_cod=#8, baia_baia_cod='#9'
+                ani_statusvida='#7', acolhimento_aco_cod=#8, baia_baia_cod=#9
                 WHERE ani_cod='#1'
                 """;
 
@@ -66,12 +67,16 @@ public class AnimalDAL implements IDAL<Animal>{
         sql = sql.replace("#5", String.valueOf(entidade.getInformacao().getStatus()));
         sql = sql.replace("#6", String.valueOf(entidade.getInformacao().getIdade()));
         sql = sql.replace("#7", String.valueOf(entidade.getInformacao().getStatusVida()));
-        if(entidade.getIdAcolhimento()==0){
+        if(entidade.getIdAcolhimento() == null || entidade.getIdAcolhimento() == 0){
             sql=sql.replace("#8","null");
         }
         else
             sql=sql.replace("#8",""+entidade.getIdAcolhimento());
-        sql = sql.replace("#9", String.valueOf(entidade.getIdBaia()));
+        if(entidade.getIdBaia() == null || entidade.getIdBaia() == 0)
+            sql = sql.replace("#9", "null");
+        else
+            sql = sql.replace("#9", String.valueOf(entidade.getIdBaia()));
+        System.out.println("sql: "+sql);
         return SingletonDB.getConexao().manipular(sql);
     }
 
@@ -121,6 +126,8 @@ public class AnimalDAL implements IDAL<Animal>{
     @Override
     public Animal get(Long id) {
         Animal animal = null;
+        String alinhaId="SELECT setval('animal_id_seq', (SELECT MAX(ani_cod) FROM animal))";
+        SingletonDB.getConexao().consultar(alinhaId);
         String sql = "SELECT * FROM animal WHERE ani_cod=" + id;
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
         try {
@@ -136,8 +143,8 @@ public class AnimalDAL implements IDAL<Animal>{
 
                 animal = new Animal(
                         rs.getLong("ani_cod"),
-                        rs.getInt("baia_baia_cod"),
-                        rs.getInt("acolhimento_aco_cod"),
+                        rs.getLong("baia_baia_cod"),
+                        rs.getLong("acolhimento_aco_cod"),
                         info
                 );
             }
@@ -148,7 +155,9 @@ public class AnimalDAL implements IDAL<Animal>{
     }
 
     @Override
-    public boolean save(Animal entidade) {
+    public boolean save(Animal entidade) {//ok
+        String attId="SELECT setval('animal_id_seq', (SELECT MAX(ani_cod) FROM animal))";
+        SingletonDB.getConexao().manipular(attId);
         String sql= """
                 INSERT INTO animal(ani_nome, ani_raca, ani_desc, ani_status, ani_idade, ani_statusVida, Acolhimento_aco_cod, Baia_baia_cod) VALUES
                  ('#2','#3','#4','#5',#6,'#7',#8,#9)
@@ -159,19 +168,17 @@ public class AnimalDAL implements IDAL<Animal>{
         sql=sql.replace("#5",""+entidade.getInformacao().getStatus());
         sql=sql.replace("#6",""+entidade.getInformacao().getIdade());
         sql=sql.replace("#7",""+entidade.getInformacao().getStatusVida());
-        if(entidade.getIdAcolhimento()==0){
+        if(entidade.getIdAcolhimento()==null||entidade.getIdAcolhimento()==0){
             sql=sql.replace("#8","null");
         }
         else
             sql=sql.replace("#8",""+entidade.getIdAcolhimento());
-        if(entidade.getIdBaia()==0)
+        if(entidade.getIdBaia()==null||entidade.getIdBaia()==0 )
             sql=sql.replace("#9","null");
         else
             sql=sql.replace("#9",""+entidade.getIdBaia());
         System.out.println("Enviando o SQL: " + sql);
         return SingletonDB.getConexao().manipular(sql);
     }
-
-
 
 }

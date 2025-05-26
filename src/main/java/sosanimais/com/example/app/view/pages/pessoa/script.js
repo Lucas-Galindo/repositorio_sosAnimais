@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-   
-
         // Formatação de CPF
         const cpfInput = document.getElementById('person-cpf');
         cpfInput.addEventListener('input', function(e) {

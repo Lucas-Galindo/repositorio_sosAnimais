@@ -10,7 +10,7 @@ import java.util.List;
 public class TransferenciaService {
     TransferenciaDAL repositorio = new TransferenciaDAL();
 
-    public boolean salvarTransferencia(Transferencia entidade){ return repositorio.saveTransfere(entidade);}
+    public Transferencia salvarTransferencia(Transferencia entidade){ return repositorio.saveTransfere(entidade);}
     public Transferencia getId(Long mat){ return repositorio.get(mat);}
     public List<Transferencia> getAll(String filtro) {return repositorio.get(filtro);}
     public boolean deletar(Transferencia entidade){return repositorio.delete(entidade);}
@@ -21,4 +21,5 @@ public class TransferenciaService {
 
     public boolean salvarDados(Transfere_to_Baia elemento){ return repositorio.saveAssociativa(elemento);}
     public Transferencia getRegistroData(Date data){ return repositorio.findByDate(data);}
+    public Transferencia getRegistroFunc(int mat){ return repositorio.findByMat(mat);}
 }

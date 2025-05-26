@@ -422,15 +422,23 @@ CREATE TABLE Transferir_to_Baia (
     TTB_id INTEGER PRIMARY KEY NOT NULL,
     Transferir_Baia_tb_cod INTEGER,
     baia_cod INTEGER,
-    CONSTRAINT Transferir_Baia_FK FOREIGN KEY (Transferir_Baia_tb_cod) REFERENCES Transferir_Baia(tb_cod),
+    CONSTRAINT Transferir_Baia_FK FOREIGN KEY (Transferir_Baia_tb_cod) REFERENCES Transferir_Baia(tb_cod)
     
 );
 
+ALTER TABLE Transferir_to_Baia DROP COLUMN Transferir_Baia_tb_cod;
+ALTER TABLE Transferir_to_Baia ADD COLUMN tb_id INTEGER;
+ALTER TABLE Transferir_to_Baia ADD COLUMN ani_id integer unique;
+ALTER TABLE Transferir_to_Baia ADD CONSTRAINT Transferir_Animal_FK FOREIGN KEY (ani_Id) REFERENCES Animal(ani_cod);
 ALTER TABLE Transferir_to_Baia ADD COLUMN baia_Destino INTEGER;
 ALTER TABLE Transferir_to_Baia RENAME COLUMN baia_cod TO baia_Origem;
 
 CREATE SEQUENCE Transferir_to_Baia_id_seq START 1;
 ALTER TABLE Transferir_to_Baia ALTER COLUMN TTB_id SET DEFAULT nextval('Transferir_to_Baia_id_seq');
+
+
+ALTER TABLE TRANSFERENCIA DROP COLUMN tb_date DATE;
+ALTER TABLE TRANSFERENCIA ADD COLUMN tb_date timestamp;
 
 
 --Restart

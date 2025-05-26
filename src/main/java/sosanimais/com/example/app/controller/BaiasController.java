@@ -45,14 +45,17 @@ public class BaiasController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Baias"));
     }
 
-    @PutMapping("/atualizar-quantidade/{id}")
-    public ResponseEntity<Object> atualizarQtde(@PathVariable Long id) {
-        boolean aux = baiaService.atualizarQuantidade(id);
+    @PutMapping("/atualizar-ocupacao/{operacao}/{id}")
+    public ResponseEntity<Object> incrementoQtde(@PathVariable String operacao, @PathVariable Long id) {
+        char sinal = '-';
+        if(operacao.equals("mais"))
+            sinal = '+';
+
+        boolean aux = baiaService.atualizarQuantidade(id,sinal);
         if (aux)
             return ResponseEntity.ok(aux);
-        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Baias"));
+        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar ocupacao Baias"));
     }
-
 
 
     @GetMapping("/lista") // correto

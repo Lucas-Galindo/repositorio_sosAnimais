@@ -1,9 +1,11 @@
 package sosanimais.com.example.app.model.DAL;
 
+import org.springframework.http.ResponseEntity;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
 import sosanimais.com.example.app.model.Transferencia;
 import sosanimais.com.example.app.model.db.SingletonDB;
-import sosanimais.com.example.app.model.entity.Baias;
+import java.text.SimpleDateFormat;
+
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -35,25 +37,31 @@ public class TransferenciaDAL {
         super();
     }
 
-    public boolean saveTransfere(Transferencia elemento){
+    public Transferencia saveTransfere(Transferencia elemento){
         String sql = """
-                INSERT INTO transferencia(tb_date, func_matricula) values ('#1','#2');
+                INSERT INTO transferencia(tb_date, func_mat) VALUES ('#1',#2);
                 """;
 
-        sql = sql.replace("#1",elemento.getData());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String data = elemento.getData() != null ? sdf.format(elemento.getData()) : null;
+        sql = sql.replace("#1", data);
         sql = sql.replace("#2", ""+elemento.getMatFunc());
 
-        return SingletonDB.getConexao().manipular(sql);
+        if(SingletonDB.getConexao().manipular(sql)){
+            return findByDate(elemento.getData());
+        }
+        return null;
     }
 
     public boolean saveAssociativa(Transfere_to_Baia elemento){
         String sql = """
-                INSERT INTO transferir_to_Baia(transfId,baia_Destino,baia_Origem) VALUES ('#1','#2','#3');
+                INSERT INTO transferir_to_baia(ttb_destino,ttb_origem,tb_id,ani_id) VALUES (#1,#2,#3,#4);
                 """;
 
-        sql = sql.replace("#1", ""+elemento.getTransfId());
-        sql = sql.replace("#2", ""+elemento.getBaiaDestino());
-        sql = sql.replace("#3", ""+elemento.getBaiaOrigem());
+        sql = sql.replace("#1", ""+elemento.getBaiaDestino());
+        sql = sql.replace("#2", ""+elemento.getBaiaOrigem());
+        sql = sql.replace("#3", ""+elemento.getTransfId());
+        sql = sql.replace("#4", ""+elemento.getAniId());
         return SingletonDB.getConexao().manipular(sql);
     }
 
@@ -83,8 +91,6 @@ public class TransferenciaDAL {
 
         String sql;
         ResultSet resultSet;
-//        int aux;
-//        aux = Math.toIntExact(mat);
 
         sql = "SELECT * FROM transferencia WHERE tb_id =" + Math.toIntExact(id);
         resultSet = SingletonDB.getConexao().consultar(sql);
@@ -142,7 +148,31 @@ public class TransferenciaDAL {
 
 
     public Transferencia findByDate(Date data){
-        String sql = "SELECT * FROM transferencia WHERE tb_date = "+data;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dataFormatada = sdf.format(data);
+
+            String sql = "SELECT * FROM transferencia WHERE tb_date = '" + dataFormatada + "'";
+
+            ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
+
+            if(resultSet.next()){
+                return new Transferencia(
+                        resultSet.getLong("tb_id"),
+                        resultSet.getDate("tb_date"),
+                        resultSet.getInt("func_mat")
+                );
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Transferencia findByMat(int mat){
+        String sql = "SELECT * FROM transferencia WHERE func_mat = " + mat;
+
+
         ResultSet resultSet = SingletonDB.getConexao().consultar(sql);
         try{
             if(resultSet.next()){
@@ -157,9 +187,5 @@ public class TransferenciaDAL {
         }
         return null;
     }
-
-
-
-
 
 }

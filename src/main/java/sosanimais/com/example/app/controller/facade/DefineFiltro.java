@@ -1,4 +1,4 @@
-package sosanimais.com.example.app.model;
+package sosanimais.com.example.app.controller.facade;
 
 public class DefineFiltro {
 

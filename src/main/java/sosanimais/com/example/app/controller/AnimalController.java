@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sosanimais.com.example.app.model.entity.Animal;
 import sosanimais.com.example.app.controller.service.AnimalService;
-import sosanimais.com.example.app.model.entity.Baias;
 import sosanimais.com.example.app.model.util.Erro;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class AnimalController {
             return ResponseEntity.badRequest().body(new Erro("Erro ao buscar os animais"));
         }
     }
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Object> getAnimalById(@PathVariable Long id){//ok
         Animal aux=animalService.buscarPorId(id);
         if(aux!=null)
@@ -39,7 +38,17 @@ public class AnimalController {
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao buscar o animal de id: "+id));
     }
-
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Object> getAnimalByName(@PathVariable String nome){
+        List<Animal> animalList=new ArrayList<>();
+        animalList = animalService.buscarComFiltro("ani_nome = '" + nome.replace("'", "''") + "'");
+        if(!animalList.isEmpty()){
+            return ResponseEntity.ok(animalList);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new Erro("Nenhum animal com o nome "+nome));
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Object> addAnimal(@RequestBody Animal animal){//ok

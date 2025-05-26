@@ -47,26 +47,35 @@ public class TransferenciaController {
 
     TransferenciaService transfereService = new TransferenciaService();
 
-    @PostMapping("/")
+    @PostMapping(path = "/",consumes = "application/json")
     public ResponseEntity<Object> salvarTransferencia(@RequestBody Transferencia elemento) { // correto
-        boolean aux = transfereService.salvarTransferencia(elemento);
-        if (aux)
-            return ResponseEntity.ok(elemento);
-        return ResponseEntity.badRequest().body(new Erro("Erro salvar Transferencia"));
+        Transferencia aux = transfereService.salvarTransferencia(elemento);
+        if (aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro salvar registro de Transferencia"));
     }
 
-    @PostMapping("/salvarDadosTransferencia/")
+    @PostMapping(path="/salvarDadosTransf/",consumes = "application/json")
     public ResponseEntity<Object> salvarDadosAssociativa(@RequestBody Transfere_to_Baia elemento) { // correto
+
         boolean aux = transfereService.salvarDados(elemento);
         if (aux)
             return ResponseEntity.ok(elemento);
-        return ResponseEntity.badRequest().body(new Erro("Erro salvar Transferencia"));
+        return ResponseEntity.badRequest().body(new Erro("Erro salvar dados de Transação"));
     }
 
 
     @GetMapping("/busca-transfere-data/{data}") // correto
     public ResponseEntity<Object> getTransfereData(@PathVariable Date data) {
         Transferencia aux = transfereService.getRegistroData(data);
+        if (aux != null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao achar Transferencia"));
+    }
+
+    @GetMapping("/busca-func/{mat}") // correto
+    public ResponseEntity<Object> getTransfereData(@PathVariable int mat) {
+        Transferencia aux = transfereService.getRegistroFunc(mat);
         if (aux != null)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao achar Transferencia"));

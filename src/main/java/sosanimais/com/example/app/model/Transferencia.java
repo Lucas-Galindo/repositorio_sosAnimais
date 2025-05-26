@@ -26,8 +26,8 @@ public class Transferencia {
         this.id = id;
     }
 
-    public CharSequence getData() {
-        return (CharSequence) data;
+    public Date getData() {
+        return data;
     }
 
     public void setData(Date data) {
