@@ -98,4 +98,39 @@ public class AcolhimentoDAL implements IDAL<Acolhimento> {
         }
         return acolhimento;
     }
+
+    public Long obterUltimoIdPorAnimal(Long idAnimal) {
+        String sql = "SELECT MAX(aco_cod) AS max_id FROM acolhimento WHERE animal_ani_cod = " + idAnimal;
+        Long maxId = null;
+        ResultSet rs = SingletonDB.getConexao().consultar(sql);
+        try {
+            if (rs.next()) {
+                maxId = rs.getLong("max_id");
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return maxId;
+    }
+
+    public Acolhimento buscarPorAnimal(Long idAnimal){
+        String sql = "SELECT aco_cod, aco_data, funcionario_func_mat, animal_ani_cod "
+                + "FROM Acolhimento WHERE animal_ani_cod = " + idAnimal;
+        ResultSet rs = SingletonDB.getConexao().consultar(sql);
+        try {
+            if (rs.next()) {
+                Acolhimento ac = new Acolhimento(
+                        rs.getLong("aco_cod"),
+                        rs.getDate("aco_data"),
+                        rs.getLong("funcionario_func_mat"),
+                        rs.getLong("animal_ani_cod")
+                );
+                return ac;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }

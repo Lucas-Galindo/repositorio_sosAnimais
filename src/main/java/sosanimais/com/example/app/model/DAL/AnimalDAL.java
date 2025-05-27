@@ -77,6 +77,7 @@ public class AnimalDAL implements IDAL<Animal>{
         else
             sql = sql.replace("#9", String.valueOf(entidade.getIdBaia()));
         System.out.println("sql: "+sql);
+
         return SingletonDB.getConexao().manipular(sql);
     }
 

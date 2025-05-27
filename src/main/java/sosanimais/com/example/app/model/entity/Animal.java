@@ -28,21 +28,21 @@ public class Animal {
         this.id = id;
     }
 
-    public Long getIdBaia () {
-        return idBaia;
-    }
+        public Long getIdBaia () {
+            return idBaia;
+        }
 
-    public void setIdBaia ( Long idBaia){
-        this.idBaia = idBaia;
-    }
+        public void setIdBaia ( Long idBaia){
+            this.idBaia = idBaia;
+        }
 
-    public Long getIdAcolhimento () {
-        return idAcolhimento;
-    }
+        public Long getIdAcolhimento () {
+            return idAcolhimento;
+        }
 
-    public void setIdAcolhimento ( Long idAcolhimento){
-        this.idAcolhimento = idAcolhimento;
-    }
+        public void setIdAcolhimento ( Long idAcolhimento){
+            this.idAcolhimento = idAcolhimento;
+        }
 
     public AnimalInformacao getInformacao () {
         return informacao;
