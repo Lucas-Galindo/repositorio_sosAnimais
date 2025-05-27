@@ -183,26 +183,16 @@
 
     async function buscarAnimal(animal, condicao) {
         try {
-            
-            var url;
-            var animalData;
-
+            let url;
             if (condicao === "id") {
-                //const url = `${baseUrl}/id/${animal}`;
                 url = `http://localhost:8080/apis/animal/id/${animal}`;
-                const response = await fetchAnimalData(url, `Animal não encontrado`);
-                const animalData = await response.json();
-                return animalData; 
             } else {
                 url = `http://localhost:8080/apis/animal/nome/${animal}`;
-                const response = await fetchAnimalData(url, `Animal não encontrado`);
-                const animalData = await response.json();
-                return animalData; 
             }
-
+            const response = await fetchAnimalData(url, `Animal não encontrado`);
+            const animalData = await response.json();
             console.log('Animal encontrado: ', animalData);
             return animalData;
-
         } catch (error) {
             console.error('Erro ao buscar animal:', error);
             throw error;
@@ -240,30 +230,19 @@
     async function configurarAnimal(valor){
         try{
             const animal = await buscarAnimal(valor.aniId,"id");
+            
          
             if (!animal || !animal.id) { // ← VERIFICAÇÃO ADEQUADA
                 showToast('error', 'Animal não encontrado', `Animal com ID "${valor.aniId}" não foi localizado.`);
                 return null;
             }
-            const response = await fetch(`http://localhost:8080/apis/animal/${animal.id}`,{
+            const response = await fetch(`http://localhost:8080/apis/animal/${animal.id}/${valor.baiaDestino}`,{
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({               
-                    "idBaia": valor.baiaDestino,
-                    "idAcolhimento": animal.idAcolhimento,
-                    "informacao": {
-                        "raca": animal.informacao.raca,
-                        "nome": animal.informacao.nome,
-                        "idade": animal.informacao.idade,
-                        "status": animal.informacao.status,
-                        "statusVida": animal.informacao.statusVida
-                    }
-
-                })
-                
+                headers: { 'Content-Type': 'application/json' }
+               
             });
 
-            if(!response.ok){
+            if(!response){
                 showToast('error', 'Animal não disponível', `Animal com ID não foi localizado.`);
                 return; 
             }
@@ -284,14 +263,15 @@
 
             let url;
             if(condicao === "Decremento"){
-                url = `http://localhost:8080/apis/baia/atualizar-ocupacao/menos/${id}`;
+                url = `http://localhost:8080/apis/baias/atualizar-ocupacao/menos/${id}`;
             }
             else if(condicao === "Incremento")
-                url = `http://localhost:8080/apis/baia/atualizar-ocupacao/mais/${id}`;
+                url = `http://localhost:8080/apis/baias/atualizar-ocupacao/mais/${id}`;
 
             const response = await fetch(url,{
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json' }
+               
             });
             
             if(!response.ok){
@@ -299,6 +279,8 @@
                 showToast('error','Erro ao atualizar a baia',`Erro: ${errorText}`);
                 return null;
             }
+
+            return response;
         }catch(erro){
             showToast('error','Problemas ao atuaizar baia')
             return;
@@ -310,12 +292,12 @@
 
     //Aqui ele carrega o json 
     async function configurarBaia(valor){
-        const responseOrigem = await fetch(`http://localhost:8080/apis/baia/${valor.baiaOrigem}`,{
+        const responseOrigem = await fetch(`http://localhost:8080/apis/baias/busca-baia-id/${valor.baiaOrigem}`,{
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
         if(!responseOrigem.ok){
-            showToast('error', 'Erro ao decrementar');
+            console.log("Decremento nao feito");
             return;
         }
        
@@ -326,23 +308,22 @@
         }
         console.log("Decremento realizado");
         
-
         //Destino
-        const responseDestino = fetch(`http://localhost:8080/apis/baia/${valor.baiaDestino}`,{
+        const responseDestino = await fetch(`http://localhost:8080/apis/baias/busca-baia-id/${valor.baiaDestino}`,{
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
 
         if(!responseDestino.ok){
-           showToast('error', 'Erro ao encontrar baia');
-           return null;
+            console.log("Incremento nao feito");
+            return;
         }
         const retornoBaiaDestino = await atualizarBaia(valor.baiaDestino,"Incremento");
-        if(!retornoBaiaDestino){
+        if(!retornoBaiaDestino.ok){
             //Isso aqui é para caso der errado ele incrementa a baia origem la
             showToast('error', 'Erro ao incrementar baia destino');
             await atualizar(valor.baiaOrigem,"Incremento");
-            return null;
+            return;
         }
         console.log("Incremento realizado");
 
@@ -635,6 +616,10 @@
             const animalData = await buscarAnimal(transferenciaData.animalId, "id");
 
             
+            if (!animalData || !animalData.informacao) {
+                showToast('error', 'Animal não encontrado', `Animal com ID "${transferenciaData.animalId}" não foi localizado.`);
+                return;
+            }
 
             if(animalData.informacao.status!='D'){
                 showToast('error', 'Animal não disponível', `Animal com ID "${transferenciaData.animalId}" não foi localizado.`);

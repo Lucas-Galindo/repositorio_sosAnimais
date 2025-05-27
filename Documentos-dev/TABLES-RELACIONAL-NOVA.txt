@@ -413,7 +413,9 @@ ALTER TABLE funcionario
 ADD COLUMN func_role TEXT DEFAULT 'USER' CHECK (func_role IN ('ADMIN', 'USER'));
 
 
-
+ALTER TABLE baia DROP COLUMN baia_qtde;
+ALTER TABLE baia ADD COLUMN baia_qtde NUMERIC DEFAULT 0;
+ALTER TABLE baia ADD CONSTRAINT positive_baia_qtde CHECK (baia_qtde >= 0);
 
 UPDATE adocao_animal a
 SET Func_Matricula = 15;

@@ -56,8 +56,8 @@ public class AnimalDAL implements IDAL<Animal>{
     public boolean update(Animal entidade) {
         String sql = """
                 UPDATE animal SET ani_nome='#2', ani_raca='#3', ani_desc='#4', ani_status='#5', ani_idade='#6',
-                ani_statusvida='#7', acolhimento_aco_cod=#8, baia_cod=#9
-                WHERE ani_cod='#1'
+                ani_statusvida='#7', acolhimento_aco_cod=#8, baia_baia_cod=#9
+                WHERE ani_cod=#1
                 """;
 
         sql = sql.replace("#1", String.valueOf(entidade.getId()));
@@ -77,6 +77,11 @@ public class AnimalDAL implements IDAL<Animal>{
         else
             sql = sql.replace("#9", String.valueOf(entidade.getIdBaia()));
         System.out.println("sql: "+sql);
+        return SingletonDB.getConexao().manipular(sql);
+    }
+
+    public boolean updateBaia(Long id, Long baia){
+        String sql = "UPDATE animal SET baia_baia_cod = "+baia+" WHERE ani_cod = "+id;
         return SingletonDB.getConexao().manipular(sql);
     }
 

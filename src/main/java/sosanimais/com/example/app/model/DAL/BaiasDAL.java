@@ -53,7 +53,7 @@ public class BaiasDAL {
 
     public boolean updateQtde(Long id, char sinal){
         String sql = """
-                UPDATE UPDATE baia SET baia_qtde = baia_qtde #2 1  WHERE baia_id = #1;
+                UPDATE baia SET baia_qtde = baia_qtde #2 1  WHERE baia_id = #1;
                 """;
         if(sinal == '+'){
             sql= sql.replace("#2","+");
@@ -62,6 +62,7 @@ public class BaiasDAL {
             sql= sql.replace("#2","-");
 
         sql = sql.replace("#1",""+ id);
+        System.out.println("Sql: "+sql);
         return SingletonDB.getConexao().manipular(sql);
     }
 

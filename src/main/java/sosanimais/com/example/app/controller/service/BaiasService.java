@@ -21,7 +21,6 @@ public class BaiasService {
     public boolean atualizarObjeto(Baias entidade){return repositorio.update(entidade);}
 
 
-
     public boolean atualizarQuantidade(Long id, char sinal){return repositorio.updateQtde(id,sinal);}
     public List<Baias> getAllByFilter(String filtro) {return repositorio.getAllByBaia(filtro);}
     public Baias getNomeBaia(String nome) {return repositorio.findByNome(nome);}
