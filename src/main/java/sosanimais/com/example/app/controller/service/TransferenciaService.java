@@ -3,6 +3,7 @@ package sosanimais.com.example.app.controller.service;
 import sosanimais.com.example.app.model.DAL.TransferenciaDAL;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
 import sosanimais.com.example.app.model.Transferencia;
+import sosanimais.com.example.app.model.objetosAux.FiltrosTransferencia;
 
 import java.util.Date;
 import java.util.List;
@@ -22,4 +23,10 @@ public class TransferenciaService {
     public boolean salvarDados(Transfere_to_Baia elemento){ return repositorio.saveAssociativa(elemento);}
     public Transferencia getRegistroData(Date data){ return repositorio.findByDate(data);}
     public Transferencia getRegistroFunc(int mat){ return repositorio.findByMat(mat);}
+    public List<Transferencia> pesquisaTransfere(Long id){
+        return repositorio.searchTransferencia(id);
+    }
+    public Transferencia pesquisaDetalhesTransfere(FiltrosTransferencia filtro){
+        return repositorio.searchDetailsTransfere(filtro);
+    }
 }
