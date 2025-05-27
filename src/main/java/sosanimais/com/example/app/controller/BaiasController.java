@@ -1,8 +1,8 @@
-package sosanimais.com.example.app.controller.service;
+package sosanimais.com.example.app.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sosanimais.com.example.app.model.entity.Baias;
+import sosanimais.com.example.app.controller.service.BaiasService;
 import sosanimais.com.example.app.model.entity.Baias;
 import sosanimais.com.example.app.model.util.Erro;
 
@@ -37,14 +37,25 @@ public class BaiasController {
 
 
     
-    @PutMapping
-    public ResponseEntity<Object> atualizar(@RequestBody Baias entidade) {
-        boolean aux = baiaService.atualizar(entidade);
+    @PutMapping("/atualizar-objeto/{entidade}")
+    public ResponseEntity<Object> atualizarElemento(@RequestBody Baias entidade) {
+        boolean aux = baiaService.atualizarObjeto(entidade);
         if (aux)
             return ResponseEntity.ok(aux);
         return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar Baias"));
     }
 
+    @PutMapping("/atualizar-ocupacao/{operacao}/{id}")
+    public ResponseEntity<Object> incrementoQtde(@PathVariable String operacao, @PathVariable Long id) {
+        char sinal = '-';
+        if(operacao.equals("mais"))
+            sinal = '+';
+
+        boolean aux = baiaService.atualizarQuantidade(id,sinal);
+        if (aux)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar ocupacao Baias"));
+    }
 
 
     @GetMapping("/lista") // correto

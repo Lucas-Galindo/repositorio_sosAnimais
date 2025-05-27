@@ -24,6 +24,7 @@ public class AnimalService {
         return null;
     }
 
+    public boolean atualizarBaia(Long id, Long baia){return animalDAL.updateBaia(id,baia);}
     public boolean deletarAnimal(Animal animal) {
         return animalDAL.delete(animal);
     }

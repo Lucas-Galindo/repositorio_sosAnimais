@@ -13,20 +13,20 @@ public class Animal {
 
 
     public Animal(Long id, Long idBaia, Long idAcolhimento, AnimalInformacao informacao){
-            this.id = id;
-            this.idBaia = idBaia;
-            this.idAcolhimento = idAcolhimento;
-            this.informacao = informacao;
-        }
+        this.id = id;
+        this.idBaia = idBaia;
+        this.idAcolhimento = idAcolhimento;
+        this.informacao = informacao;
+    }
 
 
-        public Long getId () {
-            return id;
-        }
+    public Long getId () {
+        return id;
+    }
 
-        public void setId ( Long id){
-            this.id = id;
-        }
+    public void setId ( Long id){
+        this.id = id;
+    }
 
         public Long getIdBaia () {
             return idBaia;
@@ -44,12 +44,12 @@ public class Animal {
             this.idAcolhimento = idAcolhimento;
         }
 
-        public AnimalInformacao getInformacao () {
-            return informacao;
-        }
-
-        public void setInformacao (AnimalInformacao informacao){
-            this.informacao = informacao;
-        }
-
+    public AnimalInformacao getInformacao () {
+        return informacao;
     }
+
+    public void setInformacao (AnimalInformacao informacao){
+        this.informacao = informacao;
+    }
+
+}

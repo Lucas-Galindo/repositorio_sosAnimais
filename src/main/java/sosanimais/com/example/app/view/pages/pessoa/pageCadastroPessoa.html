@@ -8,9 +8,7 @@
     <link rel="stylesheet" href="../assets/main.css">
   
     
-    <script href="./assets/scripts.js"></script>
-
-
+    
     <!-- PARTE DOS COMPONENTES -->
     <link rel="stylesheet" href="../assets/css/header.css">
     <script src="../assets/js/header.js"></script>
@@ -624,9 +622,11 @@
 
 
 <!-- JavaScript -->
-
+<script href="./scripts.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+       
+ 
         // JavaScript para controlar os dropdowns
         const menuButtons = document.querySelectorAll('.menu-button');
 
@@ -669,7 +669,7 @@
                 }
             });
         }
-
+    
         // Formatação de CPF
         const cpfInput = document.getElementById('person-cpf');
         cpfInput.addEventListener('input', function(e) {
@@ -921,7 +921,6 @@
                 },
                 body: JSON.stringify({
                     id: pessoaId
-                    
                 })
             })
             .then(response => {
