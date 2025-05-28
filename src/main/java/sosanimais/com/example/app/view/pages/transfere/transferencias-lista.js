@@ -1,681 +1,636 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulação - Listagem de Transferências</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+/**
+ * Sistema de Listagem de Transferências - JavaScript
+ * Comunicação entre Front-end e Back-end
+ */
+
+// Configurações da API
+const API_BASE_URL = 'http://localhost:8080/apis';
+
+// Cache de dados
+let cacheFuncionarios = new Map();
+let cacheBaias = new Map();
+let cacheAnimais = new Map();
+let transferenciasData = [];
+
+// Estado atual dos filtros
+let filtrosAtivos = {
+    dataInicial: null,
+    dataFinal: null,
+    matriculaFuncionario: null,
+    nomeFuncionario: null,
+    categoriaBaias: null
+};
+
+// Inicializar quando página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Inicializando sistema de listagem de transferências...');
+    inicializarSistema();
+});
+
+/**
+ * Inicializar sistema
+ */
+async function inicializarSistema() {
+    try {
+        // Carregar dados básicos
+        await carregarDadosIniciais();
+        
+        // Configurar botões e eventos
+        configurarEventListeners();
+        
+        console.log('Sistema inicializado com sucesso!');
+        
+    } catch (error) {
+        console.error('Erro ao inicializar:', error);
+        mostrarToast('Erro ao carregar sistema', 'erro');
+    }
+}
+
+/**
+ * Carregar dados iniciais das APIs
+ */
+async function carregarDadosIniciais() {
+    console.log('Carregando dados iniciais...');
+    
+    // Carregar funcionários
+    try {
+        const response = await fetch(`${API_BASE_URL}/funcionario/lista`);
+        if (response.ok) {
+            const funcionarios = await response.json();
+            funcionarios.forEach(func => {
+                cacheFuncionarios.set(func.matricula, func);
+            });
+            console.log(`${funcionarios.length} funcionários carregados`);
+        }
+    } catch (error) {
+        console.warn('Erro ao carregar funcionários:', error);
+    }
+
+    // Carregar baias
+    try {
+        const response = await fetch(`${API_BASE_URL}/baias/lista`);
+        if (response.ok) {
+            const baias = await response.json();
+            baias.forEach(baia => {
+                cacheBaias.set(baia.id, baia);
+            });
+            console.log(`${baias.length} baias carregadas`);
+        }
+    } catch (error) {
+        console.warn('Erro ao carregar baias:', error);
+    }
+
+    // Carregar animais
+    try {
+        const response = await fetch(`${API_BASE_URL}/animal`);
+        if (response.ok) {
+            const animais = await response.json();
+            animais.forEach(animal => {
+                cacheAnimais.set(animal.id, animal);
+            });
+            console.log(`${animais.length} animais carregados`);
+        }
+    } catch (error) {
+        console.warn('Erro ao carregar animais:', error);
+    }
+}
+
+/**
+ * Configurar todos os event listeners dos botões
+ */
+function configurarEventListeners() {
+    // Botão Pesquisar
+    const btnPesquisar = document.getElementById('btn-pesquisar');
+    if (btnPesquisar) {
+        btnPesquisar.addEventListener('click', function() {
+            pesquisarTransferencias();
+        });
+    }
+
+    // Botão Listar Todas
+    const btnListarTodas = document.getElementById('btn-listar-todas');
+    if (btnListarTodas) {
+        btnListarTodas.addEventListener('click', function() {
+            listarTodasTransferencias();
+        });
+    }
+
+    // Botão Limpar Filtros
+    const btnLimparFiltros = document.getElementById('btn-limpar-filtros');
+    if (btnLimparFiltros) {
+        btnLimparFiltros.addEventListener('click', function() {
+            limparTodosFiltros();
+        });
+    }
+
+    // Enter nos campos de input para pesquisar
+    const campos = [
+        'filtro-data-inicial',
+        'filtro-data-final', 
+        'filtro-matricula-funcionario',
+        'filtro-nome-funcionario'
+    ];
+
+    campos.forEach(campoId => {
+        const campo = document.getElementById(campoId);
+        if (campo) {
+            campo.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    pesquisarTransferencias();
+                }
+            });
+        }
+    });
+
+    // Change no select
+    const selectCategoria = document.getElementById('filtro-categoria-baias');
+    if (selectCategoria) {
+        selectCategoria.addEventListener('change', function() {
+            pesquisarTransferencias();
+        });
+    }
+}
+
+/**
+ * Pesquisar transferências com filtros
+ */
+async function pesquisarTransferencias() {
+    // Capturar valores dos filtros
+    const dataInicial = document.getElementById('filtro-data-inicial')?.value;
+    const dataFinal = document.getElementById('filtro-data-final')?.value;
+    const matriculaFunc = document.getElementById('filtro-matricula-funcionario')?.value;
+    const nomeFunc = document.getElementById('filtro-nome-funcionario')?.value;
+    const categoriaBaias = document.getElementById('filtro-categoria-baias')?.value;
+
+    // Salvar estado dos filtros
+    filtrosAtivos = {
+        dataInicial: dataInicial || null,
+        dataFinal: dataFinal || null,
+        matriculaFuncionario: matriculaFunc || null,
+        nomeFuncionario: nomeFunc || null,
+        categoriaBaias: categoriaBaias || null
+    };
+
+    console.log('Aplicando filtros:', filtrosAtivos);
+
+    try {
+        // Carregar todas as transferências se não estão carregadas
+        if (transferenciasData.length === 0) {
+            await carregarTodasTransferencias();
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
+        // Aplicar filtros
+        let dadosFiltrados = [...transferenciasData];
+
+        // Filtro por data inicial
+        if (dataInicial) {
+            const dataMin = new Date(dataInicial);
+            dadosFiltrados = dadosFiltrados.filter(t => {
+                const dataTransf = new Date(t.data);
+                return dataTransf >= dataMin;
+            });
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        // Filtro por data final
+        if (dataFinal) {
+            const dataMax = new Date(dataFinal);
+            dataMax.setHours(23, 59, 59, 999); // Final do dia
+            dadosFiltrados = dadosFiltrados.filter(t => {
+                const dataTransf = new Date(t.data);
+                return dataTransf <= dataMax;
+            });
         }
 
-        .page-title {
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2rem;
-            display: flex;
-            align-items: center;
+        // Filtro por matrícula do funcionário
+        if (matriculaFunc) {
+            dadosFiltrados = dadosFiltrados.filter(t => 
+                t.matFunc.toString().includes(matriculaFunc)
+            );
         }
 
-        .page-title i {
-            margin-right: 10px;
-            color: #e67e22;
+        // Filtro por nome do funcionário
+        if (nomeFunc) {
+            dadosFiltrados = dadosFiltrados.filter(t => {
+                const funcionario = cacheFuncionarios.get(t.matFunc);
+                if (funcionario) {
+                    const nome = funcionario.pessoa?.pessoa?.nome || funcionario.pessoa?.nome || '';
+                    return nome.toLowerCase().includes(nomeFunc.toLowerCase());
+                }
+                return false;
+            });
         }
 
-        .modo-dev-badge {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-left: 20px;
-            font-weight: bold;
-            animation: pulse 2s infinite;
+        // Exibir resultados
+        exibirResultados(dadosFiltrados);
+        
+        mostrarToast(`Pesquisa realizada. ${dadosFiltrados.length} resultado(s) encontrado(s).`, 'info');
+
+    } catch (error) {
+        console.error('Erro ao pesquisar:', error);
+        mostrarToast('Erro ao realizar pesquisa', 'erro');
+    }
+}
+
+/**
+ * Listar todas as transferências
+ */
+async function listarTodasTransferencias() {
+    try {
+        await carregarTodasTransferencias();
+        exibirResultados(transferenciasData);
+        mostrarToast(`${transferenciasData.length} transferências carregadas.`, 'sucesso');
+    } catch (error) {
+        console.error('Erro ao listar todas:', error);
+        mostrarToast('Erro ao carregar transferências', 'erro');
+    }
+}
+
+/**
+ * Carregar todas as transferências da API
+ */
+async function carregarTodasTransferencias() {
+    try {
+        console.log('Buscando todas as transferências...');
+        const response = await fetch(`${API_BASE_URL}/transferencias/lista`);
+        
+        if (response.ok) {
+            const transferencias = await response.json();
+            transferenciasData = transferencias;
+            console.log(`${transferencias.length} transferências carregadas`);
+        } else {
+            throw new Error(`Erro HTTP: ${response.status}`);
         }
+        
+    } catch (error) {
+        console.error('Erro ao carregar transferências:', error);
+        throw error;
+    }
+}
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-        }
+/**
+ * Exibir resultados na tabela
+ */
+function exibirResultados(transferencias) {
+    const containerResultados = document.getElementById('container-resultados');
+    const contadorResultados = document.getElementById('contador-resultados');
+    const tbodyResultados = document.getElementById('tbody-resultados');
+    const semResultados = document.getElementById('sem-resultados');
 
-        .filtros-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
+    // Mostrar container de resultados
+    if (containerResultados) {
+        containerResultados.classList.add('ativo');
+    }
 
-        .filtros-header {
-            background: linear-gradient(135deg, #e67e22, #d35400);
-            color: white;
-            padding: 20px;
-        }
+    // Atualizar contador
+    if (contadorResultados) {
+        contadorResultados.textContent = `${transferencias.length} transferências encontradas`;
+    }
 
-        .filtros-titulo {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
+    // Verificar se há resultados
+    if (!transferencias || transferencias.length === 0) {
+        if (tbodyResultados) tbodyResultados.innerHTML = '';
+        if (semResultados) semResultados.style.display = 'block';
+        return;
+    }
 
-        .filtros-body {
-            padding: 25px;
-        }
+    // Esconder mensagem de sem resultados
+    if (semResultados) semResultados.style.display = 'none';
 
-        .filtros-linha {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
+    // Ordenar por data mais recente
+    const transferenciasOrdenadas = [...transferencias].sort((a, b) => 
+        new Date(b.data) - new Date(a.data)
+    );
 
-        .grupo-filtro label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c3e50;
-            display: block;
-        }
+    // Construir HTML da tabela
+    let htmlTabela = '';
+    
+    transferenciasOrdenadas.forEach(transferencia => {
+        const funcionario = cacheFuncionarios.get(transferencia.matFunc) || { 
+            matricula: transferencia.matFunc, 
+            pessoa: { pessoa: { nome: 'Funcionário não encontrado' } }
+        };
+        
+        const dataFormatada = formatarData(transferencia.data);
+        const nomeFuncionario = funcionario.pessoa?.pessoa?.nome || funcionario.pessoa?.nome || 'Nome não disponível';
 
-        .grupo-filtro input, .grupo-filtro select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            transition: border-color 0.3s;
-        }
-
-        .grupo-filtro input:focus, .grupo-filtro select:focus {
-            outline: none;
-            border-color: #e67e22;
-            box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.2);
-        }
-
-        .acoes-filtro {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
-        }
-
-        .btn-pesquisar {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-        }
-
-        .btn-listar-todas {
-            background: linear-gradient(135deg, #e67e22, #d35400);
-            color: white;
-        }
-
-        .btn-limpar-filtros {
-            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .resultados-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .resultados-header {
-            background: linear-gradient(135deg, #e67e22, #d35400);
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .resultados-titulo {
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        .contador-resultados {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .tabela-resultados {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .tabela-resultados th {
-            background: #f8f9fa;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-            color: #2c3e50;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .tabela-resultados td {
-            padding: 15px;
-            border-bottom: 1px solid #e9ecef;
-            vertical-align: middle;
-        }
-
-        .linha-transferencia {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .linha-transferencia:hover {
-            background: linear-gradient(90deg, #f8f9fa, #e3f2fd);
-            transform: translateX(5px);
-        }
-
-        .linha-transferencia.expandida {
-            background: linear-gradient(90deg, #e3f2fd, #bbdefb);
-            border-left: 4px solid #e67e22;
-        }
-
-        .detalhes-transferencia {
-            background: #f8f9fa;
-            border-left: 4px solid #e67e22;
-        }
-
-        .detalhes-conteudo {
-            padding: 25px;
-            background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
-        }
-
-        .detalhes-titulo {
-            font-weight: bold;
-            color: #e67e22;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-        }
-
-        .tabela-detalhes {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .tabela-detalhes th {
-            background: #2c3e50;
-            color: white;
-            padding: 12px;
-            font-weight: 600;
-            width: 120px;
-        }
-
-        .tabela-detalhes td {
-            padding: 12px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .badge-comum {
-            background: #27ae60;
-            color: white;
-        }
-
-        .badge-medica {
-            background: #f39c12;
-            color: white;
-        }
-
-        .icone-expandir {
-            color: #e67e22;
-            transition: transform 0.3s;
-            margin-right: 8px;
-        }
-
-        .icone-expandir.expandido {
-            transform: rotate(90deg);
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            max-width: 400px;
-            z-index: 1000;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); }
-            to { transform: translateX(0); }
-        }
-
-        .toast-info {
-            border-left: 4px solid #3498db;
-        }
-
-        .toast-info .icone-toast {
-            color: #3498db;
-            margin-right: 12px;
-            font-size: 1.2rem;
-        }
-
-        .titulo-toast {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .mensagem-toast {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .highlight {
-            background: yellow;
-            padding: 2px 4px;
-            border-radius: 3px;
-            animation: highlight 2s ease-out;
-        }
-
-        @keyframes highlight {
-            from { background: yellow; }
-            to { background: transparent; }
-        }
-
-        .exemplo-uso {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 30px 0;
-        }
-
-        .exemplo-uso h3 {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .exemplo-lista {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .exemplo-lista li {
-            margin: 8px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .exemplo-lista li:before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #00b894;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="page-title">
-            <i class="fas fa-exchange-alt"></i>
-            Listagem de Transferências
-            <span class="modo-dev-badge">
-                <i class="fas fa-code"></i>
-                MODO DESENVOLVIMENTO
-            </span>
-        </h1>
-
-        <!-- Toast de Boas-vindas -->
-        <div class="toast toast-info">
-            <i class="fas fa-info-circle icone-toast"></i>
-            <div>
-                <div class="titulo-toast">Sistema de Transferências - DESENVOLVIMENTO (dados simulados)</div>
-                <div class="mensagem-toast">Use os filtros para pesquisar transferências ou clique em "Listar Todas"</div>
-            </div>
-        </div>
-
-        <!-- Filtros -->
-        <div class="filtros-container">
-            <div class="filtros-header">
-                <div class="filtros-titulo">Filtros de Pesquisa</div>
-            </div>
-            <div class="filtros-body">
-                <div class="filtros-linha">
-                    <div class="grupo-filtro">
-                        <label>Data Inicial:</label>
-                        <input type="date" value="2025-05-23">
-                    </div>
-                    <div class="grupo-filtro">
-                        <label>Data Final:</label>
-                        <input type="date" value="2025-05-27">
-                    </div>
-                    <div class="grupo-filtro">
-                        <label>Matrícula do Funcionário:</label>
-                        <input type="number" placeholder="Digite a matrícula">
-                    </div>
-                    <div class="grupo-filtro">
-                        <label>Nome do Funcionário:</label>
-                        <input type="text" placeholder="Digite o nome" value="João">
-                    </div>
-                    <div class="grupo-filtro">
-                        <label>Categoria das Baias:</label>
-                        <select>
-                            <option value="">Todas as categorias</option>
-                            <option value="comum">Comum</option>
-                            <option value="medica" selected>Médica</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="acoes-filtro">
-                    <button class="btn btn-pesquisar">
-                        <i class="fas fa-search"></i>
-                        Pesquisar
-                    </button>
-                    <button class="btn btn-listar-todas">
-                        <i class="fas fa-list"></i>
-                        Listar Todas
-                    </button>
-                    <button class="btn btn-limpar-filtros">
-                        <i class="fas fa-times"></i>
-                        Limpar Filtros
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Resultados -->
-        <div class="resultados-container">
-            <div class="resultados-header">
-                <div class="resultados-titulo">Resultados da Pesquisa</div>
-                <div class="contador-resultados">3 transferências encontradas</div>
-            </div>
-            
-            <table class="tabela-resultados">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Data</th>
-                        <th>Funcionário</th>
-                        <th>Matrícula</th>
-                        <th>Detalhes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Transferência 1 - EXPANDIDA -->
-                    <tr class="linha-transferencia expandida">
-                        <td><strong>#1</strong></td>
-                        <td>27/05/25 10:30</td>
-                        <td>João Silva</td>
-                        <td><span class="badge badge-comum">15</span></td>
-                        <td style="cursor: pointer; color: #e67e22;">
-                            <i class="fas fa-chevron-right icone-expandir expandido"></i>
-                            <span style="margin-left: 8px;">Clique para ver detalhes</span>
-                        </td>
-                    </tr>
-                    <!-- Detalhes da Transferência 1 -->
-                    <tr class="detalhes-transferencia">
-                        <td colspan="5">
-                            <div class="detalhes-conteudo">
-                                <div class="detalhes-titulo">
-                                    <i class="fas fa-info-circle"></i>
-                                    Detalhes da Movimentação
-                                </div>
-                                <table class="tabela-detalhes">
-                                    <tbody>
-                                        <tr>
-                                            <th>Animal:</th>
-                                            <td><strong>Rex</strong> (Labrador)</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Baia Origem:</th>
-                                            <td>Baia Comum 02 <span class="badge badge-comum">comum</span></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Baia Destino:</th>
-                                            <td>Baia Médica 01 <span class="badge badge-medica">medica</span></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Tipo de Movimentação:</th>
-                                            <td>
-                                                <span style="color: #dc3545;">
-                                                    <i class="fas fa-ambulance"></i> 
-                                                    Transferência para Tratamento
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Transferência 2 -->
-                    <tr class="linha-transferencia">
-                        <td><strong>#2</strong></td>
-                        <td>26/05/25 14:15</td>
-                        <td>Maria Oliveira</td>
-                        <td><span class="badge badge-comum">12</span></td>
-                        <td style="cursor: pointer; color: #e67e22;">
-                            <i class="fas fa-chevron-right icone-expandir"></i>
-                            <span style="margin-left: 8px;">Clique para ver detalhes</span>
-                        </td>
-                    </tr>
-
-                    <!-- Transferência 3 -->
-                    <tr class="linha-transferencia">
-                        <td><strong>#5</strong></td>
-                        <td>23/05/25 11:10</td>
-                        <td>Maria Oliveira</td>
-                        <td><span class="badge badge-comum">12</span></td>
-                        <td style="cursor: pointer; color: #e67e22;">
-                            <i class="fas fa-chevron-right icone-expandir"></i>
-                            <span style="margin-left: 8px;">Clique para ver detalhes</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Exemplo de Uso -->
-        <div class="exemplo-uso">
-            <h3>
-                <i class="fas fa-lightbulb"></i>
-                Como os Dados Funcionam na Tela:
-            </h3>
-            <ul class="exemplo-lista">
-                <li><strong>Modo Desenvolvimento Ativo:</strong> Sistema usa dados simulados (não precisa do backend)</li>
-                <li><strong>Filtros Funcionais:</strong> Pode filtrar por data, funcionário, categoria das baias</li>
-                <li><strong>Expansão de Detalhes:</strong> Clique em qualquer linha para ver detalhes da transferência</li>
-                <li><strong>Dados Realistas:</strong> Rex foi transferido da Baia Comum 02 para Baia Médica 01</li>
-                <li><strong>Validações:</strong> Data inicial não pode ser maior que final</li>
-                <li><strong>Toasts Informativos:</strong> Sistema mostra notificações para cada ação</li>
-                <li><strong>Interface Responsiva:</strong> Funciona em desktop, tablet e mobile</li>
-                <li><strong>Animações Suaves:</strong> Expansão/recolhimento com transições</li>
-            </ul>
-        </div>
-
-        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #ecf0f1; border-radius: 8px;">
-            <h4 style="color: #2c3e50; margin-bottom: 10px;">
-                <i class="fas fa-toggle-on"></i>
-                Para usar dados reais, altere CONFIG.MODO_DESENVOLVIMENTO para false
-            </h4>
-            <p style="color: #7f8c8d;">
-                Quando conectado ao backend, os dados virão das APIs reais do sistema
-            </p>
-        </div>
-    </div>
-
-    <script>
-        // Simular interatividade básica
-        document.addEventListener('DOMContentLoaded', function() {
-            // Simular clique na transferência não expandida
-            const linhasTransferencia = document.querySelectorAll('.linha-transferencia:not(.expandida)');
-            
-            linhasTransferencia.forEach((linha, index) => {
-                linha.addEventListener('click', function() {
-                    // Simular toast de carregamento
-                    const toast = document.createElement('div');
-                    toast.className = 'toast toast-info';
-                    toast.innerHTML = `
-                        <i class="fas fa-spinner fa-spin icone-toast"></i>
-                        <div>
-                            <div class="titulo-toast">Carregando</div>
-                            <div class="mensagem-toast">Buscando detalhes da transferência...</div>
+        htmlTabela += `
+            <tr class="linha-transferencia" data-id="${transferencia.id}" onclick="toggleDetalhesTransferencia(${transferencia.id})">
+                <td>${transferencia.id}</td>
+                <td>${dataFormatada}</td>
+                <td>${nomeFuncionario}</td>
+                <td>${funcionario.matricula}</td>
+                <td>
+                    <i class="fas fa-chevron-right icone-expandir" id="icone-${transferencia.id}"></i>
+                </td>
+            </tr>
+            <tr class="detalhes-transferencia" id="detalhes-${transferencia.id}">
+                <td colspan="5">
+                    <div class="detalhes-conteudo">
+                        <div class="loading-details">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Carregando detalhes...</span>
                         </div>
-                    `;
-                    
-                    document.body.appendChild(toast);
-                    
-                    setTimeout(() => {
-                        toast.remove();
-                        
-                        // Simular expansão
-                        linha.classList.add('expandida');
-                        const icone = linha.querySelector('.icone-expandir');
-                        icone.classList.add('expandido');
-                        
-                        // Criar detalhes simulados
-                        const detalhes = document.createElement('tr');
-                        detalhes.className = 'detalhes-transferencia';
-                        
-                        const exemplos = [
-                            {
-                                animal: 'Luna',
-                                raca: 'Pastor Alemão',
-                                origem: 'Baia Comum 02',
-                                destino: 'Baia Médica 01',
-                                tipo: 'Transferência para Tratamento'
-                            },
-                            {
-                                animal: 'Rocky',
-                                raca: 'Rottweiler', 
-                                origem: 'Baia Comum 03',
-                                destino: 'Baia Médica 03',
-                                tipo: 'Transferência para Tratamento'
-                            }
-                        ];
-                        
-                        const exemplo = exemplos[index] || exemplos[0];
-                        
-                        detalhes.innerHTML = `
-                            <td colspan="5">
-                                <div class="detalhes-conteudo">
-                                    <div class="detalhes-titulo">
-                                        <i class="fas fa-info-circle"></i>
-                                        Detalhes da Movimentação
-                                    </div>
-                                    <table class="tabela-detalhes">
-                                        <tbody>
-                                            <tr>
-                                                <th>Animal:</th>
-                                                <td><strong>${exemplo.animal}</strong> (${exemplo.raca})</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Baia Origem:</th>
-                                                <td>${exemplo.origem} <span class="badge badge-comum">comum</span></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Baia Destino:</th>
-                                                <td>${exemplo.destino} <span class="badge badge-medica">medica</span></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Tipo de Movimentão:</th>
-                                                <td>
-                                                    <span style="color: #dc3545;">
-                                                        <i class="fas fa-ambulance"></i> 
-                                                        ${exemplo.tipo}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </td>
-                        `;
-                        
-                        linha.insertAdjacentElement('afterend', detalhes);
-                        
-                        // Toast de sucesso
-                        const toastSucesso = document.createElement('div');
-                        toastSucesso.className = 'toast toast-info';
-                        toastSucesso.innerHTML = `
-                            <i class="fas fa-check-circle icone-toast" style="color: #27ae60;"></i>
-                            <div>
-                                <div class="titulo-toast">Detalhes Carregados</div>
-                                <div class="mensagem-toast">Informações da transferência exibidas com sucesso</div>
-                            </div>
-                        `;
-                        
-                        document.body.appendChild(toastSucesso);
-                        
-                        setTimeout(() => {
-                            toastSucesso.remove();
-                        }, 3000);
-                        
-                    }, 1000);
-                });
+                    </div>
+                </td>
+            </tr>
+        `;
+    });
+
+    if (tbodyResultados) {
+        tbodyResultados.innerHTML = htmlTabela;
+    }
+}
+
+/**
+ * Toggle detalhes da transferência (função global para onclick)
+ */
+function toggleDetalhesTransferencia(transferenciaId) {
+    const linhaTransferencia = document.querySelector(`[data-id="${transferenciaId}"]`);
+    const detalhes = document.getElementById(`detalhes-${transferenciaId}`);
+    const icone = document.getElementById(`icone-${transferenciaId}`);
+    
+    if (!detalhes || !icone) return;
+    
+    if (detalhes.classList.contains('ativo')) {
+        // Colapsar
+        detalhes.classList.remove('ativo');
+        linhaTransferencia.classList.remove('expandida');
+        icone.classList.remove('expandido');
+    } else {
+        // Expandir
+        detalhes.classList.add('ativo');
+        linhaTransferencia.classList.add('expandida');
+        icone.classList.add('expandido');
+        
+        // Carregar detalhes se ainda não carregados
+        const conteudo = detalhes.querySelector('.detalhes-conteudo');
+        if (conteudo && conteudo.querySelector('.loading-details')) {
+            carregarDetalhesTransferencia(transferenciaId);
+        }
+    }
+}
+
+/**
+ * Carregar detalhes específicos da transferência
+ */
+async function carregarDetalhesTransferencia(transferenciaId) {
+    const detalhes = document.getElementById(`detalhes-${transferenciaId}`);
+    if (!detalhes) return;
+    
+    const conteudoDetalhes = detalhes.querySelector('.detalhes-conteudo');
+    if (!conteudoDetalhes) return;
+    
+    try {
+        console.log(`Carregando detalhes para transferência ${transferenciaId}`);
+        
+        // Buscar detalhes da transferência
+        const dadosDetalhes = await buscarDetalhesTransferencia(transferenciaId);
+        
+        let htmlDetalhes = `
+            <div class="detalhes-titulo">
+                <i class="fas fa-list-ul"></i>
+                Movimentações desta Transferência
+            </div>
+        `;
+        
+        if (dadosDetalhes && dadosDetalhes.length > 0) {
+            htmlDetalhes += `
+                <table class="tabela-detalhes">
+                    <thead>
+                        <tr>
+                            <th>ID Movimentação</th>
+                            <th>Baia Origem</th>
+                            <th>Baia Destino</th>
+                            <th>Animal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            dadosDetalhes.forEach(detalhe => {
+                const baiaOrigem = cacheBaias.get(detalhe.baiaOrigem) || { 
+                    id: detalhe.baiaOrigem, 
+                    nome: 'Não encontrada',
+                    categoria: 'N/A'
+                };
+                const baiaDestino = cacheBaias.get(detalhe.baiaDestino) || { 
+                    id: detalhe.baiaDestino, 
+                    nome: 'Não encontrada',
+                    categoria: 'N/A'
+                };
+                const animal = cacheAnimais.get(detalhe.animalId) || { 
+                    id: detalhe.animalId, 
+                    informacao: { nome: 'Animal não encontrado', raca: 'N/A' }
+                };
+                
+                htmlDetalhes += `
+                    <tr>
+                        <td>${detalhe.id}</td>
+                        <td>
+                            <strong>${baiaOrigem.nome}</strong><br>
+                            <small>ID: ${baiaOrigem.id}</small><br>
+                            <span class="badge badge-${baiaOrigem.categoria.toLowerCase()}">${baiaOrigem.categoria}</span>
+                        </td>
+                        <td>
+                            <strong>${baiaDestino.nome}</strong><br>
+                            <small>ID: ${baiaDestino.id}</small><br>
+                            <span class="badge badge-${baiaDestino.categoria.toLowerCase()}">${baiaDestino.categoria}</span>
+                        </td>
+                        <td>
+                            <strong>${animal.informacao?.nome || 'Nome não disponível'}</strong><br>
+                            <small>ID: ${animal.id}</small><br>
+                            <small>Raça: ${animal.informacao?.raca || 'N/A'}</small>
+                        </td>
+                    </tr>
+                `;
             });
             
-            // Remover toast inicial após 5 segundos
-            setTimeout(() => {
-                const toastInicial = document.querySelector('.toast');
-                if (toastInicial) {
-                    toastInicial.style.animation = 'slideIn 0.3s ease-out reverse';
-                    setTimeout(() => toastInicial.remove(), 300);
-                }
-            }, 5000);
+            htmlDetalhes += `
+                    </tbody>
+                </table>
+            `;
+        } else {
+            htmlDetalhes += `
+                <p style="text-align: center; color: #6c757d; padding: 1rem;">
+                    <i class="fas fa-info-circle"></i>
+                    Nenhuma movimentação encontrada para esta transferência.
+                </p>
+            `;
+        }
+        
+        conteudoDetalhes.innerHTML = htmlDetalhes;
+        
+    } catch (error) {
+        console.error('Erro ao carregar detalhes:', error);
+        conteudoDetalhes.innerHTML = `
+            <div style="text-align: center; color: #dc3545; padding: 1rem;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Erro ao carregar detalhes da transferência.</p>
+                <button class="btn-pesquisar" onclick="carregarDetalhesTransferencia(${transferenciaId})">
+                    <i class="fas fa-redo"></i>
+                    Tentar Novamente
+                </button>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Buscar detalhes da transferência na API
+ */
+async function buscarDetalhesTransferencia(transferenciaId) {
+    try {
+        // TODO: Implementar endpoint real para buscar dados de transferir_to_baia
+        // const response = await fetch(`${API_BASE_URL}/transferencias/${transferenciaId}/detalhes`);
+        // if (response.ok) {
+        //     return await response.json();
+        // }
+        
+        // Por enquanto, usando dados mock para demonstração
+        return await getDadosMockDetalhes(transferenciaId);
+        
+    } catch (error) {
+        console.error('Erro ao buscar detalhes:', error);
+        throw error;
+    }
+}
+
+/**
+ * Dados mock para demonstração (remover quando implementar endpoint real)
+ */
+async function getDadosMockDetalhes(transferenciaId) {
+    // Simular delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Dados de exemplo baseados no ID
+    const mockData = [
+        {
+            id: `${transferenciaId}-1`,
+            baiaOrigem: 1,
+            baiaDestino: 2,
+            animalId: 1
+        }
+    ];
+    
+    // Adicionar mais dados para alguns IDs
+    if (transferenciaId % 3 === 0) {
+        mockData.push({
+            id: `${transferenciaId}-2`,
+            baiaOrigem: 3,
+            baiaDestino: 4,
+            animalId: 2
         });
-    </script>
-</body>
-</html>
+    }
+    
+    return mockData;
+}
+
+/**
+ * Limpar todos os filtros
+ */
+function limparTodosFiltros() {
+    // Limpar campos
+    const campos = [
+        'filtro-data-inicial',
+        'filtro-data-final',
+        'filtro-matricula-funcionario',
+        'filtro-nome-funcionario',
+        'filtro-categoria-baias'
+    ];
+
+    campos.forEach(campoId => {
+        const campo = document.getElementById(campoId);
+        if (campo) {
+            campo.value = '';
+        }
+    });
+
+    // Resetar estado dos filtros
+    filtrosAtivos = {
+        dataInicial: null,
+        dataFinal: null,
+        matriculaFuncionario: null,
+        nomeFuncionario: null,
+        categoriaBaias: null
+    };
+
+    // Esconder resultados
+    const containerResultados = document.getElementById('container-resultados');
+    if (containerResultados) {
+        containerResultados.classList.remove('ativo');
+    }
+
+    mostrarToast('Filtros limpos', 'info');
+}
+
+/**
+ * Formatar data
+ */
+function formatarData(dateString) {
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (error) {
+        return 'Data inválida';
+    }
+}
+
+/**
+ * Sistema de Toast/Notificações
+ */
+function mostrarToast(mensagem, tipo = 'sucesso', duracao = 4000) {
+    let container = document.getElementById('container-toast');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'container-toast';
+        container.className = 'container-toast';
+        document.body.appendChild(container);
+    }
+    
+    const toastId = 'toast-' + Date.now();
+    const icones = {
+        sucesso: 'fa-check-circle',
+        erro: 'fa-exclamation-circle',
+        info: 'fa-info-circle'
+    };
+    
+    const toastHtml = `
+        <div class="toast toast-${tipo}" id="${toastId}">
+            <div class="icone-toast">
+                <i class="fas ${icones[tipo] || icones.info}"></i>
+            </div>
+            <div class="conteudo-toast">
+                <div class="mensagem-toast">${mensagem}</div>
+            </div>
+            <button class="fechar-toast" onclick="fecharToast('${toastId}')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', toastHtml);
+    
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        setTimeout(() => toast.classList.add('mostrar'), 100);
+        setTimeout(() => fecharToast(toastId), duracao);
+    }
+}
+
+/**
+ * Fechar toast
+ */
+function fecharToast(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        toast.classList.remove('mostrar');
+        setTimeout(() => toast.remove(), 300);
+    }
+}
