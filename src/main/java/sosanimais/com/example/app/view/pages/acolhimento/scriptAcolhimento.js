@@ -1,121 +1,148 @@
-async function registrarAcolhimento() {
-  // Pega os valores do formulário
-  const data = document.getElementById("ac-date").value.trim();
-  const idFuncRaw = document.getElementById("ac-func").value.trim();
-  const idAnimalRaw = document.getElementById("ac-id-animal").value.trim();
+document.addEventListener('DOMContentLoaded', function() {
+  // Elementos do DOM
+  const animalSelect    = document.getElementById('ac-animal-select');
+  const acDateInput     = document.getElementById('ac-date');
+  const funcInput       = document.getElementById('ac-func');
+  const registrarBtn    = document.getElementById('botaoRegistrar');   // botão de registrar
+  const alterarBtn      = document.getElementById('botaoAlterar');     // botão de alterar
 
-  // Validação simples
-  if (!data || !idFuncRaw || !idAnimalRaw) {
-    alert("Por favor, preencha todos os campos obrigatórios.");
-    return;
-  }
+  // 1) Carrega animais disponíveis (sem acolhimento)
+  async function loadAvailableAnimals() {
+    if (!animalSelect) {
+      console.error('Select de animais não encontrado (id ac-animal-select).');
+      return;
+    }
+    try {
+      const resp = await fetch("http://localhost:8080/apis/animal");
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const data = await resp.json();
+      // Considera não acolhidos tanto null quanto zero
+      const available = Array.isArray(data)
+        ? data.filter(a => a.idAcolhimento == null || a.idAcolhimento === 0)
+        : [];
 
-  const idFunc = parseInt(idFuncRaw);
-  const idAnimal = parseInt(idAnimalRaw);
+      animalSelect.innerHTML = '<option value="">Selecione...</option>';
+      available.forEach(a => {
+        const nome = a.informacao?.nome || 'Sem nome';
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.text = `${a.id} – ${nome}`;
+        animalSelect.appendChild(opt);
+      });
 
-  if (isNaN(idFunc) || isNaN(idAnimal)) {
-    alert("IDs devem ser números válidos.");
-    return;
-  }
-
-  const payload = {
-    data: data,
-    idFunc: idFunc,
-    idAnimal: idAnimal
-  };
-
-  try {
-    const response = await fetch("http://localhost:8080/apis/acolhimento", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
-      // Tenta interpretar como JSON para pegar a mensagem
-      let errorObj;
-      try {
-        errorObj = JSON.parse(errorText);
-      } catch {
-        errorObj = null;
+      if (available.length === 0) {
+        animalSelect.innerHTML = '<option value="">Nenhum animal disponível</option>';
+        animalSelect.disabled = true;
       }
+    } catch (err) {
+      console.error("Erro ao carregar animais disponíveis:", err);
+      animalSelect.innerHTML = '<option value="">Erro ao carregar</option>';
+      animalSelect.disabled = true;
+    }
+  }
 
-      // Verifica se o erro é de animal não encontrado
-      if (errorObj && errorObj.mensagem && errorObj.mensagem.includes("Animal com id")) {
-        const wantToRegister = confirm(
-          `${errorObj.mensagem} Deseja cadastrar um novo animal agora?`
-        );
-        if (wantToRegister) {
-          // Redireciona para página de cadastro (altere para a sua URL real)
-          window.location.href = "/pages/animal/pageCadastroAnimal.html";
+  // 2) Função registrar acolhimento
+  async function registrarAcolhimento() {
+    const dataRaw    = acDateInput.value.trim();
+    const funcRaw    = funcInput.value.trim();
+    const animalRaw  = animalSelect.value;
+
+    if (!dataRaw || !funcRaw || !animalRaw) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    const idFunc    = parseInt(funcRaw, 10);
+    const idAnimal  = parseInt(animalRaw, 10);
+    if (isNaN(idFunc) || isNaN(idAnimal)) {
+      alert("IDs devem ser números válidos.");
+      return;
+    }
+
+    const payload = { data: dataRaw, idFunc, idAnimal };
+
+    try {
+      const response = await fetch("http://localhost:8080/apis/acolhimento", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        let errorText = await response.text();
+        let errorMsg  = errorText;
+        try { errorMsg = JSON.parse(errorText).mensagem; } catch {}
+        if (errorMsg.includes("Animal com id")) {
+          if (confirm(`${errorMsg}\nDeseja cadastrar um novo animal agora?`)) {
+            window.location.href = "/pages/animal/pageCadastroAnimal.html";
+          }
+          return;
         }
+        alert("Erro ao registrar acolhimento: " + errorMsg);
         return;
       }
 
-      alert("Erro ao registrar acolhimento: " + errorText);
+      const result = await response.json();
+      alert(`Acolhimento registrado com sucesso! ID: ${result.id}`);
+      loadAvailableAnimals(); // atualiza lista após registro
+    } catch (error) {
+      alert("Erro ao registrar acolhimento: " + error.message);
+      console.error("Erro na função registrarAcolhimento:", error);
+    }
+  }
+
+  // 3) Função alterar acolhimento
+  async function alterarAcolhimento() {
+    const idAcolhimentoRaw = document.getElementById("ac-id").value.trim();
+    const dataRaw          = acDateInput.value.trim();
+    const funcRaw          = funcInput.value.trim();
+    const animalRaw        = animalSelect.value;
+
+    if (!idAcolhimentoRaw || !dataRaw || !funcRaw || !animalRaw) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
       return;
     }
 
-    const result = await response.json();
-    alert(`Acolhimento registrado com sucesso! ID: ${result.id}`);
-    // Opcional: limpar formulário, atualizar lista, etc.
-  } catch (error) {
-    alert("Erro ao registrar acolhimento: " + error.message);
-    console.error("Erro na função registrarAcolhimento:", error);
-  }
-}
-
-
-async function alterarAcolhimento() {
-  // Pega os valores do formulário
-  const idAcolhimentoRaw = document.getElementById("ac-id").value.trim();
-  const data = document.getElementById("ac-date").value.trim();
-  const idFuncRaw = document.getElementById("ac-func").value.trim();
-  const idAnimalRaw = document.getElementById("ac-id-animal").value.trim();
-
-  // Validação simples
-  if (!idAcolhimentoRaw || !data || !idFuncRaw || !idAnimalRaw) {
-    alert("Por favor, preencha todos os campos obrigatórios.");
-    return;
-  }
-
-  const idAcolhimento = parseInt(idAcolhimentoRaw);
-  const idFunc = parseInt(idFuncRaw);
-  const idAnimal = parseInt(idAnimalRaw);
-
-  if (isNaN(idAcolhimento) || isNaN(idFunc) || isNaN(idAnimal)) {
-    alert("IDs devem ser números válidos.");
-    return;
-  }
-
-  // Monta o payload JSON conforme esperado
-  const payload = {
-    data: data,
-    idFunc: idFunc,
-    idAnimal: idAnimal
-  };
-
-  try {
-    const response = await fetch(`http://localhost:8080/apis/acolhimento/${idAcolhimento}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      redirect: "follow"
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      alert("Erro ao alterar acolhimento: " + errorText);
+    const idAcolhimento = parseInt(idAcolhimentoRaw, 10);
+    const idFunc        = parseInt(funcRaw, 10);
+    const idAnimal      = parseInt(animalRaw, 10);
+    if (isNaN(idAcolhimento) || isNaN(idFunc) || isNaN(idAnimal)) {
+      alert("IDs devem ser números válidos.");
       return;
     }
 
-    const result = await response.json();
-    alert(`Acolhimento alterado com sucesso! ID: ${result.id || idAcolhimento}`);
-    // Opcional: limpar formulário, atualizar lista, etc.
-  } catch (error) {
-    alert("Erro ao alterar acolhimento: " + error.message);
-    console.error("Erro na função alterarAcolhimento:", error);
+    const payload = { data: dataRaw, idFunc, idAnimal };
+
+    try {
+      const response = await fetch(`http://localhost:8080/apis/acolhimento/${idAcolhimento}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        alert("Erro ao alterar acolhimento: " + errorText);
+        return;
+      }
+
+      const result = await response.json();
+      alert(`Acolhimento alterado com sucesso! ID: ${result.id || idAcolhimento}`);
+      loadAvailableAnimals(); // atualiza select se desejado
+    } catch (error) {
+      alert("Erro ao alterar acolhimento: " + error.message);
+      console.error("Erro na função alterarAcolhimento:", error);
+    }
   }
-}
+
+  // Liga os botões se existirem
+  if (registrarBtn) registrarBtn.addEventListener('click', registrarAcolhimento);
+  if (alterarBtn)   alterarBtn.addEventListener('click', alterarAcolhimento);
+
+  // Expor para onclick inline
+  window.registrarAcolhimento = registrarAcolhimento;
+  window.alterarAcolhimento  = alterarAcolhimento;
+
+  // Inicializa carregando select
+  loadAvailableAnimals();
+});

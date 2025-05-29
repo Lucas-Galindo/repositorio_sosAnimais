@@ -52,6 +52,7 @@ public class AnimalDAL implements IDAL<Animal>{
         return animals;
     }
 
+
     @Override
     public boolean update(Animal entidade) {
         String sql = """

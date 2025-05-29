@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Acolhimento</title>
+    <title>SOS Amigos de Animais - Registro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Estilos existentes - incorporando do arquivo fornecido */
@@ -136,6 +136,85 @@
 
         .menu-item {
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+                 .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .results-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-body {
+            padding: 1.5rem;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Estilo zebrado para a tabela */
+        .results-table tbody tr:nth-child(even) {
+            background-color: #f9f7f5;
+        }
+
+        .results-table tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .results-table tbody tr:hover {
+            background-color: #f0ede8 !important;
         }
 
         .menu-button {
@@ -677,7 +756,6 @@
     </style>
 </head>
 <body>
-    <script src="scriptAcolhimento.js"></script>
     <!-- Header -->
     <header>
         <button class="sidebar-toggle" id="sidebarToggle">
@@ -836,420 +914,198 @@
         </aside>
 
         <!-- Content -->
-        <main class="content">
-            <h1 class="page-title">
-                <i class="fas fa-plus-circle"></i>
-                Registro de acolhimento
-            </h1>
-            
-            <div class="form-container">
-                <div class="form-header">
-                    <div class="form-title">Novo Registro de Acolhimento</div>
-                </div>
-                
-                <div class="form-steps">
-                  <!--
-                    <div class="form-step active">
-                        <i class="fas fa-info-circle"></i>
-                        Informações Básicas
-                    </div>-->
-                    <!--
-                    <div class="form-step">
-                        <i class="fas fa-heartbeat"></i>
-                        Saúde e Cuidados
-                    </div>
-                    <div class="form-step">
-                        <i class="fas fa-paw"></i>
-                        Características
-                    </div>
-                    <div class="form-step">
-                        <i class="fas fa-camera"></i>
-                        Fotos e Documentos
-                    </div>-->
-                </div>
-                
-                <form class="form-body">
-                    <!-- Seção 1: Informações Básicas -->
-                    <div class="form-section">
-                        <h3 class="section-title">Insira os dados do acolhimento</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="ac-date" class="required">Data do acolhimento</label>
-                                <input type="date" id="ac-date" class="form-control" placeholder="Data acolhimento" required>
-                            </div>
-                
-                            
-                            
-                            <div class="form-group">
-                                <label for="ac-id-func" class="required">Id do funcionário</label>
-                                <input type="number" id="ac-func" class="form-control" placeholder="Id do funcionário" required>
-                            </div>
+       <main class="content">
+      <h1 class="page-title">
+        <i class="fas fa-plus-circle"></i>
+        Registro de Medicação ou Vacinação
+      </h1>
 
-                            <div class="form-group">
-                              <label for="ac-animal-select" class="required">Animal</label>
-                              <select id="ac-animal-select" class="form-control" required>
-                                <option value="">Selecione o animal</option>
-                              </select>
-                              <span class="help-text">Selecione um animal que ainda não foi acolhido</span>
-                            </div>
-                        
-                            <!--
-                            <div class="form-group">
-                                <label for="animal-gender" class="required">Sexo</label>
-                                <div class="radio-group">
-                                    <div class="form-check">
-                                        <input type="radio" id="gender-male" name="animal-gender" class="form-check-input" value="male" required>
-                                        <label for="gender-male" class="form-check-label">Macho</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" id="gender-female" name="animal-gender" class="form-check-input" value="female" required>
-                                        <label for="gender-female" class="form-check-label">Fêmea</label>
-                                    </div>
-                                </div>
-                            </div>
-                            -->
-                                <!--
-                                <select id="age-unit" class="form-control" style="width: 30%;">
-                                    <option value="days">Dias</option>
-                                    <option value="months">Meses</option>
-                                    <option value="years" selected>Anos</option>
-                                </select>-->
-                            </div>
-                        </div>
-                        
-                        <!--
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="animal-color" class="required">Cor Predominante</label>
-                                <select id="animal-color" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="black">Preto</option>
-                                    <option value="white">Branco</option>
-                                    <option value="brown">Marrom</option>
-                                    <option value="gray">Cinza</option>
-                                    <option value="golden">Dourado</option>
-                                    <option value="brindle">Tigrado</option>
-                                    <option value="spotted">Malhado</option>
-                                    <option value="bicolor">Bicolor</option>
-                                    <option value="tricolor">Tricolor</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="intake-date" class="required">Data de Entrada</label>
-                                <input type="date" id="intake-date" class="form-control" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="intake-source" class="required">Origem</label>
-                                <select id="intake-source" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="rescue">Resgate</option>
-                                    <option value="surrender">Entrega Voluntária</option>
-                                    <option value="born">Nascido na Instituição</option>
-                                    <option value="transfer">Transferência</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                            -->
-                        </div>
-                        <button type="button" class="btn btn-primary"  onclick="registrarAcolhimento()">Registrar Acolhimento</button>
-                    </div>
+      <div class="form-container">
+        <div class="form-header">
+          <div class="form-title">Novo Registro de Aplicação</div>
+        </div>
 
-                    
-                
-                    <!-- Seção 3: Características (Oculto por padrão) -->
-                    <div class="form-section" style="display: none;">
-                        <!-- Conteúdo da seção Características -->
-                    </div>
-                    
-                    <!-- Seção 4: Fotos e Documentos (Oculto por padrão) -->
-                    <div class="form-section" style="display: none;">
-                        <!-- Conteúdo da seção Fotos e Documentos -->
-                    </div>
-                    <!--
-                    <div class="form-actions">
-                        
-                        <div class="form-actions-left">
-                            <button type="button" class="btn btn-outline" id="btn-cancel">
-                                <i class="fas fa-times"></i>
-                                Cancelar
-                            </button>
-                            <button type="button" class="btn btn-outline" id="btn-save-draft">
-                                <i class="fas fa-save"></i>
-                                Salvar Rascunho
-                            </button>
-                        </div>
-                        <div class="form-actions-right">
-                            <button type="button" class="btn btn-secondary" id="btn-previous" style="display: none;">
-                                <i class="fas fa-arrow-left"></i>
-                                Anterior
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-next">
-                                Cadastrar
-                                <i class="fas fa-arrow-right" "></i>
-                            </button>
-                        </div>-->
-                    </div>
-                </form>
+        <form class="form-body">
+          <div class="form-section">
+            <h3 class="section-title">Informações Básicas</h3>
+            <div class="form-row">
+              <!-- Data -->
+              <div class="form-group">
+                <label for="aplicacao-data" class="required">Data da aplicação</label>
+                <input type="date" id="aplicacao-data" class="form-control" required>
+              </div>
+
+              <!-- Animal busca -->
+              <div class="form-group" style="flex:2">
+                <label for="animal-busca" class="required">Animal (ID ou Nome)</label>
+                <div style="display:flex;gap:0.5rem;">
+                  <input type="text" id="animal-busca" class="form-control" placeholder="Digite ID ou nome">
+                  <button type="button" id="btn-buscar-animal" class="btn btn-outline">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
+
+                <table class="results-table" id="animal-tbl" class="small-table" style="display:none;">
+                  <thead><tr><th>ID</th><th>Nome</th><th>Sexo</th><th>Raça</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+
+              <!-- Insumo select -->
+              <div class="form-group">
+                <label for="insumo-select" class="required">Insumo</label>
+                <select id="insumo-select" class="form-control" required>
+                  <option>Carregando...</option>
+                </select>
+              </div>
             </div>
-        </main>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-logo">
-            <i class="fas fa-paw" style="margin-right: 10px;"></i>
-            <div class="footer-brand">S.O.S. Amigos de Animais</div>
-        </div>
-        <div class="footer-links">
-            <a href="#" class="footer-link">Sobre nós</a>
-            <a href="#" class="footer-link">Política de Privacidade</a>
-            <a href="#" class="footer-link">Contato</a>
-        </div>
-        <div class="footer-copyright">
-            &copy; 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.
-        </div>
-    </footer>
+            <button type="button" class="btn btn-primary" id="btn-registrar">
+              <i class="fas fa-check"></i> Registrar
+            </button>
+          </div>
+        </form>
+      </div>
 
-    <!-- JavaScript -->
-    <script>
-        // JavaScript para controlar os dropdowns
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButtons = document.querySelectorAll('.menu-button');
-            
-            menuButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Encontra o dropdown-menu associado a este botão
-                    const dropdownMenu = this.nextElementSibling;
-                    const dropdownIcon = this.querySelector('.dropdown-icon');
-                    
-                    // Toggle da classe active
-                    dropdownMenu.classList.toggle('active');
-                    dropdownIcon.classList.toggle('active');
-                    
-                    // Opcional: Fecha outros dropdowns abertos
-                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                        if (menu !== dropdownMenu) {
-                            menu.classList.remove('active');
-                            menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
-                        }
-                    });
-                });
-            });
-            
-            // Toggle para exibir/ocultar a sidebar em dispositivos móveis
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            
-            if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('active');
-                });
-                
-                // Fechar a sidebar quando clicar fora dela em dispositivos móveis
-                document.addEventListener('click', function(event) {
-                    const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnToggle = sidebarToggle.contains(event.target);
-                    
-                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
-                        sidebar.classList.remove('active');
-                    }
-                });
-            }
-            
-            // Navegação entre etapas do formulário
-            const formSections = document.querySelectorAll('.form-section');
-            const formSteps = document.querySelectorAll('.form-step');
-            const btnNext = document.getElementById('btn-next');
-            const btnPrevious = document.getElementById('btn-previous');
-            
-            let currentStep = 0;
-            
-            if (btnNext && btnPrevious) {
-                btnNext.addEventListener('click', function() {
-                    if (currentStep < formSections.length - 1) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        formSteps[currentStep].classList.add('completed');
-                        
-                        currentStep++;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        
-                        btnPrevious.style.display = 'flex';
-                        
-                        if (currentStep === formSections.length - 1) {
-                            btnNext.textContent = 'Finalizar';
-                            btnNext.innerHTML = 'Finalizar <i class="fas fa-check" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        }
-                    } else {
-                        // Último passo - enviar formulário
-                        alert('Formulário enviado com sucesso!');
-                    }
-                });
-                
-                btnPrevious.addEventListener('click', function() {
-                    if (currentStep > 0) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        
-                        currentStep--;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        formSteps[currentStep].classList.remove('completed');
-                        
-                        if (currentStep === 0) {
-                            btnPrevious.style.display = 'none';
-                        }
-                        
-                        btnNext.textContent = 'Próximo';
-                        btnNext.innerHTML = 'Próximo <i class="fas fa-arrow-right" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                    }
-                });
-            }
-            
-            // Clique nos passos do formulário para navegar (opcional)
-            formSteps.forEach((step, index) => {
-                step.addEventListener('click', function() {
-                    if (index < currentStep || step.classList.contains('completed')) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        
-                        currentStep = index;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        
-                        btnPrevious.style.display = currentStep > 0 ? 'flex' : 'none';
-                        
-                        btnNext.textContent = currentStep === formSections.length - 1 ? 'Finalizar' : 'Próximo';
-                        if (currentStep === formSections.length - 1) {
-                            btnNext.innerHTML = 'Finalizar <i class="fas fa-check" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        } else {
-                            btnNext.innerHTML = 'Próximo <i class="fas fa-arrow-right" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        }
-                    }
-                });
-            });
-            
-            // Simulação de autocomplete para raças
-            const breedInput = document.getElementById('animal-breed');
-            const breedResults = document.getElementById('breed-results');
-            
-            if (breedInput && breedResults) {
-                const dogBreeds = ['Labrador Retriever', 'Golden Retriever', 'Pastor Alemão', 'Bulldog', 'Poodle', 'Beagle', 'Rottweiler', 'Yorkshire Terrier', 'Boxer', 'Dachshund'];
-                const catBreeds = ['Persa', 'Siamês', 'Maine Coon', 'Angorá', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Himalaia'];
-                
-                const animalTypeSelect = document.getElementById('animal-type');
-                
-                breedInput.addEventListener('focus', function() {
-                    breedResults.style.display = 'block';
-                    
-                    // Limpa os resultados anteriores
-                    breedResults.innerHTML = '';
-                    
-                    // Determina quais raças mostrar com base no tipo de animal selecionado
-                    let breeds = [];
-                    if (animalTypeSelect.value === 'dog') {
-                        breeds = dogBreeds;
-                    } else if (animalTypeSelect.value === 'cat') {
-                        breeds = catBreeds;
-                    }
-                    
-                    // Adiciona as raças aos resultados
-                    breeds.forEach(breed => {
-                        const item = document.createElement('div');
-                        item.classList.add('autocomplete-item');
-                        item.textContent = breed;
-                        item.addEventListener('click', function() {
-                            breedInput.value = breed;
-                            breedResults.style.display = 'none';
-                        });
-                        breedResults.appendChild(item);
-                    });
-                });
-                
-                breedInput.addEventListener('input', function() {
-                    const value = this.value.toLowerCase();
-                    
-                    // Limpa os resultados anteriores
-                    breedResults.innerHTML = '';
-                    
-                    // Determina quais raças mostrar com base no tipo de animal selecionado
-                    let breeds = [];
-                    if (animalTypeSelect.value === 'dog') {
-                        breeds = dogBreeds;
-                    } else if (animalTypeSelect.value === 'cat') {
-                        breeds = catBreeds;
-                    }
-                    
-                    // Filtra as raças com base no valor digitado
-                    const filteredBreeds = breeds.filter(breed => breed.toLowerCase().includes(value));
-                    
-                    // Adiciona as raças filtradas aos resultados
-                    filteredBreeds.forEach(breed => {
-                        const item = document.createElement('div');
-                        item.classList.add('autocomplete-item');
-                        item.textContent = breed;
-                        item.addEventListener('click', function() {
-                            breedInput.value = breed;
-                            breedResults.style.display = 'none';
-                        });
-                        breedResults.appendChild(item);
-                    });
-                    
-                    // Mostra ou oculta os resultados com base se há resultados para mostrar
-                    breedResults.style.display = filteredBreeds.length > 0 ? 'block' : 'none';
-                });
-                
-                // Oculta os resultados ao clicar fora do input
-                document.addEventListener('click', function(event) {
-                    if (!breedInput.contains(event.target) && !breedResults.contains(event.target)) {
-                        breedResults.style.display = 'none';
-                    }
-                });
-                
-                // Atualiza as raças quando o tipo de animal muda
-                animalTypeSelect.addEventListener('change', function() {
-                    breedInput.value = '';
-                });
-            }
-            
-            // Exemplo de validação básica
-            const requiredInputs = document.querySelectorAll('[required]');
-            
-            if (requiredInputs.length > 0) {
-                requiredInputs.forEach(input => {
-                    input.addEventListener('blur', function() {
-                        if (!this.value) {
-                            this.classList.add('invalid');
-                            
-                            // Adiciona mensagem de erro se ainda não existir
-                            let errorMessage = this.nextElementSibling;
-                            if (!errorMessage || !errorMessage.classList.contains('error-text')) {
-                                errorMessage = document.createElement('span');
-                                errorMessage.classList.add('error-text');
-                                errorMessage.textContent = 'Este campo é obrigatório';
-                                this.insertAdjacentElement('afterend', errorMessage);
-                            }
-                        } else {
-                            this.classList.remove('invalid');
-                            
-                            // Remove mensagem de erro se existir
-                            const errorMessage = this.nextElementSibling;
-                            if (errorMessage && errorMessage.classList.contains('error-text')) {
-                                errorMessage.remove();
-                            }
-                        }
-                    });
-                });
-            }
-        });
-    </script>
+      <div id="toast-container" class="toast-container"></div>
+    </main>
+  </div>
+  <main-footer></main-footer>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const API_INSUMO    = 'http://localhost:8080/apis/insumo/ids/2/6';
+  const API_ANIMAL    = 'http://localhost:8080/apis/animal';
+  const API_APLICACAO = 'http://localhost:8080/apis/animal_insumo';
+  const TOKEN         = 'Bearer SEU_TOKEN_AQUI';
+
+  const selectInsumo    = document.getElementById('insumo-select');
+  const btnBuscarAnimal = document.getElementById('btn-buscar-animal');
+  const inputAnimal     = document.getElementById('animal-busca');
+  const animalTbl       = document.getElementById('animal-tbl');
+  const animalTbody     = animalTbl.querySelector('tbody');
+  const btnRegistrar    = document.getElementById('btn-registrar');
+  const dataField       = document.getElementById('aplicacao-data');
+  const toastRoot       = document.getElementById('toast-container');
+  let currentAnimal     = null;
+
+  function showToast(type, title, msg) {
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.innerHTML = `
+      <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'} toast-icon"></i>
+      <div class="toast-content">
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${msg}</div>
+      </div>
+      <button class="toast-close">&times;</button>
+    `;
+    toastRoot.appendChild(t);
+    t.querySelector('.toast-close').onclick = () => t.remove();
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
+    }, 5000);
+  }
+
+  // Carrega insumos das categorias 2 e 6
+  (async function loadInsumos() {
+    selectInsumo.innerHTML = '<option>Carregando...</option>';
+    try {
+      const resp = await fetch(API_INSUMO, {
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization': TOKEN
+        }
+      });
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const items = await resp.json();
+      selectInsumo.innerHTML = '<option value="">Selecione o insumo</option>';
+      items.forEach(i => {
+        const o = document.createElement('option');
+        o.value = i.id;
+        o.text  = i.nome;
+        selectInsumo.appendChild(o);
+      });
+    } catch (e) {
+      console.error('Erro ao carregar insumos:', e);
+      selectInsumo.innerHTML = '<option>Erro ao carregar</option>';
+      selectInsumo.disabled = true;
+      showToast('error','Erro','Não foi possível carregar insumos.');
+    }
+  })();
+
+  // Buscar animal
+  btnBuscarAnimal.addEventListener('click', async () => {
+    const term = inputAnimal.value.trim();
+    if (!term) return showToast('error','Erro','Digite ID ou nome.');
+    const url = /^\d+$/.test(term)
+      ? `${API_ANIMAL}/id/${term}`
+      : `${API_ANIMAL}/nome/${encodeURIComponent(term)}`;
+    try {
+      const resp = await fetch(url, {
+        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
+      });
+      if (!resp.ok) throw new Error('Animal não encontrado');
+      const data = await resp.json();
+      const a = Array.isArray(data) ? data[0] : data;
+      currentAnimal = a;
+      animalTbody.innerHTML = `
+        <tr>
+          <td>${a.id}</td>
+          <td>${a.informacao?.nome || '-'}</td>
+          <td>${a.informacao?.sexo || '-'}</td>
+          <td>${a.informacao?.raca || '-'}</td>
+        </tr>`;
+      animalTbl.style.display = 'table';
+      showToast('success','OK','Animal carregado');
+    } catch (e) {
+      console.error(e);
+      showToast('error','Erro', e.message);
+      animalTbl.style.display = 'none';
+      currentAnimal = null;
+    }
+  });
+
+  // Registrar aplicação
+  btnRegistrar.addEventListener('click', async () => {
+    const dataAplic  = dataField.value;
+    const insumoId   = parseInt(selectInsumo.value, 10);
+    if (!dataAplic || !currentAnimal || isNaN(insumoId)) {
+      return showToast('error','Erro','Preencha todos os campos.');
+    }
+
+    try {
+      const payload = {
+        animalAniCod:    currentAnimal.id,
+        insumoIsuId:     insumoId,
+        aiDataExecucao:  dataAplic
+      };
+      console.log('Payload para POST:', payload);
+
+      const resp = await fetch(API_APLICACAO, {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization': TOKEN
+        },
+        body: JSON.stringify(payload)
+      });
+      if (!resp.ok) {
+        const txt = await resp.text();
+        throw new Error(txt || resp.statusText);
+      }
+      showToast('success','Sucesso','Aplicação registrada!');
+      document.querySelector('.form-body').reset();
+      animalTbl.style.display = 'none';
+      currentAnimal = null;
+    } catch (e) {
+      console.error(e);
+      showToast('error','Erro', e.message);
+    }
+  });
+});
+</script>
 </body>
 </html>

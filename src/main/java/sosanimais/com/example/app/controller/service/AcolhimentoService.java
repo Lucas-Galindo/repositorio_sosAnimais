@@ -66,6 +66,10 @@ public class AcolhimentoService {
         return acolhimentoDAL.get(id);
     }
 
+    public List<Acolhimento>buscarPorNomeAnimal(String nome){
+        return acolhimentoDAL.buscarPorNomeAnimal(nome);
+    }
+
     public List<Acolhimento> buscarTodos() throws SQLException {
         return acolhimentoDAL.get("");
     }

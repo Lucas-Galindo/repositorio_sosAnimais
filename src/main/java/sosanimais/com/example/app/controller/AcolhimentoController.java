@@ -38,6 +38,7 @@ public class AcolhimentoController {
         }
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Object> getAcById(@PathVariable Long id){//ok
         Acolhimento aux=acolhimentoService.buscarPorId(id);
@@ -45,6 +46,18 @@ public class AcolhimentoController {
             return ResponseEntity.ok(aux);
         else
             return ResponseEntity.badRequest().body(new Erro("Não foi possível encontrar o acolhimento de id: "+id));
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Object> getAcByAnimal(@PathVariable String nome){
+        List<Acolhimento> acolhimentos=new ArrayList<>();
+        acolhimentos=acolhimentoService.buscarPorNomeAnimal(nome);
+        if(!acolhimentos.isEmpty()){
+            return ResponseEntity.ok(acolhimentos);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new Erro("Nenhum acolhimento encontrado para o animal: "+nome));
+        }
     }
 
     @PostMapping
