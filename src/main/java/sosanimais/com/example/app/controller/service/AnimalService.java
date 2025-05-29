@@ -18,9 +18,20 @@ public class AnimalService {
     }
 
     public Animal atualizarAnimal(Animal animal) {
-        boolean att=animalDAL.update(animal);
-        if(att==true)
+        Animal existente = animalDAL.get(animal.getId());
+        if (animal.getIdAcolhimento() == null || animal.getIdAcolhimento() == 0) {
+            animal.setIdAcolhimento(existente.getIdAcolhimento());
+        }
+
+        if (animal.getIdBaia() == null || animal.getIdBaia() == 0) {
+            animal.setIdBaia(existente.getIdBaia());
+        }
+
+        // Atualiza o animal
+        boolean att = animalDAL.update(animal);
+        if (att) {
             return animal;
+        }
         return null;
     }
 
@@ -36,6 +47,7 @@ public class AnimalService {
     public List<Animal> buscarTodos() {
         return animalDAL.get("");
     }
+
 
     public List<Animal> buscarComFiltro(String filtroSQL) {
         return animalDAL.get(filtroSQL);

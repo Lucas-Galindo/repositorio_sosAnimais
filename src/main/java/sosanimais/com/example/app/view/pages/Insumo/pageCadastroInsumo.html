@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Acolhimento</title>
+    <title>SOS Amigos de Animais - Cadastro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Estilos existentes - incorporando do arquivo fornecido */
@@ -677,7 +677,6 @@
     </style>
 </head>
 <body>
-    <script src="scriptAcolhimento.js"></script>
     <!-- Header -->
     <header>
         <button class="sidebar-toggle" id="sidebarToggle">
@@ -837,419 +836,151 @@
 
         <!-- Content -->
         <main class="content">
-            <h1 class="page-title">
-                <i class="fas fa-plus-circle"></i>
-                Registro de acolhimento
-            </h1>
-            
-            <div class="form-container">
-                <div class="form-header">
-                    <div class="form-title">Novo Registro de Acolhimento</div>
-                </div>
-                
-                <div class="form-steps">
-                  <!--
-                    <div class="form-step active">
-                        <i class="fas fa-info-circle"></i>
-                        Informações Básicas
-                    </div>-->
-                    <!--
-                    <div class="form-step">
-                        <i class="fas fa-heartbeat"></i>
-                        Saúde e Cuidados
-                    </div>
-                    <div class="form-step">
-                        <i class="fas fa-paw"></i>
-                        Características
-                    </div>
-                    <div class="form-step">
-                        <i class="fas fa-camera"></i>
-                        Fotos e Documentos
-                    </div>-->
-                </div>
-                
-                <form class="form-body">
-                    <!-- Seção 1: Informações Básicas -->
-                    <div class="form-section">
-                        <h3 class="section-title">Insira os dados do acolhimento</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="ac-date" class="required">Data do acolhimento</label>
-                                <input type="date" id="ac-date" class="form-control" placeholder="Data acolhimento" required>
-                            </div>
-                
-                            
-                            
-                            <div class="form-group">
-                                <label for="ac-id-func" class="required">Id do funcionário</label>
-                                <input type="number" id="ac-func" class="form-control" placeholder="Id do funcionário" required>
-                            </div>
+      <h1 class="page-title">
+        <i class="fas fa-plus-circle"></i> Cadastro de Insumos
+      </h1>
 
-                            <div class="form-group">
-                              <label for="ac-animal-select" class="required">Animal</label>
-                              <select id="ac-animal-select" class="form-control" required>
-                                <option value="">Selecione o animal</option>
-                              </select>
-                              <span class="help-text">Selecione um animal que ainda não foi acolhido</span>
-                            </div>
-                        
-                            <!--
-                            <div class="form-group">
-                                <label for="animal-gender" class="required">Sexo</label>
-                                <div class="radio-group">
-                                    <div class="form-check">
-                                        <input type="radio" id="gender-male" name="animal-gender" class="form-check-input" value="male" required>
-                                        <label for="gender-male" class="form-check-label">Macho</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" id="gender-female" name="animal-gender" class="form-check-input" value="female" required>
-                                        <label for="gender-female" class="form-check-label">Fêmea</label>
-                                    </div>
-                                </div>
-                            </div>
-                            -->
-                                <!--
-                                <select id="age-unit" class="form-control" style="width: 30%;">
-                                    <option value="days">Dias</option>
-                                    <option value="months">Meses</option>
-                                    <option value="years" selected>Anos</option>
-                                </select>-->
-                            </div>
-                        </div>
-                        
-                        <!--
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="animal-color" class="required">Cor Predominante</label>
-                                <select id="animal-color" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="black">Preto</option>
-                                    <option value="white">Branco</option>
-                                    <option value="brown">Marrom</option>
-                                    <option value="gray">Cinza</option>
-                                    <option value="golden">Dourado</option>
-                                    <option value="brindle">Tigrado</option>
-                                    <option value="spotted">Malhado</option>
-                                    <option value="bicolor">Bicolor</option>
-                                    <option value="tricolor">Tricolor</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="intake-date" class="required">Data de Entrada</label>
-                                <input type="date" id="intake-date" class="form-control" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="intake-source" class="required">Origem</label>
-                                <select id="intake-source" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="rescue">Resgate</option>
-                                    <option value="surrender">Entrega Voluntária</option>
-                                    <option value="born">Nascido na Instituição</option>
-                                    <option value="transfer">Transferência</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                            -->
-                        </div>
-                        <button type="button" class="btn btn-primary"  onclick="registrarAcolhimento()">Registrar Acolhimento</button>
-                    </div>
+      <div class="form-container">
+        <div class="form-header">
+          <div class="form-title">Novo Cadastro de Insumo</div>
+        </div>
 
-                    
-                
-                    <!-- Seção 3: Características (Oculto por padrão) -->
-                    <div class="form-section" style="display: none;">
-                        <!-- Conteúdo da seção Características -->
-                    </div>
-                    
-                    <!-- Seção 4: Fotos e Documentos (Oculto por padrão) -->
-                    <div class="form-section" style="display: none;">
-                        <!-- Conteúdo da seção Fotos e Documentos -->
-                    </div>
-                    <!--
-                    <div class="form-actions">
-                        
-                        <div class="form-actions-left">
-                            <button type="button" class="btn btn-outline" id="btn-cancel">
-                                <i class="fas fa-times"></i>
-                                Cancelar
-                            </button>
-                            <button type="button" class="btn btn-outline" id="btn-save-draft">
-                                <i class="fas fa-save"></i>
-                                Salvar Rascunho
-                            </button>
-                        </div>
-                        <div class="form-actions-right">
-                            <button type="button" class="btn btn-secondary" id="btn-previous" style="display: none;">
-                                <i class="fas fa-arrow-left"></i>
-                                Anterior
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-next">
-                                Cadastrar
-                                <i class="fas fa-arrow-right" "></i>
-                            </button>
-                        </div>-->
-                    </div>
-                </form>
+        <form class="form-body">
+          <div class="form-section">
+            <h3 class="section-title">Informações Básicas</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="insumo-name" class="required">Nome do Insumo</label>
+                <input type="text" id="insumo-name" class="form-control" placeholder="Ex: Ração" required>
+              </div>
+
+              <div class="form-group">
+                <label for="categ-type" class="required">Categoria do Insumo</label>
+                <select id="categ-type" class="form-control" required>
+                  <option value="">Carregando categorias...</option>
+                </select>
+                <span class="help-text">Selecione a categoria</span>
+              </div>
+
+              <div class="form-group">
+                <label for="insumo-qtd" class="required">Quantidade</label>
+                <input type="number" id="insumo-qtd" class="form-control" placeholder="Ex: 50" required>
+              </div>
+            </div><!--/.form-row-->
+
+            <div class="form-group">
+              <label for="insumo-description">Descrição</label>
+              <textarea id="insumo-description" class="form-control" rows="4"
+                        placeholder="Descreva o insumo, ex: Ração especial para filhotes"></textarea>
             </div>
-        </main>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-logo">
-            <i class="fas fa-paw" style="margin-right: 10px;"></i>
-            <div class="footer-brand">S.O.S. Amigos de Animais</div>
-        </div>
-        <div class="footer-links">
-            <a href="#" class="footer-link">Sobre nós</a>
-            <a href="#" class="footer-link">Política de Privacidade</a>
-            <a href="#" class="footer-link">Contato</a>
-        </div>
-        <div class="footer-copyright">
-            &copy; 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.
-        </div>
-    </footer>
+            <button type="button" class="btn btn-primary" onclick="cadastrarInsumo()">
+              <i class="fas fa-check"></i> Cadastrar
+            </button>
+          </div><!--/.form-section-->
+        </form>
+      </div><!--/.form-container-->
 
-    <!-- JavaScript -->
-    <script>
-        // JavaScript para controlar os dropdowns
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButtons = document.querySelectorAll('.menu-button');
-            
-            menuButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Encontra o dropdown-menu associado a este botão
-                    const dropdownMenu = this.nextElementSibling;
-                    const dropdownIcon = this.querySelector('.dropdown-icon');
-                    
-                    // Toggle da classe active
-                    dropdownMenu.classList.toggle('active');
-                    dropdownIcon.classList.toggle('active');
-                    
-                    // Opcional: Fecha outros dropdowns abertos
-                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                        if (menu !== dropdownMenu) {
-                            menu.classList.remove('active');
-                            menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
-                        }
-                    });
-                });
-            });
-            
-            // Toggle para exibir/ocultar a sidebar em dispositivos móveis
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            
-            if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('active');
-                });
-                
-                // Fechar a sidebar quando clicar fora dela em dispositivos móveis
-                document.addEventListener('click', function(event) {
-                    const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnToggle = sidebarToggle.contains(event.target);
-                    
-                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
-                        sidebar.classList.remove('active');
-                    }
-                });
-            }
-            
-            // Navegação entre etapas do formulário
-            const formSections = document.querySelectorAll('.form-section');
-            const formSteps = document.querySelectorAll('.form-step');
-            const btnNext = document.getElementById('btn-next');
-            const btnPrevious = document.getElementById('btn-previous');
-            
-            let currentStep = 0;
-            
-            if (btnNext && btnPrevious) {
-                btnNext.addEventListener('click', function() {
-                    if (currentStep < formSections.length - 1) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        formSteps[currentStep].classList.add('completed');
-                        
-                        currentStep++;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        
-                        btnPrevious.style.display = 'flex';
-                        
-                        if (currentStep === formSections.length - 1) {
-                            btnNext.textContent = 'Finalizar';
-                            btnNext.innerHTML = 'Finalizar <i class="fas fa-check" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        }
-                    } else {
-                        // Último passo - enviar formulário
-                        alert('Formulário enviado com sucesso!');
-                    }
-                });
-                
-                btnPrevious.addEventListener('click', function() {
-                    if (currentStep > 0) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        
-                        currentStep--;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        formSteps[currentStep].classList.remove('completed');
-                        
-                        if (currentStep === 0) {
-                            btnPrevious.style.display = 'none';
-                        }
-                        
-                        btnNext.textContent = 'Próximo';
-                        btnNext.innerHTML = 'Próximo <i class="fas fa-arrow-right" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                    }
-                });
-            }
-            
-            // Clique nos passos do formulário para navegar (opcional)
-            formSteps.forEach((step, index) => {
-                step.addEventListener('click', function() {
-                    if (index < currentStep || step.classList.contains('completed')) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        
-                        currentStep = index;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        
-                        btnPrevious.style.display = currentStep > 0 ? 'flex' : 'none';
-                        
-                        btnNext.textContent = currentStep === formSections.length - 1 ? 'Finalizar' : 'Próximo';
-                        if (currentStep === formSections.length - 1) {
-                            btnNext.innerHTML = 'Finalizar <i class="fas fa-check" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        } else {
-                            btnNext.innerHTML = 'Próximo <i class="fas fa-arrow-right" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        }
-                    }
-                });
-            });
-            
-            // Simulação de autocomplete para raças
-            const breedInput = document.getElementById('animal-breed');
-            const breedResults = document.getElementById('breed-results');
-            
-            if (breedInput && breedResults) {
-                const dogBreeds = ['Labrador Retriever', 'Golden Retriever', 'Pastor Alemão', 'Bulldog', 'Poodle', 'Beagle', 'Rottweiler', 'Yorkshire Terrier', 'Boxer', 'Dachshund'];
-                const catBreeds = ['Persa', 'Siamês', 'Maine Coon', 'Angorá', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Himalaia'];
-                
-                const animalTypeSelect = document.getElementById('animal-type');
-                
-                breedInput.addEventListener('focus', function() {
-                    breedResults.style.display = 'block';
-                    
-                    // Limpa os resultados anteriores
-                    breedResults.innerHTML = '';
-                    
-                    // Determina quais raças mostrar com base no tipo de animal selecionado
-                    let breeds = [];
-                    if (animalTypeSelect.value === 'dog') {
-                        breeds = dogBreeds;
-                    } else if (animalTypeSelect.value === 'cat') {
-                        breeds = catBreeds;
-                    }
-                    
-                    // Adiciona as raças aos resultados
-                    breeds.forEach(breed => {
-                        const item = document.createElement('div');
-                        item.classList.add('autocomplete-item');
-                        item.textContent = breed;
-                        item.addEventListener('click', function() {
-                            breedInput.value = breed;
-                            breedResults.style.display = 'none';
-                        });
-                        breedResults.appendChild(item);
-                    });
-                });
-                
-                breedInput.addEventListener('input', function() {
-                    const value = this.value.toLowerCase();
-                    
-                    // Limpa os resultados anteriores
-                    breedResults.innerHTML = '';
-                    
-                    // Determina quais raças mostrar com base no tipo de animal selecionado
-                    let breeds = [];
-                    if (animalTypeSelect.value === 'dog') {
-                        breeds = dogBreeds;
-                    } else if (animalTypeSelect.value === 'cat') {
-                        breeds = catBreeds;
-                    }
-                    
-                    // Filtra as raças com base no valor digitado
-                    const filteredBreeds = breeds.filter(breed => breed.toLowerCase().includes(value));
-                    
-                    // Adiciona as raças filtradas aos resultados
-                    filteredBreeds.forEach(breed => {
-                        const item = document.createElement('div');
-                        item.classList.add('autocomplete-item');
-                        item.textContent = breed;
-                        item.addEventListener('click', function() {
-                            breedInput.value = breed;
-                            breedResults.style.display = 'none';
-                        });
-                        breedResults.appendChild(item);
-                    });
-                    
-                    // Mostra ou oculta os resultados com base se há resultados para mostrar
-                    breedResults.style.display = filteredBreeds.length > 0 ? 'block' : 'none';
-                });
-                
-                // Oculta os resultados ao clicar fora do input
-                document.addEventListener('click', function(event) {
-                    if (!breedInput.contains(event.target) && !breedResults.contains(event.target)) {
-                        breedResults.style.display = 'none';
-                    }
-                });
-                
-                // Atualiza as raças quando o tipo de animal muda
-                animalTypeSelect.addEventListener('change', function() {
-                    breedInput.value = '';
-                });
-            }
-            
-            // Exemplo de validação básica
-            const requiredInputs = document.querySelectorAll('[required]');
-            
-            if (requiredInputs.length > 0) {
-                requiredInputs.forEach(input => {
-                    input.addEventListener('blur', function() {
-                        if (!this.value) {
-                            this.classList.add('invalid');
-                            
-                            // Adiciona mensagem de erro se ainda não existir
-                            let errorMessage = this.nextElementSibling;
-                            if (!errorMessage || !errorMessage.classList.contains('error-text')) {
-                                errorMessage = document.createElement('span');
-                                errorMessage.classList.add('error-text');
-                                errorMessage.textContent = 'Este campo é obrigatório';
-                                this.insertAdjacentElement('afterend', errorMessage);
-                            }
-                        } else {
-                            this.classList.remove('invalid');
-                            
-                            // Remove mensagem de erro se existir
-                            const errorMessage = this.nextElementSibling;
-                            if (errorMessage && errorMessage.classList.contains('error-text')) {
-                                errorMessage.remove();
-                            }
-                        }
-                    });
-                });
-            }
+      <div id="toast-container" class="toast-container"></div>
+    </main>
+  </div>
+
+  <main-footer></main-footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const API_CAT   = 'http://localhost:8080/apis/categoria';
+    const selectCat = document.getElementById('categ-type');
+    const toastRoot = document.getElementById('toast-container');
+
+    function showToast(type, title, msg) {
+      const t = document.createElement('div');
+      t.className = `toast toast-${type}`;
+      t.innerHTML = `
+        <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'} toast-icon"></i>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${msg}</div>
+        </div>
+        <button class="toast-close">&times;</button>
+      `;
+      toastRoot.appendChild(t);
+      t.querySelector('.toast-close').onclick = () => t.remove();
+      setTimeout(() => t.classList.add('show'), 10);
+      setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => t.remove(), 300);
+      }, 5000);
+    }
+
+    // 1) Carregar categorias no <select>
+    async function loadCategorias() {
+      selectCat.innerHTML = '<option value="">Carregando categorias...</option>';
+      try {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvIiwiaXNzIjoibG9jYWxob3N0OjgwODAiLCJuaXZlbCI6IjIiLCJpYXQiOjE3NDg0NDgzNzEsImV4cCI6MTc0ODQ0ODQzMX0.EU2_oowloJVUlQf7d-IZ8xfX-irrBpd6uksMQT4NutQ');
+
+        const resp = await fetch(API_CAT, { method: 'GET', headers, redirect: 'follow' });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const cats = await resp.json();
+
+        selectCat.innerHTML = '<option value="">Selecione a categoria</option>';
+        cats.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.text  = c.nome;
+          selectCat.appendChild(opt);
         });
-    </script>
+      } catch (err) {
+        console.error('Erro ao carregar categorias:', err);
+        selectCat.innerHTML = '<option value="">Erro ao carregar</option>';
+        selectCat.disabled = true;
+        showToast('error','Erro','Não foi possível carregar categorias.');
+      }
+    }
+
+    // 2) Função de cadastro de insumo
+    window.cadastrarInsumo = async function() {
+      const nome       = document.getElementById('insumo-name').value.trim();
+      const descricao  = document.getElementById('insumo-description').value.trim();
+      const quantidade = parseInt(document.getElementById('insumo-qtd').value, 10);
+      const idCat      = parseInt(selectCat.value, 10);
+      const nomeCat    = selectCat.options[selectCat.selectedIndex]?.text || '';
+
+      if (!nome || isNaN(quantidade) || isNaN(idCat)) {
+        return showToast('error','Erro','Preencha todos os campos obrigatórios.');
+      }
+
+      const payload = { nome, descricao, quantidade, idCat, nomeCategoria: nomeCat };
+
+      try {
+        console.log('Payload:', payload);
+        const headers = new Headers();
+        headers.append('Content-Type','application/json');
+        headers.append('Authorization','Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvIiwiaXNzIjoibG9jYWxob3N0OjgwODAiLCJuaXZlbCI6IjIiLCJpYXQiOjE3NDg0NDgzNzEsImV4cCI6MTc0ODQ0ODQzMX0.EU2_oowloJVUlQf7d-IZ8xfX-irrBpd6uksMQT4NutQ');
+
+        const resp = await fetch('http://localhost:8080/apis/insumo', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload),
+          redirect: 'follow'
+        });
+
+        const text = await resp.text();
+        console.log('Resposta:', text);
+
+        if (!resp.ok) throw new Error(text || resp.statusText);
+        showToast('success','Sucesso','Insumo cadastrado com sucesso!');
+        document.querySelector('.form-body').reset();
+      } catch (err) {
+        console.error(err);
+        showToast('error','Erro','Falha ao cadastrar insumo: '+err.message);
+      }
+    };
+
+    loadCategorias();
+  });
+  </script>
 </body>
 </html>

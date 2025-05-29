@@ -49,7 +49,12 @@ public class AcolhimentoDAL implements IDAL<Acolhimento> {
 
     @Override
     public boolean delete(Acolhimento entidade) {
+        String desvincularAnimal ="UPDATE animal" +
+                "   SET acolhimento_aco_cod = NULL" +
+                " WHERE acolhimento_aco_cod ="+entidade.getId();
+        SingletonDB.getConexao().manipular(desvincularAnimal);
         String sql = "DELETE FROM acolhimento WHERE aco_cod ="+entidade.getId();
+
         return SingletonDB.getConexao().manipular(sql);
     }
 
@@ -113,6 +118,35 @@ public class AcolhimentoDAL implements IDAL<Acolhimento> {
         }
         return maxId;
     }
+
+    public List<Acolhimento> buscarPorNomeAnimal(String nome) {
+        // escapa aspas simples e normaliza para minúsculas
+        String nomeEscaped = nome.replace("'", "''").toLowerCase();
+        String sql =
+                "SELECT a.aco_cod, a.aco_data, a.funcionario_func_mat, a.animal_ani_cod " +
+                        "FROM Acolhimento a " +
+                        "  JOIN Animal ani ON a.animal_ani_cod = ani.ani_cod " +
+                        "WHERE LOWER(ani.ani_nome) = '" + nomeEscaped + "'";
+
+        List<Acolhimento> resultados = new ArrayList<>();
+        try (
+                ResultSet rs = SingletonDB.getConexao().consultar(sql);
+        ) {
+            while (rs.next()) {
+                Acolhimento ac = new Acolhimento(
+                        rs.getLong("aco_cod"),
+                        rs.getDate("aco_data"),
+                        rs.getLong("funcionario_func_mat"),
+                        rs.getLong("animal_ani_cod")
+                );
+                resultados.add(ac);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar acolhimentos por nome de animal (case-insensitive)", e);
+        }
+        return resultados;
+    }
+
 
     public Acolhimento buscarPorAnimal(Long idAnimal){
         String sql = "SELECT aco_cod, aco_data, funcionario_func_mat, animal_ani_cod "
