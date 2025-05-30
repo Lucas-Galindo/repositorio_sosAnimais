@@ -403,7 +403,7 @@
             async function loadAdoptions() {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    window.location.href = '../auth.html';
+                    window.location.href = '../pageTelaLogin.html';
                     return;
                 }
 
@@ -460,10 +460,16 @@
                 }
             }
 
-            // Funções de ação
+            // Funções de ação (editar, excluir)
             window.editAdoption = function(id) {
-                // Implementar edição
-                console.log('Editar adoção:', id);
+                if (!id) {
+                    showToast('error', 'Erro', 'ID da adoção não fornecido');
+                    return;
+                }
+                console.log('Redirecionando para edição da adoção:', id);
+                const url = `pageAlterarAdocao.html?id=${encodeURIComponent(id)}`;
+                console.log('URL de redirecionamento:', url);
+                window.location.href = url;
             };
 
             window.deleteAdoption = async function(id) {

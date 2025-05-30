@@ -1,0 +1,112 @@
+/* SIDEBAR */
+
+.sidebar {
+    width: 280px;
+    height: calc(100vh - 100px); /* Altura da viewport menos a altura do header */
+    background-color: var(--color-orange-burnt);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    position: fixed;
+    top: 100px; /* Posiciona abaixo do header */
+}
+
+.sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.menu-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menu-button-content {
+    display: flex;
+    align-items: center;
+}
+
+.menu-icon {
+    margin-right: 10px;
+}
+
+.dropdown-icon {
+    transition: transform 0.3s;
+}
+
+.dropdown-icon.active {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: var(--color-brown-dark);
+}
+
+.dropdown-menu.active {
+    max-height: 500px;
+    transition: max-height 0.5s ease-in;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-280px);
+        transition: transform 0.3s ease;
+        z-index: 999;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .content {
+        margin-left: 0;
+    }
+}
+
+

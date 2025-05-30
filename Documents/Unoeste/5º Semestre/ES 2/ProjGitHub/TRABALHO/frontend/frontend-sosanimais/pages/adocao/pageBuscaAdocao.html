@@ -760,7 +760,11 @@
                     }
                     if (data) {
                         if (filtro) filtro += ' AND ';
-                        const dataFormatada = new Date(data).toISOString().split('T')[0];
+                        const dataObj = new Date(data);
+                        dataObj.setDate(dataObj.getDate() + 1); // Ajusta o fuso horário adicionando um dia
+                        const dataFormatada = dataObj.toISOString().split('T')[0];
+                        console.log('Data selecionada:', data);
+                        console.log('Data formatada para busca:', dataFormatada);
                         filtro += `adota_data='${dataFormatada}'`;
                     }
 
@@ -897,10 +901,14 @@
                 resultsCount.textContent = `${adocoes.length} adoção(ões) encontrada(s)`;
                 
                 adocoes.forEach(adocao => {
+                    console.log('Data da adoção recebida:', adocao.adoData);
+                    const dataFormatada = formatDate(adocao.adoData);
+                    console.log('Data formatada para exibição:', dataFormatada);
+                    
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${adocao.adoCod || ''}</td>
-                        <td>${formatDate(adocao.adoData) || ''}</td>
+                        <td>${dataFormatada || ''}</td>
                         <td>${adocao.aniCod || ''}</td>
                         <td>${adocao.adoMat || ''}</td>
                         <td>${adocao.funcCod || ''}</td>
@@ -926,6 +934,7 @@
                         console.log('Data inválida:', dateString);
                         return '';
                     }
+                    // Remove o ajuste de data anterior
                     return date.toLocaleDateString('pt-BR');
                 } catch (error) {
                     console.error('Erro ao formatar data:', error);
@@ -988,7 +997,7 @@
 
             // Funções de ação (editar, excluir)
             window.editAdoption = function(id) {
-                showToast('info', 'Editar', `Editar adoção ID: ${id}. (Implementar edição)`);
+                window.location.href = `pageAlterarAdocao.html?id=${id}`;
             };
             window.deleteAdoption = async function(id) {
                 if (!confirm('Tem certeza que deseja excluir esta adoção?')) {

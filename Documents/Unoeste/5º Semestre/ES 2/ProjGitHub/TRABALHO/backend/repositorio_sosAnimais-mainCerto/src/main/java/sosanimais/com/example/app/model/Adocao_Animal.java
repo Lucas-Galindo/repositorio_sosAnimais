@@ -9,7 +9,7 @@ public class Adocao_Animal{
     private Long funcCod;
     private Long aniCod;
     private int adoMat;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "America/Sao_Paulo")
     private Date adoData;
 
     public Adocao_Animal(Long adoCod, Long funcCod, Long aniCod, int adoMat) {
