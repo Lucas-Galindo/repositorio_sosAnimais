@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Cadastro de Baia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }        
+
+        /* Estilos específicos para a página de cadastro */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+            content: '*';
+            color: red;
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control.invalid {
+            border-color: red;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .error-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: red;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: var(--button-text);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-orange-burnt);
+            color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        /* Notificação Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Header -->
+<main-header></main-header>
+
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Sidebar -->
+    <main-sidebar></main-sidebar>
+    
+    <!-- Content -->
+    <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-warehouse"></i>
+            Cadastro de Baia
+        </h1>
+
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-title">Nova Baia</div>
+            </div>
+
+            <form class="form-body" id="baiaForm">
+                <div class="form-section">
+                    <h3 class="section-title">Informações da Baia</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="baia-nome" class="required">Nome da Baia</label>
+                            <input type="text" id="baia-nome" name="nome" class="form-control" placeholder="Digite o nome da baia" required>
+                            <div class="error-text" id="nome-error" style="display: none;">Por favor, informe o nome da baia.</div>
+                            <span class="help-text">Insira nome padrão como Baia_Categoria_numero. Exemplo: Baia_Comum_2</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="baia-categoria" class="required">Categoria da Baia</label>
+                            <select id="baia-categoria" name="categoria" class="form-control" required>
+                                <option value="">Selecione a categoria</option>
+                                <option value="Comum">Comum</option>
+                                <option value="Medica">Médica</option>
+                                <option value="Definitiva">Definitiva</option>
+                            </select>
+                            <div class="error-text" id="categoria-error" style="display: none;">Por favor, selecione a categoria da baia.</div>
+                            <span class="help-text">Categoria define o tipo de uso da baia.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="form-actions-left">
+                            <button type="button" class="btn btn-outline" id="btn-cancel">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                        <div class="form-actions-right">
+                            <button type="button" class="btn btn-primary" id="btn-save">
+                                <i class="fas fa-save"></i>
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<div id="footer-container"></div>
+<main-footer></main-footer>
+
+<!-- Toast de Notificação -->
+<div class="toast-container" id="toast-container">
+    <!-- As notificações serão injetadas aqui via JavaScript -->
+</div>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // JavaScript para controlar os dropdowns
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Encontra o dropdown-menu associado a este botão
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                // Toggle da classe active
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                // Opcional: Fecha outros dropdowns abertos
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        // Funções de validação
+        function validateNome(nome) {
+            return nome.trim().length > 0;
+        }
+
+        function validateCategoria(categoria) {
+            return categoria !== '';
+        }
+
+        function showError(fieldId, errorId, show) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(errorId);
+
+            if (show) {
+                field.classList.add('invalid');
+                errorElement.style.display = 'block';
+            } else {
+                field.classList.remove('invalid');
+                errorElement.style.display = 'none';
+            }
+        }
+
+        // Validação em tempo real
+        document.getElementById('baia-nome').addEventListener('blur', function() {
+            showError('baia-nome', 'nome-error', !validateNome(this.value));
+        });
+
+        document.getElementById('baia-categoria').addEventListener('change', function() {
+            console.log('Categoria selecionada:', this.value); // Debug
+            showError('baia-categoria', 'categoria-error', !validateCategoria(this.value));
+        });
+
+        // Toast de notificação
+        function showToast(type, title, message) {
+            const toastContainer = document.getElementById('toast-container');
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+
+            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+            toast.innerHTML = `
+                <i class="fas ${iconClass} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close">&times;</button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Adicionar evento de fechamento
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+
+            // Exibir o toast com animação
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            // Remover o toast automaticamente após 5 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+
+        // Função para enviar os dados para a API
+        async function saveBaia(baiaData) {
+            try {
+                console.log('Enviando dados para API:', baiaData); // Debug
+
+                const response = await fetch('http://localhost:8080/apis/baias', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        qtde: 0, // Valor padrão para quantidade
+                        nome: baiaData.nome,
+                        categoria: baiaData.categoria, // Enviando para ambos os campos conforme estrutura do banco
+                         // Adicionando o nome da baia
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.text();
+                    console.error('Erro na resposta da API:', errorData);
+                    throw new Error(`Erro HTTP: ${response.status} - ${errorData}`);
+                }
+
+                const responseData = await response.json();
+                console.log('Baia cadastrada com sucesso:', responseData);
+
+                // Limpar formulário
+                document.getElementById('baiaForm').reset();
+
+                // Mensagem de sucesso
+                showToast('success', 'Cadastro Realizado', `Baia "${baiaData.nome}" da categoria "${baiaData.categoria}" cadastrada com sucesso!`);
+
+            } catch (erro) {
+                console.error('Erro ao cadastrar baia:', erro);
+                showToast('error', 'Erro no Cadastro', `Ocorreu um erro ao cadastrar a baia: ${erro.message}`);
+            }
+        }
+
+        // Salvar o formulário
+        const saveButton = document.getElementById('btn-save');
+        saveButton.addEventListener('click', function() {
+            const nomeInput = document.getElementById('baia-nome');
+            const categoriaInput = document.getElementById('baia-categoria');
+
+            console.log('Valores capturados:', {
+                nome: nomeInput.value,
+                categoria: categoriaInput.value
+            }); // Debug
+
+            // Validar todos os campos
+            const nomeValid = validateNome(nomeInput.value);
+            const categoriaValid = validateCategoria(categoriaInput.value);
+
+            showError('baia-nome', 'nome-error', !nomeValid);
+            showError('baia-categoria', 'categoria-error', !categoriaValid);
+
+            // Se todos os campos forem válidos, enviar o formulário
+            if (nomeValid && categoriaValid) {
+                const baiaData = {
+                    nome: nomeInput.value.trim(),
+                    categoria: categoriaInput.value
+                };
+
+                console.log('Dados da baia a serem enviados:', baiaData);
+                saveBaia(baiaData);
+            } else {
+                console.log('Validação falhou:', {
+                    nomeValid,
+                    categoriaValid
+                });
+            }
+        });
+
+        // Cancelar o formulário
+        const cancelButton = document.getElementById('btn-cancel');
+        cancelButton.addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja cancelar? Todas as informações não salvas serão perdidas.')) {
+                const form = document.getElementById('baiaForm');
+                form.reset();
+
+                // Remover mensagens de erro
+                document.querySelectorAll('.error-text').forEach(element => {
+                    element.style.display = 'none';
+                });
+
+                // Remover classes de erro
+                document.querySelectorAll('.form-control').forEach(element => {
+                    element.classList.remove('invalid');
+                });
+
+                // Opcional: Redirecionar para listagem
+                // window.location.href = 'listagem-baias.html';
+            }
+        });
+    });
+</script>
+</body>
+</html>

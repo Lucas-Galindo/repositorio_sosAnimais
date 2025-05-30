@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/main.css">
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="./assets/css/header.css">
+    <script src="./assets/js/header.js"></script>
+    <link rel="stylesheet" href="./assets/css/footer.css">
+    <script src="./assets/js/footer.js"></script>
+    <link rel="stylesheet" href="./assets/css/sidebar.css">
+    <script src="./assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px;
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }
+
+        /* Estilos específicos para a página home */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--color-orange-light), var(--color-orange-burnt));
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-small);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--color-orange-burnt);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .stat-icon.animals {
+            background-color: #28a745;
+        }
+
+        .stat-icon.adocoes {
+            background-color: #007bff;
+        }
+
+        .stat-icon.funcionarios {
+            background-color: #6f42c1;
+        }
+
+        .stat-icon.doadores {
+            background-color: #fd7e14;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--color-orange-burnt);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header i {
+            margin-right: 0.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .recent-activity {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .activity-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .activity-icon.success {
+            background-color: #28a745;
+        }
+
+        .activity-icon.warning {
+            background-color: #ffc107;
+        }
+
+        .activity-icon.info {
+            background-color: #17a2b8;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            background-color: white;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            border-color: var(--color-orange-burnt);
+            background-color: rgba(211, 122, 71, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 2rem;
+            color: var(--color-orange-burnt);
+            margin-bottom: 0.75rem;
+        }
+
+        .action-btn-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            text-align: center;
+        }
+
+        .action-btn-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-orange-burnt);
+            color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .btn-small {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        /* Notificação Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .dashboard-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .welcome-title {
+                font-size: 1.6rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .welcome-section {
+                padding: 1.5rem;
+            }
+
+            .welcome-title {
+                font-size: 1.4rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+
+            .action-btn {
+                padding: 1rem;
+            }
+
+            .action-btn i {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Header -->
+<main-header></main-header>
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Sidebar -->
+    <main-sidebar></main-sidebar>
+    
+    <!-- Content -->
+    <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-home"></i>
+            Dashboard
+        </h1>
+
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-title">Bem-vindo ao SOS Amigos de Animais</div>
+            <div class="welcome-subtitle">Sistema de gestão para cuidado e proteção animal</div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Animais no Abrigo</div>
+                    <div class="stat-icon animals">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                </div>
+                <div class="stat-number">127</div>
+                <div class="stat-description">Animais atualmente sob cuidados</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Adoções Este Mês</div>
+                    <div class="stat-icon adocoes">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                <div class="stat-number">23</div>
+                <div class="stat-description">Animais encontraram novos lares</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Funcionários Ativos</div>
+                    <div class="stat-icon funcionarios">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-number">15</div>
+                <div class="stat-description">Equipe dedicada ao cuidado</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Doadores Registrados</div>
+                    <div class="stat-icon doadores">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                </div>
+                <div class="stat-number">89</div>
+                <div class="stat-description">Pessoas generosas que ajudam</div>
+            </div>
+        </div>
+
+        <!-- Dashboard Row -->
+        <div class="dashboard-row">
+            <!-- Recent Activities -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        Atividades Recentes
+                    </div>
+                    <a href="#" class="btn btn-outline btn-small">Ver Todas</a>
+                </div>
+                <div class="card-body">
+                    <ul class="recent-activity">
+                        <li class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Max foi adotado</div>
+                                <div class="activity-time">Há 2 horas</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Novo animal acolhido: Luna</div>
+                                <div class="activity-time">Há 4 horas</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon warning">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Thor transferido para baia médica</div>
+                                <div class="activity-time">Ontem</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon success">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Doação de ração recebida</div>
+                                <div class="activity-time">Ontem</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Novo funcionário cadastrado</div>
+                                <div class="activity-time">2 dias atrás</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <i class="fas fa-bolt"></i>
+                        Ações Rápidas
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-plus"></i>
+                            <div class="action-btn-title">Novo Animal</div>
+                            <div class="action-btn-desc">Cadastrar animal</div>
+                        </a>
+
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-heart"></i>
+                            <div class="action-btn-title">Nova Adoção</div>
+                            <div class="action-btn-desc">Registrar adoção</div>
+                        </a>
+
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-exchange-alt"></i>
+                            <div class="action-btn-title">Transferir</div>
+                            <div class="action-btn-desc">Mover animal</div>
+                        </a>
+
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-box"></i>
+                            <div class="action-btn-title">Nova Doação</div>
+                            <div class="action-btn-desc">Registrar doação</div>
+                        </a>
+
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div class="action-btn-title">Nova Compra</div>
+                            <div class="action-btn-desc">Adicionar compra</div>
+                        </a>
+
+                        <a href="#" class="action-btn">
+                            <i class="fas fa-chart-bar"></i>
+                            <div class="action-btn-title">Relatórios</div>
+                            <div class="action-btn-desc">Ver relatórios</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div id="footer-container"></div>
+<main-footer></main-footer>
+
+<!-- Toast de Notificação -->
+<div class="toast-container" id="toast-container">
+    <!-- As notificações serão injetadas aqui via JavaScript -->
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Simular carregamento de dados
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+        
+        // JavaScript para controlar os dropdowns
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Encontra o dropdown-menu associado a este botão
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                // Toggle da classe active
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                // Opcional: Fecha outros dropdowns abertos
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+        // Animação de entrada para os cards de estatística
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100);
+            }, index * 100);
+        });
+
+        // Funcionalidade dos botões de ação rápida
+        const actionBtns = document.querySelectorAll('.action-btn');
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const title = this.querySelector('.action-btn-title').textContent;
+                showToast('success', 'Navegação', `Redirecionando para ${title}...`);
+            });
+        });
+
+        // Simular notificação de boas-vindas
+        setTimeout(() => {
+            showToast('success', 'Bem-vindo!', 'Sistema carregado com sucesso.');
+        }, 1000);
+    });
+
+    // Função para mostrar toast
+    function showToast(type, title, message) {
+        const toastContainer = document.getElementById('toast-container');
+        
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        
+        const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas ${iconClass}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Mostrar toast
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+        
+        // Auto remover após 5 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 5000);
+        
+        // Botão de fechar
+        toast.querySelector('.toast-close').addEventListener('click', () => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        });
+    }
+</script>
+</body>
+</html>

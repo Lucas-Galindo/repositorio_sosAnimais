@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Cadastro de Pessoa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+  
+    
+    
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+       
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }        
+        /* Estilos específicos para a página de cadastro */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+            content: '*';
+            color: red;
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control.invalid {
+            border-color: red;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .error-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: red;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: var(--button-text);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-orange-burnt);
+            color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        /* Notificação Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Estilização dos checkboxes */
+        .checkbox-container {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper label {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Seção de Funcionário */
+        .employee-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid #eee;
+            display: none;
+        }
+
+        .employee-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .checkbox-container {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+           
+
+            .title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Header -->
+ <main-header></main-header>
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Sidebar -->
+     <main-sidebar></main-sidebar>
+    <!-- Content -->
+    <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-user-plus"></i>
+            Cadastro de Pessoa
+        </h1>
+
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-title">Novo Cadastro</div>
+            </div>
+
+            <form class="form-body" id="personForm">
+                <div class="form-section">
+                    <h3 class="section-title">Informações Pessoais</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="person-name" class="required">Nome Completo</label>
+                            <input type="text" id="person-name" name="name" class="form-control" placeholder="Digite o nome completo" required>
+                            <div class="error-text" id="name-error" style="display: none;">Por favor, informe o nome completo.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="person-cpf" class="required">CPF</label>
+                            <input type="text" id="person-cpf" name="cpf" class="form-control" placeholder="000.000.000-00" required maxlength="14">
+                            <div class="error-text" id="cpf-error" style="display: none;">CPF inválido. Digite um CPF válido.</div>
+                            <span class="help-text">Digite apenas os números ou com a formatação padrão.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="person-email" class="required">E-mail</label>
+                            <input type="email" id="person-email" name="email" class="form-control" placeholder="exemplo@email.com" required>
+                            <div class="error-text" id="email-error" style="display: none;">Por favor, informe um e-mail válido.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="person-phone" class="required">Telefone</label>
+                            <input type="tel" id="person-phone" name="phone" class="form-control" placeholder="(00) 00000-0000" required maxlength="15">
+                            <div class="error-text" id="phone-error" style="display: none;">Por favor, informe um telefone válido.</div>
+                            <span class="help-text">Digite apenas os números ou com a formatação padrão.</span>
+                        </div>
+                    </div>
+
+                    <!-- Seção de checkboxes para tipo de pessoa -->
+                    <div class="form-section">
+                        <h3 class="section-title">Tipo de Pessoa</h3>
+                        <div class="checkbox-container">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="adotante-checkbox" name="person-type" value="adotante">
+                                <label for="adotante-checkbox">Adotante</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="funcionario-checkbox" name="person-type" value="funcionario">
+                                <label for="funcionario-checkbox">Funcionário</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="doador-checkbox" name="person-type" value="doador">
+                                <label for="doador-checkbox">Doador</label>
+                            </div>
+                        </div>
+                        <div class="error-text" id="person-type-error" style="display: none;">Por favor, selecione pelo menos um tipo de pessoa.</div>
+                        <small class="help-text">Uma pessoa pode ter múltiplos papéis. Por exemplo, um funcionário também pode ser doador.</small>
+                    </div>
+
+                    <!-- Seção para Funcionário (aparece apenas quando o checkbox de funcionário é selecionado) -->
+                    <div id="employee-section" class="employee-section">
+                        <h3 class="section-title">Informações de Funcionário</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="employee-login" class="required">Login</label>
+                                <input type="text" id="employee-login" name="login" class="form-control" placeholder="Digite o login">
+                                <div class="error-text" id="login-error" style="display: none;">Por favor, informe um login válido.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="employee-password" class="required">Senha</label>
+                                <input type="password" id="employee-password" name="password" class="form-control" placeholder="Digite a senha">
+                                <div class="error-text" id="password-error" style="display: none;">Por favor, informe uma senha válida.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <div class="form-actions-left">
+                            <button type="button" class="btn btn-outline" id="btn-cancel">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                        <div class="form-actions-right">
+                            <button type="button" class="btn btn-primary" id="btn-save">
+                                <i class="fas fa-save"></i>
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<div id="footer-container"></div>
+<main-footer></main-footer>
+<!-- Toast de Notificação -->
+<div class="toast-container" id="toast-container">
+    <!-- As notificações serão injetadas aqui via JavaScript -->
+</div>
+
+
+<!-- JavaScript -->
+<script href="./scripts.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+       
+ 
+        // JavaScript para controlar os dropdowns
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Encontra o dropdown-menu associado a este botão
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                // Toggle da classe active
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                // Opcional: Fecha outros dropdowns abertos
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+    
+        // Formatação de CPF
+        const cpfInput = document.getElementById('person-cpf');
+        cpfInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                e.target.value = value;
+            }
+        });
+
+        // Formatação de telefone
+        const phoneInput = document.getElementById('person-phone');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                if (value.length > 2) {
+                    value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
+                }
+                if (value.length > 10) {
+                    value = value.substring(0, 10) + '-' + value.substring(10);
+                }
+                e.target.value = value;
+            }
+        });
+
+        // Controle dos checkboxes de tipo de pessoa
+        const checkboxes = document.querySelectorAll('input[name="person-type"]');
+        const employeeSection = document.getElementById('employee-section');
+        const funcionarioCheckbox = document.getElementById('funcionario-checkbox');
+        const adotanteCheckbox = document.getElementById('adotante-checkbox');
+        const doadorCheckbox = document.getElementById('doador-checkbox');
+
+        // Permitir múltiplos checkboxes selecionados ao mesmo tempo
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // Mostrar/esconder seção de funcionário baseado no checkbox
+                if (this.id === 'funcionario-checkbox') {
+                    if (this.checked) {
+                        employeeSection.classList.add('active');
+                    } else {
+                        employeeSection.classList.remove('active');
+                    }
+                }
+                
+                // Verificar se pelo menos um checkbox está marcado
+                const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                document.getElementById('person-type-error').style.display = anyChecked ? 'none' : 'block';
+            });
+        });
+
+        // Funções de validação
+        function validateName(name) {
+            return name.trim().length > 0;
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function validateCPF(cpf) {
+            // Simplificado para este exemplo, apenas verifica se o CPF tem a formatação correta
+            const re = /^\d{3}\.\d{3}\.\d{3}-\d{2}$|^\d{11}$/;
+            return re.test(String(cpf));
+        }
+
+        function validatePhone(phone) {
+            // Simplificado para este exemplo, apenas verifica se o telefone tem a formatação correta
+            const re = /^\(\d{2}\) \d{5}-\d{4}$|^\(\d{2}\) \d{4}-\d{4}$|^\d{10,11}$/;
+            return re.test(String(phone));
+        }
+
+        function validateEmployeeFields() {
+            const loginValid = document.getElementById('employee-login').value.trim().length > 0;
+            const passwordValid = document.getElementById('employee-password').value.trim().length > 0;
+            
+            showError('employee-login', 'login-error', !loginValid);
+            showError('employee-password', 'password-error', !passwordValid);
+            
+            return loginValid && passwordValid;
+        }
+
+        function showError(fieldId, errorId, show) {
+            const field = document.getElementById(fieldId);
+            const errorElement = document.getElementById(errorId);
+
+            if (show) {
+                field.classList.add('invalid');
+                errorElement.style.display = 'block';
+            } else {
+                field.classList.remove('invalid');
+                errorElement.style.display = 'none';
+            }
+        }
+
+        // Validação em tempo real
+        document.getElementById('person-name').addEventListener('blur', function() {
+            showError('person-name', 'name-error', !validateName(this.value));
+        });
+
+        document.getElementById('person-email').addEventListener('blur', function() {
+            showError('person-email', 'email-error', !validateEmail(this.value));
+        });
+
+        document.getElementById('person-cpf').addEventListener('blur', function() {
+            showError('person-cpf', 'cpf-error', !validateCPF(this.value));
+        });
+
+        document.getElementById('person-phone').addEventListener('blur', function() {
+            showError('person-phone', 'phone-error', !validatePhone(this.value));
+        });
+
+        document.getElementById('employee-login').addEventListener('blur', function() {
+            if (funcionarioCheckbox.checked) {
+                showError('employee-login', 'login-error', this.value.trim().length === 0);
+            }
+        });
+
+        document.getElementById('employee-password').addEventListener('blur', function() {
+            if (funcionarioCheckbox.checked) {
+                showError('employee-password', 'password-error', this.value.trim().length === 0);
+            }
+        });
+
+        // Toast de notificação
+        function showToast(type, title, message) {
+            const toastContainer = document.getElementById('toast-container');
+
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+
+            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+
+            toast.innerHTML = `
+                    <i class="fas ${iconClass} toast-icon"></i>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <button class="toast-close">&times;</button>
+                `;
+
+            toastContainer.appendChild(toast);
+
+            // Adicionar evento de fechamento
+            toast.querySelector('.toast-close').addEventListener('click', function() {
+                toast.remove();
+            });
+
+            // Exibir o toast com animação
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+
+            // Remover o toast automaticamente após 5 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+
+        // Não precisamos gerar matrícula, pois será gerada pelo banco de dados
+        // A matrícula de funcionário é informada manualmente pelo usuário
+
+        // Salvar o formulário
+        const saveButton = document.getElementById('btn-save');
+        saveButton.addEventListener('click', function() {
+            const nameInput = document.getElementById('person-name');
+            const emailInput = document.getElementById('person-email');
+            const cpfInput = document.getElementById('person-cpf');
+            const phoneInput = document.getElementById('person-phone');
+
+            // Verificar se algum tipo de pessoa foi selecionado
+            const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+            if (!anyChecked) {
+                document.getElementById('person-type-error').style.display = 'block';
+                return;
+            }
+
+            // Validar todos os campos
+            const nameValid = validateName(nameInput.value);
+            const emailValid = validateEmail(emailInput.value);
+            const cpfValid = validateCPF(cpfInput.value);
+            const phoneValid = validatePhone(phoneInput.value);
+
+            showError('person-name', 'name-error', !nameValid);
+            showError('person-email', 'email-error', !emailValid);
+            showError('person-cpf', 'cpf-error', !cpfValid);
+            showError('person-phone', 'phone-error', !phoneValid);
+
+            // Validar campos específicos de funcionário se o checkbox estiver marcado
+            let employeeValid = true;
+            if (funcionarioCheckbox.checked) {
+                employeeValid = validateEmployeeFields();
+            }
+
+            // Se todos os campos forem válidos, enviar o formulário
+            if (nameValid && emailValid && cpfValid && phoneValid && employeeValid) {
+                // Preparar os dados base da pessoa
+                //console.log("Entrou no if de campos validos");
+                const pessoaData = {
+                    name: nameInput.value,
+                    email: emailInput.value,
+                    cpf: cpfInput.value.replace(/\D/g, ''), // Remove formatação
+                    phone: phoneInput.value.replace(/\D/g, '') // Remove formatação
+                };
+                //console.log(pessoaData);
+
+                // Salvar a pessoa primeiro e depois salvar os diferentes papéis
+                savePerson(pessoaData);
+            }
+        });
+
+
+        // Funções para salvar os diferentes tipos de pessoa
+        function salvarFuncionario(pessoaId) {
+            return fetch('http://localhost:8080/apis/funcionario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: pessoaId,
+                    login: document.getElementById('employee-login').value,
+                    senha: document.getElementById('employee-password').value,
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar funcionário');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Funcionário salvo com sucesso:', data);
+                return data;
+            });
+        }
+
+        function salvarAdotante(pessoaId) {
+            return fetch('http://localhost:8080/apis/adotante', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: pessoaId
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar adotante');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Adotante salvo com sucesso:', data);
+                return data;
+            });
+        }
+
+        function salvarDoador(pessoaId) {
+            return fetch('http://localhost:8080/apis/doador', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                   id: pessoaId
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar doador');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Doador salvo com sucesso:', data);
+                return data;
+            });
+        }
+
+
+
+        // Função para enviar os dados para a API
+        async function savePerson(pessoaData) {
+            try {
+                // Cadastrar pessoa mantendo a estrutura requerida
+                const response = await fetch('http://localhost:8080/apis/pessoa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "pessoa": {
+                            nome: pessoaData.name,
+                            cpf: pessoaData.cpf,
+                            telefone: pessoaData.phone,
+                            email: pessoaData.email
+                        }
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+                
+                const pessoaResponseData = await response.json();
+                console.log('Resposta da API:', pessoaResponseData);
+                
+                // Tentar acessar o ID em diferentes possíveis locais na estrutura
+                let pessoaId;  
+                //console.log("Não foi possível encontrar o ID diretamente, tentando buscar por CPF...");
+                const cpf = pessoaData.cpf;
+                const pessoaPorCPF = await pesquisarCPF(cpf);
+                pessoaId = pessoaPorCPF.id;
+                
+                
+                if (!pessoaId) {
+                    throw new Error("Não foi possível obter o ID da pessoa");
+                }
+                console.log('ID da pessoa:', pessoaId);
+                
+                // Executar em paralelo todas as operações necessárias
+                const promises = [];
+                
+                if (funcionarioCheckbox.checked) {
+                    promises.push(salvarFuncionario(pessoaId));
+                }
+                
+                if (adotanteCheckbox.checked) {
+                    promises.push(salvarAdotante(pessoaId));
+                }
+                
+                if (doadorCheckbox.checked) {
+                    promises.push(salvarDoador(pessoaId));
+                }
+                // Aguardar todas as operações
+                const resultados = promises.length > 0 ? await Promise.all(promises) : [];
+                // Concluir com sucesso
+                console.log('Cadastros realizados com sucesso:', resultados);
+                // Limpar formulário
+                document.getElementById('personForm').reset();
+                employeeSection.classList.remove('active');
+                
+                // Mensagem de sucesso
+                let tiposPessoa = [];
+                if (funcionarioCheckbox.checked) tiposPessoa.push('Funcionário');
+                if (adotanteCheckbox.checked) tiposPessoa.push('Adotante');
+                if (doadorCheckbox.checked) tiposPessoa.push('Doador');
+                
+                const tiposMsg = tiposPessoa.join(', ');
+                showToast('success', 'Cadastro Realizado', `${pessoaData.name} cadastrado(a) com sucesso como ${tiposMsg}!`);
+                
+            } catch (erro) {
+                console.error('Erro ao cadastrar:', erro);
+                showToast('error', 'Erro no Cadastro', `Ocorreu um erro ao cadastrar: ${erro.message}`);
+            }
+        }
+
+        ///////////////////////  FUNÇÃO DE PESQUISAR A PESSOA  /////////////////////////////
+
+        function pesquisarCPF(cpf) {
+            return fetch(`http://localhost:8080/apis/pessoa/busca-cpf/${cpf}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erro ao buscar pessoa por CPF: ${response.status}`);
+                }
+                return response.json();
+            });
+        }
+        ///////////////////////////////////////////////////////////////////////////////////
+
+        // Cancelar o formulário
+        const cancelButton = document.getElementById('btn-cancel');
+        cancelButton.addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja cancelar? Todas as informações não salvas serão perdidas.')) {
+                const form = document.getElementById('personForm');
+                form.reset();
+
+                // Esconder a seção de funcionário
+                employeeSection.classList.remove('active');
+
+                // Remover mensagens de erro
+                document.querySelectorAll('.error-text').forEach(element => {
+                    element.style.display = 'none';
+                });
+
+                // Remover classes de erro
+                document.querySelectorAll('.form-control').forEach(element => {
+                    element.classList.remove('invalid');
+                });
+
+                // Redirecionar ou fazer outra ação
+                // window.location.href = 'listagem-pessoas.html';
+            }
+        });
+    });
+</script>
+</body>
+</html>
