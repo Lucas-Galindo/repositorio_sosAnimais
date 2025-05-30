@@ -31,15 +31,15 @@ class SideBar extends HTMLElement{
             <i class="fas fa-chevron-down dropdown-icon"></i>
         </button>
         <div class="dropdown-menu">
-            <a href="#" class="dropdown-item">
+            <a href="../animal/pageListarAnimal.html" class="dropdown-item">
                 <i class="fas fa-list"></i>
                 Listar todos
             </a>
-            <a href="#" class="dropdown-item">
+            <a href="../animal/pageCadastroAnimal.html" class="dropdown-item">
                 <i class="fas fa-plus-circle"></i>
                 Cadastrar novo
             </a>
-            <a href="#" class="dropdown-item">
+            <a href="../animal/pageBuscaAnimal.html" class="dropdown-item">
                 <i class="fas fa-search"></i>
                 Buscar animal
             </a>
@@ -55,15 +55,15 @@ class SideBar extends HTMLElement{
             <i class="fas fa-chevron-down dropdown-icon"></i>
         </button>
         <div class="dropdown-menu">
-            <a href="../pages/pessoa/pageListarPessoa.html" class="dropdown-item">
+            <a href="../pessoa/pageListarPessoa.html" class="dropdown-item">
                 <i class="fas fa-list"></i>
                 Listar todas
             </a>
-            <a href="../pages/pessoa/pageCadastroPessoa.html" class="dropdown-item">
+            <a href="../pessoa/pageCadastroPessoa.html" class="dropdown-item">
                 <i class="fas fa-plus-circle"></i>
                 Cadastrar nova
             </a>
-            <a href="../pages/pessoa/pageBuscaPessoa.html" class="dropdown-item">
+            <a href="../pessoa/pageBuscaPessoa.html" class="dropdown-item">
                 <i class="fas fa-search"></i>
                 Buscar pessoa
             </a>
@@ -103,13 +103,13 @@ class SideBar extends HTMLElement{
             <i class="fas fa-chevron-down dropdown-icon"></i>
         </button>
         <div class="dropdown-menu">
-            <a href="../pages/transfere/pageTransfere.html" class="dropdown-item">
+            <a href="../transfere/pageTransfere.html" class="dropdown-item">
                 <i class="fas fa-plus-circle"></i>
                 Cadastrar nova
             </a>
-            <a href="#" class="dropdown-item">
-                <i class="fas fa-search"></i>
-                Buscar transferência
+            <a href="../transfere/pageListarTransfere.html" class="dropdown-item">
+                <i class="fas fa-list"></i>
+                Listar todos
             </a>
         </div>
     </div>

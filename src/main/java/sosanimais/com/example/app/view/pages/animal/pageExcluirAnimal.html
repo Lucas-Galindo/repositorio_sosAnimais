@@ -535,194 +535,230 @@
         <!-- Sidebar -->
         <main-sidebar></main-sidebar>
 
-        <!-- Content -->
-        <main class="content">
-            <h1 class="page-title">
-                <i class="fas fa-search"></i>
-                Exclusão de Animais
-            </h1>
+      <main class="content">
+    <h1 class="page-title">
+        <i class="fas fa-search"></i>
+        Exclusão de Animais
+    </h1>
 
-            <!-- Search Form Container -->
-            <div class="search-container">
-                <div class="search-header">
-                    <div class="search-title">Excluir Animal</div>
-                </div>
+    <div class="search-container">
+        <div class="search-header">
+            <div class="search-title">Excluir Animal</div>
+        </div>
 
-                <div class="search-body">
-                    <!-- Search Form -->
-                    <div class="search-form">
-                        <div class="search-input-group">
-                            <input type="text" id="animalIdInput" class="search-input" placeholder="Digite o Id do Animal">
-                        </div>
-                        <button type="button" id="searchBtn" class="btn-search">
-                            <i class="fas fa-search"></i>
-                            Pesquisar
-                        </button>
-                    </div>
+        <div class="search-body">
+            <div class="search-form">
+                <div class="search-input-group">
+                    <label for="animalSearchInput" class="required">
+                        ID ou Nome do Animal
+                    </label>
+                    <input type="text" id="animalSearchInput" class="search-input" placeholder="Digite o ID ou nome do Animal">
                 </div>
+                <button type="button" id="searchBtn" class="btn-search">
+                    <i class="fas fa-search"></i>
+                    Pesquisar
+                </button>
             </div>
-
-            <!-- Results Container (initially hidden) -->
-            <div class="results-container" id="results-container" style="display: none;">
-                <div class="results-header">
-                    <div class="results-title">Resultados da Pesquisa</div>
-                    <div class="results-count" id="results-count">0 animais encontrados</div>
-                </div>
-            
-                <div class="results-body">
-                    <table class="results-table" id="results-table">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Nome</th>
-                                <th>Raça</th>
-                                <th>Status</th>
-                                <th>Idade</th>
-                                <th>Excluir?</th>
-                            </tr>
-                        </thead>
-                        <tbody id="results-tbody"></tbody>
-                    </table>
-
-                    <!-- No Results Message (shown when search returns empty) -->
-                    <div class="no-results" id="no-results" style="display: none;">
-                        <i class="fas fa-search"></i>
-                        <h3>Nenhum resultado encontrado</h3>
-                        <p>Tente outro termo de busca ou verifique os filtros aplicados.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="toast-container" id="toast-container"></div>
-        </main>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <main-footer></main-footer>
-</body>
+    <div class="results-container" id="results-container" style="display: none;">
+        <div class="results-header">
+            <div class="results-title">Resultados da Pesquisa</div>
+            <div class="results-count" id="results-count">0 animais encontrados</div>
+        </div>
+
+        <div class="results-body">
+            <table class="results-table" id="results-table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Raça</th>
+                        <th>Status</th>
+                        <th>Idade</th>
+                        <th>Excluir?</th>
+                    </tr>
+                </thead>
+                <tbody id="results-tbody"></tbody>
+            </table>
+
+            <div class="no-results" id="no-results" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>Nenhum resultado encontrado</h3>
+                <p>Tente outro termo de busca ou verifique os filtros aplicados.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+</main>
+</div>
+
+<main-footer></main-footer>
+
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const searchButton = document.getElementById('searchBtn');
-  const resultsContainer = document.getElementById('results-container');
-  const resultsTbody = document.getElementById('results-tbody');
-  const noResults = document.getElementById('no-results');
-  const animalIdInput = document.getElementById('animalIdInput');
-  const resultsCount = document.getElementById('results-count');
+document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE = 'http://localhost:8080/apis/animal';
+    // ATENÇÃO: Substitua este token pelo seu token JWT real, obtido após o login.
+    // Este token de exemplo pode estar expirado ou ser inválido.
+    const TOKEN = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VhcmlvIiwiaXNzIjoibG9jYWxob3N0OjgwODAiLCJuaXZlbCI6IjIiLCJpYXQiOjE3NDg0NDgzNzEsImV4cCI6MTc0ODQ0ODQzMX0.EU2_oowloJVUlQf7d-IZ8xfX-irrBpd6uksMQT4NutQ';
+    
+    const searchBtn = document.getElementById('searchBtn');
+    const input = document.getElementById('animalSearchInput');
+    const resultsCt = document.getElementById('results-container');
+    const resultsCount = document.getElementById('results-count');
+    const tbody = document.getElementById('results-tbody');
+    const noResults = document.getElementById('no-results');
+    const toastRoot = document.getElementById('toast-container');
 
-  // Função de exibição de Toast (mensagens)
-  function showToast(type, title, message) {
-    const toastContainer = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    let iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-
-    toast.innerHTML = `
-      <i class="fas ${iconClass} toast-icon"></i>
-      <div class="toast-content">
-        <div class="toast-title">${title}</div>
-        <div class="toast-message">${message}</div>
-      </div>
-      <button class="toast-close">&times;</button>
-    `;
-
-    toastContainer.appendChild(toast);
-    toast.querySelector('.toast-close').addEventListener('click', () => toast.remove());
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 5000);
-  }
-
-  // Função para exibir o animal encontrado
-  function renderAnimal(animal) {
-    resultsTbody.innerHTML = ''; // Limpa os resultados anteriores
-
-    if (!animal) {
-      resultsCount.innerText = '0 animais encontrados';
-      noResults.style.display = 'block';
-      resultsContainer.style.display = 'none';
-      return;
+    // Função para exibir mensagens de notificação (toasts)
+    function showToast(type, title, message) {
+        const t = document.createElement('div');
+        t.className = `toast toast-${type}`;
+        t.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close">&times;</button>
+        `;
+        toastRoot.appendChild(t);
+        t.querySelector('.toast-close').onclick = () => t.remove();
+        // Adiciona classe 'show' para iniciar a transição CSS
+        setTimeout(() => t.classList.add('show'), 10);
+        // Remove o toast após 5 segundos
+        setTimeout(() => {
+            t.classList.remove('show');
+            setTimeout(() => t.remove(), 300); // Espera a transição de saída antes de remover do DOM
+        }, 5000);
     }
 
-    noResults.style.display = 'none';
-    resultsContainer.style.display = 'block';
-    resultsCount.innerText = '1 animal encontrado';
+    // Função para buscar o animal por ID ou nome
+    async function searchAnimal() {
+        const term = input.value.trim();
+        if (!term) {
+            showToast('error', 'Erro', 'Digite um ID ou nome do animal.');
+            return;
+        }
 
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${animal.id ?? '-'}</td>
-      <td>${animal.informacao?.nome ?? '-'}</td>
-      <td>${animal.informacao?.raca ?? 'SRD'}</td>
-      <td>${animal.informacao?.status ?? '-'}</td>
-      <td>${animal.informacao?.idade ?? '-'}</td>
-      <td><button class="btn btn-search" id="deleteButton" data-id="${animal.id}">Confirmar Exclusão</button></td>
-    `;
-    resultsTbody.appendChild(row);
+        // Limpa a tabela e oculta mensagens de resultados anteriores
+        resultsCt.style.display = 'none';
+        tbody.innerHTML = '';
+        noResults.style.display = 'none';
 
-    // Adiciona o evento de exclusão ao botão
-    const deleteButton = document.getElementById('deleteButton');
-    deleteButton.addEventListener('click', () => deleteAnimal(deleteButton.getAttribute('data-id')));
-  }
+        try {
+            let animals = [];
+            let url;
 
-  // Função para realizar a busca e exibir o resultado
-  async function searchAnimal() {
-    const idAnimal = animalIdInput.value.trim();
-    if (!idAnimal) {
-      showToast('error', 'Erro', 'Por favor, insira um ID válido.');
-      return;
+            // Determina a URL da API com base se o termo é um ID (número) ou nome (texto)
+            if (/^\d+$/.test(term)) { // Regex para verificar se a string contém apenas dígitos
+                url = `${API_BASE}/id/${term}`;
+            } else {
+                url = `${API_BASE}/nome/${encodeURIComponent(term)}`; // Codifica o nome para URL
+            }
+
+            const res = await fetch(url, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+            });
+
+            if (!res.ok) {
+                // Tenta ler a mensagem de erro do corpo da resposta, se disponível
+                const errorText = await res.text();
+                throw new Error(errorText || 'Erro desconhecido ao buscar o animal.');
+            }
+
+            let data = await res.json();
+
+            // Garante que 'data' seja um array para facilitar a iteração
+            if (!Array.isArray(data)) {
+                animals = [data]; // Se for um único objeto, transforma em array de um item
+            } else {
+                animals = data;
+            }
+
+            if (animals.length === 0) {
+                showToast('error', 'Erro', 'Nenhum animal encontrado com o termo fornecido.');
+                noResults.style.display = 'block'; // Exibe a mensagem de "nenhum resultado"
+                return;
+            }
+
+            // Exibe o container de resultados e atualiza a contagem
+            resultsCt.style.display = 'block';
+            resultsCount.innerText = `${animals.length} animal(is) encontrado(s)`;
+
+            // Preenche a tabela com os animais encontrados
+            animals.forEach(animal => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${animal.id || '-'}</td>
+                    <td>${animal.informacao.nome || '-'}</td>
+                    <td>${animal.raca || 'SRD'}</td>
+                    <td>${animal.informacao.status || '-'}</td>
+                    <td>${animal.informacao.idade != null ? animal.informacao.idade + ' ano(s)' : '-'}</td>
+                    <td>
+                        <button class="btn btn-search" data-id="${animal.id}">
+                            <i class="fas fa-trash-alt"></i> Excluir
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+
+                // Adiciona um listener de evento ao botão de exclusão de cada linha
+                // Usa event.target.dataset.id para pegar o id do atributo data-id do botão
+                // ou event.target.closest('button').dataset.id caso o clique seja no ícone
+                tr.querySelector('.btn-danger')
+                    .addEventListener('click', (event) => deleteAnimal(event.target.dataset.id || event.target.closest('button').dataset.id));
+            });
+
+        } catch (err) {
+            console.error('Erro na busca de animal:', err);
+            //showToast('error', 'Erro', 'Falha na busca: ' + err.message);
+            noResults.style.display = 'block'; // Exibe a mensagem de "nenhum resultado" em caso de erro na API
+        }
     }
 
-    try {
-      const response = await fetch(`http://localhost:8080/apis/animal/id/${idAnimal}`);
-      if (!response.ok) {
-        showToast('error', 'Erro', 'Animal não encontrado.');
-        renderAnimal(null);
-        return;
-      }
+    // Função para excluir um animal
+    async function deleteAnimal(id) {
+        if (!confirm('Tem certeza que deseja excluir este animal? Esta ação é irreversível.')) {
+            return; // Usuário cancelou a exclusão
+        }
 
-      const animal = await response.json();
-      renderAnimal(animal);
-    } catch (error) {
-      showToast('error', 'Erro', `Erro ao buscar o animal: ${error.message}`);
+        try {
+            const res = await fetch(`${API_BASE}/${id}`, {
+                method: 'DELETE',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': TOKEN // Inclui o token JWT na requisição de exclusão
+                },
+            });
+
+            if (!res.ok) {
+                const txt = await res.text();
+                throw new Error(txt || res.statusText);
+            }
+
+            showToast('success', 'Sucesso', 'Animal excluído com sucesso!');
+            // Após a exclusão bem-sucedida, limpa a tabela e o campo de busca
+            resultsCt.style.display = 'none';
+            tbody.innerHTML = '';
+            input.value = ''; // Limpa o campo de busca para uma nova pesquisa
+        } catch (err) {
+            console.error('Erro na exclusão do animal:', err);
+            showToast('error', 'Erro', 'Falha na exclusão: ' + err.message);
+        }
     }
-  }
 
-  // Função para excluir o animal
-  async function deleteAnimal(idAnimal) {
-    console.log('Excluindo animal com ID:', idAnimal); // Log para depuração
-
-    const confirmDeletion = confirm('Tem certeza que deseja excluir este animal?');
-
-    if (!confirmDeletion) return;
-
-    try {
-      const response = await fetch(`http://localhost:8080/apis/animal/${idAnimal}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        showToast('error', 'Erro', `Erro ao excluir o animal: ${errorText}`);
-        return;
-      }
-
-      showToast('success', 'Sucesso', 'Animal excluído com sucesso!');
-      renderAnimal(null); // Limpa os resultados após exclusão
-    } catch (error) {
-      showToast('error', 'Erro', `Erro ao excluir o animal: ${error.message}`);
-    }
-  }
-
-  // Event listener para o botão de pesquisa
-  searchButton.addEventListener('click', searchAnimal);
-
-  // Event listener para buscar ao pressionar Enter
-  animalIdInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') searchAnimal();
-  });
+    // Event Listeners para o botão de pesquisa e o input (tecla Enter)
+    searchBtn.addEventListener('click', searchAnimal);
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Evita o comportamento padrão de submit do formulário
+            searchAnimal();
+        }
+    });
 });
 </script>
 </body>

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import sosanimais.com.example.app.controller.service.TransferenciaService;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
 import sosanimais.com.example.app.model.Transferencia;
+import sosanimais.com.example.app.model.objetosAux.FiltrosTransferencia;
 import sosanimais.com.example.app.model.util.Erro;
 
 import java.util.Date;
@@ -29,21 +30,6 @@ public class TransferenciaController {
      *
      * */
 
-
-    /*
-    Json enviado para ca ta com esses elementos
-    const transferenciaData = {
-                // id será gerado automaticamente no backend
-                data: new Date(dataInput.value).toISOString(),
-                matTransfere: parseInt(matriculaInput.value),
-                // Dados adicionais para contexto (não necessariamente enviados ao backend)
-                animalId: animalInput.value.trim(),
-                baiaDestino: selectedBaiaId,
-                baiaNome: selectedBaiaName,
-                tipoBaia: selectedBaiaType
-            };
-
-     */
 
     TransferenciaService transfereService = new TransferenciaService();
 
@@ -105,6 +91,31 @@ public class TransferenciaController {
         return ResponseEntity.badRequest().body(new Erro("Erro ao listar Transferencia"));
     }
 
+
+    @GetMapping("/{id}/detalhes")
+    public ResponseEntity<Object> getDetalhesTransferencia(@PathVariable Long id){
+        List<Transferencia> aux = transfereService.pesquisaTransfere(id);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Erro ao recuperar detalhes da transferencia"));
+
+    }
+
+    @GetMapping("/pesquisa")
+    public ResponseEntity<Object> pesquisarTransferencias(
+            @RequestParam(required = false) String dataInicial,
+            @RequestParam(required = false) String dataFinal,
+            @RequestParam(required = false) int matFunc,
+            @RequestParam(required = false) String nomeFunc,
+            @RequestParam(required = false) String categoriaBaias
+    ){
+        FiltrosTransferencia filtros = new FiltrosTransferencia(dataInicial,dataFinal,matFunc,nomeFunc,categoriaBaias);
+        Transferencia aux = transfereService.pesquisaDetalhesTransfere(filtros);
+        if(aux!=null)
+            return ResponseEntity.ok(aux);
+        return ResponseEntity.badRequest().body(new Erro("Nao foi possivel realizar a pesquisa"));
+
+    }
 
     @PutMapping
     public ResponseEntity<Object> atualizar(@RequestBody Transferencia entidade) { //correto

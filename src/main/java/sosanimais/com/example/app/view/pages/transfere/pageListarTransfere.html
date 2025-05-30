@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Listagem de Transferências</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px;
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }
+
+        /* Estilos específicos para transferências */
+        .filtros-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .filtros-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filtros-titulo {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .filtros-body {
+            padding: 1.5rem;
+        }
+
+        .filtros-linha {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grupo-filtro {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .label-filtro {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .input-filtro, .select-filtro {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .input-filtro:focus, .select-filtro:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .acoes-filtro {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+
+        .btn-pesquisar {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pesquisar:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-listar-todas {
+            background-color: var(--color-orange-burnt);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-listar-todas:hover {
+            background-color: #c0774a;
+        }
+
+        .btn-limpar-filtros {
+            background-color: #6c757d;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-limpar-filtros:hover {
+            background-color: #5a6268;
+        }
+
+        .resultados-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .resultados-container.ativo {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .resultados-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resultados-titulo {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .contador-resultados {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .resultados-body {
+            padding: 1.5rem;
+        }
+
+        .tabela-resultados {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabela-resultados th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tabela-resultados td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+            vertical-align: middle;
+        }
+
+        .tabela-resultados tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tabela-resultados tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Linha expansível */
+        .linha-transferencia {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .linha-transferencia:hover {
+            background-color: #f0f8ff;
+        }
+
+        .linha-transferencia.expandida {
+            background-color: #e6f3ff;
+        }
+
+        .detalhes-transferencia {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--color-orange-burnt);
+            display: none;
+        }
+
+        .detalhes-transferencia.ativo {
+            display: table-row;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .detalhes-conteudo {
+            padding: 1rem;
+            background-color: #f8f9fa;
+        }
+
+        .detalhes-titulo {
+            font-weight: bold;
+            color: var(--color-orange-burnt);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tabela-detalhes {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+        }
+
+        .tabela-detalhes th {
+            background-color: #e9ecef;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border: 1px solid #dee2e6;
+        }
+
+        .tabela-detalhes td {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.85rem;
+            border: 1px solid #dee2e6;
+            background-color: white;
+        }
+
+        .icone-expandir {
+            margin-left: 0.5rem;
+            color: var(--color-orange-burnt);
+            transition: transform 0.2s;
+        }
+
+        .icone-expandir.expandido {
+            transform: rotate(90deg);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .badge-comum {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-medica {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .sem-resultados {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .sem-resultados i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .sem-resultados h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Toast de Notificação */
+        .container-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.mostrar {
+            transform: translateX(0);
+        }
+
+        .icone-toast {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-sucesso .icone-toast {
+            color: #28a745;
+        }
+
+        .toast-erro .icone-toast {
+            color: #dc3545;
+        }
+
+        .toast-info .icone-toast {
+            color: #17a2b8;
+        }
+
+        .conteudo-toast {
+            flex: 1;
+        }
+
+        .titulo-toast {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .mensagem-toast {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .fechar-toast {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .acoes-filtro {
+                flex-direction: column;
+            }
+
+            .filtros-linha {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .tabela-resultados {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .acoes-filtro {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .filtros-header, .resultados-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <main-header></main-header>
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <main-sidebar></main-sidebar>
+
+        <!-- Content -->
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-exchange-alt"></i>
+                Listagem de Transferências
+            </h1>
+
+            <!-- Filtros Container -->
+            <div class="filtros-container">
+                <div class="filtros-header">
+                    <div class="filtros-titulo">Filtros de Pesquisa</div>
+                </div>
+
+                <div class="filtros-body">
+                    <!-- Linha de Filtros -->
+                    <div class="filtros-linha">
+                        <div class="grupo-filtro">
+                            <label class="label-filtro">Data Inicial:</label>
+                            <input type="date" id="filtro-data-inicial" class="input-filtro">
+                        </div>
+
+                        <div class="grupo-filtro">
+                            <label class="label-filtro">Data Final:</label>
+                            <input type="date" id="filtro-data-final" class="input-filtro">
+                        </div>
+
+                        <div class="grupo-filtro">
+                            <label class="label-filtro">Matrícula do Funcionário:</label>
+                            <input type="number" id="filtro-matricula-funcionario" class="input-filtro" placeholder="Digite a matrícula">
+                        </div>
+
+                        <div class="grupo-filtro">
+                            <label class="label-filtro">Nome do Funcionário:</label>
+                            <input type="text" id="filtro-nome-funcionario" class="input-filtro" placeholder="Digite o nome">
+                        </div>
+
+                        <div class="grupo-filtro">
+                            <label class="label-filtro">Categoria das Baias:</label>
+                            <select id="filtro-categoria-baias" class="select-filtro">
+                                <option value="">Todas as categorias</option>
+                                <option value="comum">Comum</option>
+                                <option value="medica">Médica</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Ações de Filtro -->
+                    <div class="acoes-filtro">
+                        <button type="button" id="btn-pesquisar" class="btn-pesquisar">
+                            <i class="fas fa-search"></i>
+                            Pesquisar
+                        </button>
+                        <button type="button" id="btn-listar-todas" class="btn-listar-todas">
+                            <i class="fas fa-list"></i>
+                            Listar Todas
+                        </button>
+                        <button type="button" id="btn-limpar-filtros" class="btn-limpar-filtros">
+                            <i class="fas fa-times"></i>
+                            Limpar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Container de Resultados -->
+            <div class="resultados-container" id="container-resultados">
+                <div class="resultados-header">
+                    <div class="resultados-titulo">Resultados da Pesquisa</div>
+                    <div class="contador-resultados" id="contador-resultados">0 transferências encontradas</div>
+                </div>
+
+                <div class="resultados-body">
+                    <table class="tabela-resultados" id="tabela-resultados">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Data</th>
+                                <th>Funcionário</th>
+                                <th>Matrícula</th>
+                                <th>Detalhes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-resultados">
+                            <!-- Resultados serão inseridos aqui via JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <!-- Mensagem de Sem Resultados -->
+                    <div class="sem-resultados" id="sem-resultados" style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhuma transferência encontrada</h3>
+                        <p>Tente outro termo de busca ou verifique os filtros aplicados.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- Container de Toast -->
+    <div class="container-toast" id="container-toast">
+        <!-- Toasts serão inseridos aqui via JavaScript -->
+    </div>
+    <!-- Footer -->
+    <main-footer></main-footer>
+
+    <!-- JavaScript -->
+    <script src="transferencias-lista.js"></script>
+    
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+        
+        // JavaScript para controlar os dropdowns
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Encontra o dropdown-menu associado a este botão
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                // Toggle da classe active
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                // Opcional: Fecha outros dropdowns abertos
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+
+        
+       
+});
+</script>
+
+</body>
+</html>

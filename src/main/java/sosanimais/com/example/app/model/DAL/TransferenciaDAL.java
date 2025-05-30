@@ -4,6 +4,8 @@ import org.springframework.http.ResponseEntity;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
 import sosanimais.com.example.app.model.Transferencia;
 import sosanimais.com.example.app.model.db.SingletonDB;
+import sosanimais.com.example.app.model.objetosAux.FiltrosTransferencia;
+
 import java.text.SimpleDateFormat;
 
 
@@ -185,6 +187,69 @@ public class TransferenciaDAL {
         }catch(Exception e){
             e.printStackTrace();
         }
+        return null;
+    }
+
+
+    public List<Transferencia> searchTransferencia(Long id){
+        String sql = """
+            SELECT ttb.ttb_id AS Identificador,
+                           ttb.tb_id AS Transferencia,
+                           ttb.ani_id as Animal,
+                           ttb.ttb_origem AS Origem,
+                           ttb.ttb_destino AS Destino
+                    FROM transferir_to_baia ttb
+                    LEFT JOIN animal a ON ttb.ani_id = a.ani_cod
+                    LEFT JOIN baia o ON ttb.ttb_origem = o.baia_id    -- Mesmo tabela, alias 'origem'
+                    LEFT JOIN baia d ON ttb.ttb_destino = d.baia_id -- Mesmo tabela, alias 'destino' 
+                    WHERE ttb.ttb_id = #1
+        """;
+
+        sql = sql.replace("#1",""+id);
+        return null;
+    }
+
+
+
+    /* JSON DE COMO VAI CHEGAR NO CONTROLLER PROS DETALHES
+    {
+      "transferencia": {
+        "id": 1,
+        "data": "2025-05-27T10:30:00.000Z",
+        "matFunc": 15
+      },
+      "detalhes": [
+        {
+          "ttb_id": 1,
+          "ani_id": 5,
+          "nomeAnimal": "Rex",
+          "ttb_Origem": 2,
+          "nomeOrigemBaia": "Baia Comum 02",
+          "categoriaOrigem": "comum",
+          "ttb_Destino": 8,
+          "nomeDestinoBaia": "Baia Médica 01",
+          "categoriaDestino": "medica"
+        }
+      ]
+    }
+     */
+
+    // Pesquisa por id de transferencia - acesso a associativa
+    public Transferencia searchDetailsTransfere(FiltrosTransferencia filtros) {
+
+        StringBuilder sql = new StringBuilder("SELECT DISTINCT t.* FROM transferencia t ");
+
+        if (filtros.getNomeFunc() != null) {
+            sql.append("LEFT JOIN funcionario f ON t.func_mat = f.func_matricula ");
+            sql.append("LEFT JOIN pessoa p ON f.usu_id = p.pess_id ");
+        }
+
+        if (filtros.getCategoriaBaias() != null) {
+            sql.append("LEFT JOIN transferir_to_baia ttb ON t.tb_id = ttb.tb_id ");
+            sql.append("LEFT JOIN baia b ON ttb.ttb_destino = b.baia_id OR ttb.ttb_origem = b.baia_id ");
+        }
+
+        sql.append("WHERE 1=1 ");
         return null;
     }
 
