@@ -1,4 +1,4 @@
-package sosanimais.com.example.app.controller.facade;
+package sosanimais.com.example.app.model.objetosAux;
 
 public class DefineSinal {
 
