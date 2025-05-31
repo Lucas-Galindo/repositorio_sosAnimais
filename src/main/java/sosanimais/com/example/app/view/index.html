@@ -4,11 +4,29 @@
   <meta charset="UTF-8">
   <title>Redirecionando...</title>
   <script>
-    // Redireciona automaticamente ao carregar a página
     window.onload = function () {
-      //window.location.href = "pagina-destino.html";
-      //window.location.href = "login.html";
-      window.location.href = "./pages/home.html";
+      fetch('/apis/empresa/verificar') // Endpoint para verificar se existe empresa
+        .then(response => {
+          if (response.status === 404) {
+            // Nenhuma empresa encontrada, redireciona para o cadastro de empresa
+            // O caminho deve ser relativo à localização do index.html no servidor web
+            window.location.href = "./pages/Empresa/pageCadastroEmpresa.html";
+          } else if (response.ok) {
+            // Empresa existe, ou não foi possível determinar (ex: erro diferente de 404 mas ainda OK)
+            // Prossiga para a home page
+            window.location.href = "./pages/home.html";
+          } else {
+            // Outro erro na resposta (ex: 500 Internal Server Error)
+            console.error('Erro ao verificar empresa, status:', response.status);
+            // Fallback para a home page em caso de erro não esperado
+            window.location.href = "./pages/home.html";
+          }
+        })
+        .catch(error => {
+          console.error('Falha ao tentar verificar a existência da empresa:', error);
+          // Fallback em caso de falha na requisição (problema de rede, API indisponível, etc.)
+          window.location.href = "./pages/home.html";
+        });
     };
   </script>
 </head>

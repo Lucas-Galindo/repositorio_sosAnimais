@@ -128,22 +128,25 @@ ALTER TABLE Animal ALTER COLUMN ani_cod SET DEFAULT nextval('animal_id_seq');
 
 -- FIM ANIMAL
 
--- ADOCAO_ANIMAL
 
-CREATE TABLE Adocao_Animal (
-                               adota_cod INTEGER PRIMARY KEY,
-                               funcionario_Func_Login VARCHAR(4000) NOT NULL,
-                               Animal_ani_cod INTEGER,
-                               adota_data timestamp,
-                               Func_Matricula INTEGER,
-                               CONSTRAINT Adocao_Animal_Animal_FK FOREIGN KEY (Animal_ani_cod) REFERENCES Animal(ani_cod),
-                               CONSTRAINT Adocao_Animal_funcionario_FK FOREIGN KEY (Func_Matricula) REFERENCES funcionario(Func_Matricula)
+
+-- Inicio Adocao_animal
+
+CREATE TABLE ADOCAO_ANIMAL(
+                              adota_cod INTEGER PRIMARY KEY,
+                              adota_data date,
+                              funcionario_func_cod INTEGER,
+                              animal_ani_cod INTEGER,
+                              adotante_mat INTEGER,
+                              CONSTRAINT Adocao_Animal_func_FK FOREIGN KEY (funcionario_func_cod) REFERENCES funcionario(func_matricula),
+                              CONSTRAINT Adocao_Animal_animal_FK FOREIGN KEY (animal_ani_cod) REFERENCES Animal(ani_cod),
+                              CONSTRAINT Adocao_Animal_adotante_FK FOREIGN KEY (adotante_mat) REFERENCES Adotante(adotante_matricula)
 );
-ALTER TABLE ADOCAO_ANIMAL DROP COLUMN funcionario_Func_Login;
-CREATE SEQUENCE adocao_animal_id_seq START 1;
-ALTER TABLE Adocao_Animal ALTER COLUMN adota_cod SET DEFAULT nextval('adocao_animal_id_seq');
 
--- FIM ADOCAO_ANIMAL
+CREATE SEQUENCE ADOCAO_ANIMAL_id_seq START 1;
+ALTER TABLE ADOCAO_ANIMAL ALTER COLUMN adota_cod SET DEFAULT nextval('ADOCAO_ANIMAL_id_seq');
+-- FIM adocao_animal
+
 
 
 
@@ -166,15 +169,16 @@ CREATE TABLE Transferir_to_Baia (
                                     ttb_Origem INTEGER,
                                     tb_id INTEGER,
                                     ani_id INTEGER,
-                                    baia_cod INTEGER,
+    --baia_cod INTEGER,
 
                                     CONSTRAINT Transferencia_Associativa_FK FOREIGN KEY (tb_id) REFERENCES Transferencia(tb_id),
-                                    CONSTRAINT Transferir_Baia_FK FOREIGN KEY (baia_cod) REFERENCES Baia (baia_id),
+    --CONSTRAINT Transferir_Baia_FK FOREIGN KEY (baia_cod) REFERENCES Baia (baia_id),
                                     CONSTRAINT Transferir_Animal_FK FOREIGN KEY (ani_id) REFERENCES Animal(ani_cod)
 
 );
 CREATE SEQUENCE Transferir_to_ttb_id_seq START 1;
 ALTER TABLE Transferir_to_Baia ALTER COLUMN ttb_id SET DEFAULT nextval('Transferir_to_ttb_id_seq');
+--ALTER TABLE transferir_to_baia DROP COLUMN baia_cod;
 
 
 -- FIM TRANSFERENCIAS
@@ -401,6 +405,7 @@ ALTER TABLE Animal_Insumo ALTER COLUMN ani_id SET DEFAULT nextval('Animal_Insumo
 -- FIM ANIMAL_INSUMO
 
 
+
 CREATE SEQUENCE adotante_matricula_seq START 100;
 ALTER TABLE adotante ALTER COLUMN adotante_matricula SET DEFAULT nextval('adotante_matricula_seq');
 
@@ -412,22 +417,28 @@ ALTER TABLE funcionario
     ADD COLUMN func_role TEXT DEFAULT 'USER' CHECK (func_role IN ('ADMIN', 'USER'));
 
 
+ALTER TABLE baia DROP COLUMN baia_qtde;
+ALTER TABLE baia ADD COLUMN baia_qtde NUMERIC DEFAULT 0;
+ALTER TABLE baia ADD CONSTRAINT positive_baia_qtde CHECK (baia_qtde >= 0);
+
+--UPDATE adocao_animaFl a
+--SET Func_Matricula = 15;
+
+--ALTER TABLE adocao_animal
+--ALTER COLUMN Func_Matricula TYPE INTEGER
+--USING Func_Matricula::INTEGER;
 
 
-UPDATE adocao_animal a
-SET Func_Matricula = 15;
 
-ALTER TABLE adocao_animal
-    ALTER COLUMN Func_Matricula TYPE INTEGER
-        USING Func_Matricula::INTEGER;
+--ALTER TABLE adocao_animal
+--ADD COLUMN adotante_mat INTEGER;
 
+--ALTER TABLE adocao_animal
+--ADD CONSTRAINT fk_adotante
+--FOREIGN KEY (adotante_mat)
+--REFERENCES adotante(adotante_matricula);
 
-
-ALTER TABLE adocao_animal
-    ADD COLUMN adotante_mat INTEGER;
-
-ALTER TABLE adocao_animal
-    ADD CONSTRAINT fk_adotante
-        FOREIGN KEY (adotante_mat)
-            REFERENCES adotante(adotante_matricula);
-
+--UPDATE ADOCAO_ANIMAL
+--SET ADOTANTE_MAT = AD.ADOTANTE_MATRICULA
+--FROM ADOTANTE AD
+--WHERE ADOTA_COD = AD.ADOCAO_ANIMAL_ADOTA_COD;
