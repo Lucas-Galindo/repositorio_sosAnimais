@@ -3,51 +3,55 @@ package sosanimais.com.example.app.model.entity;
 import sosanimais.com.example.app.model.Endereco;
 
 public class Empresa {
+
     private int id;
     private int capacidade;
     private String cnpj;
     private String nome;
-    private String NomeFantasia;
+    private String nomeFantasia;
     private Endereco endereco;
     private String descricao;
     private String telefone;
+    private String historia; // Mantido para o formulário, mas não persistido no DB pelo DAL atual
 
-    private String historia;
-
-    public Empresa(int id, int capacidade, String cnpj, String nome, String nomeFantasia, String descricao, String telefone) {
+    // Construtor vazio (OBRIGATÓRIO para Jackson/JPA)
+    public Empresa() {
     }
 
-
-    public Empresa(String nome, String nomeFantasia, Endereco endereco, String descricao, String telefone, int id, int capacidade, String cnpj, String historia) {
-        this.nome = nome;
-        NomeFantasia = nomeFantasia;
-        this.endereco = endereco;
-        this.descricao = descricao;
-        this.telefone = telefone;
+    // Construtor usado pelo EmpresaDAL.montarEmpresa (sem historia, pois não vem do DB)
+    public Empresa(int id, int capacidade, String cnpj, String nome, String nomeFantasia, Endereco endereco, String descricao, String telefone) {
         this.id = id;
         this.capacidade = capacidade;
         this.cnpj = cnpj;
+        this.nome = nome;
+        this.nomeFantasia = nomeFantasia;
+        this.endereco = endereco;
+        this.descricao = descricao;
+        this.telefone = telefone;
+        // this.historia = null; // Não vem do DB nesta versão do DAL
+    }
+
+    // Construtor completo que pode ser usado ao receber dados do formulário (inclui historia)
+    public Empresa(int id, int capacidade, String cnpj, String nome, String nomeFantasia, Endereco endereco, String descricao, String telefone, String historia) {
+        this.id = id;
+        this.capacidade = capacidade;
+        this.cnpj = cnpj;
+        this.nome = nome;
+        this.nomeFantasia = nomeFantasia;
+        this.endereco = endereco;
+        this.descricao = descricao;
+        this.telefone = telefone;
         this.historia = historia;
     }
 
-    public Empresa(int id, int capacidade, String cnpj, String nome, String nomeFantasia, String descricao) {
+
+    // Getters e Setters
+    public int getId() {
+        return id;
     }
 
-
-    public String getHistoria() {
-        return historia;
-    }
-
-    public void setHistoria(String historia) {
-        this.historia = historia;
-    }
-
-    public String getNomeFantasia() {
-        return NomeFantasia;
-    }
-
-    public void setNomeFantasia(String nomeFantasia) {
-        NomeFantasia = nomeFantasia;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCapacidade() {
@@ -74,16 +78,21 @@ public class Empresa {
         this.nome = nome;
     }
 
+    public String getNomeFantasia() {
+        return nomeFantasia;
+    }
+
+    public void setNomeFantasia(String nomeFantasia) {
+        this.nomeFantasia = nomeFantasia;
+    }
+
     public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String rua, String cep, int numero) {
-        this.endereco.setRua(rua);
-        this.endereco.setCep(cep);
-        this.endereco.setNumero(numero);
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
-
 
     public String getDescricao() {
         return descricao;
@@ -101,11 +110,11 @@ public class Empresa {
         this.telefone = telefone;
     }
 
-    public int getId() {
-        return id;
+    public String getHistoria() {
+        return historia;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setHistoria(String historia) {
+        this.historia = historia;
     }
 }
