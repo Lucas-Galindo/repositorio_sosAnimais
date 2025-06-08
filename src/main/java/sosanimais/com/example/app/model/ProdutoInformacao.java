@@ -2,13 +2,18 @@ package sosanimais.com.example.app.model;
 
 public class ProdutoInformacao {
     private String nome;
-    private String Descricao;
+    private String descricao;
     private double preco;
+    private String validade;
 
-    public ProdutoInformacao(String nome, String Descricao, double preco){
+    public ProdutoInformacao(String nome, String descricao, double preco, String validade) {
         this.nome = nome;
-        this.Descricao = Descricao;
+        this.descricao = descricao;
         this.preco = preco;
+        this.validade = validade;
+    }
+
+    public ProdutoInformacao() {
     }
 
     public String getNome() {
@@ -20,11 +25,11 @@ public class ProdutoInformacao {
     }
 
     public String getDescricao() {
-        return Descricao;
+        return descricao;
     }
 
     public void setDescricao(String descricao) {
-        Descricao = descricao;
+        this.descricao = descricao;
     }
 
     public double getPreco() {
@@ -33,5 +38,13 @@ public class ProdutoInformacao {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public String getValidade() {
+        return validade;
+    }
+
+    public void setValidade(String validade) {
+        this.validade = validade;
     }
 }

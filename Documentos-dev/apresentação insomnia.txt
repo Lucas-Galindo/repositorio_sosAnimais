@@ -1,0 +1,69 @@
++ CADASTRO EMPRESA +
+URL:
+http://localhost:8080/apis/empresa/cadastro
+METODO -> POST
+JSON:
+{
+    "nome": "SOS Animais Regente Feijó",
+    "nomeFantasia": "SOS Animais",
+    "cnpj": "12.345.678/0001-99",
+    "capacidade": 150,
+    "descricao": "Organização dedicada ao resgate...",
+    "telefone": "(18) 99999-9999",
+    "endereco": {
+        "rua": "Rua dos Protetores",
+        "numero": "777",
+        "cep": "19570-000",
+        "bairro": "Centro",
+        "cidade": "Regente Feijó",
+        "estado": "SP"
+    },
+    "historia": "Nossa história começou em..."
+}
+
+
+
++ SOBRE NOS +
+URL:
+http://localhost:8080/apis/empresa/verificar/1
+METODO ->GET
+SEM JSON.
+
+
++ CADASTRO DOAÇÕES +
+URL:
+http://localhost:8080/apis/doacoes
+METODO ->POST
+JSON:
+{
+    "nomeDoador": "Ana Silva",
+    "email": "ana.silva@example.com",
+    "tipo": "dinheiro",
+    "mensagem": "Contribuição para ajudar!",
+    "dataDoacao": "2025-06-01",
+    "valor": 100.50,
+    "produto": null
+}
+{
+    "nomeDoador": "Carlos Mendes",
+    "email": "carlos.mendes@example.com",
+    "tipo": "remedios",
+    "mensagem": "Alguns medicamentos importantes.",
+    "dataDoacao": "2025-06-02",
+    "valor": null,
+    "produto": {
+        "nome": "Vermífugo Canino",
+        "validade": "2026-12-31",
+        "descricao": "Caixa com 4 comprimidos"
+    }
+}
+
+
++ DESCARTAR DOAÇÃO/LISTAGEM DE DOAÇÕES ATUAIS +
+URL:
+http://localhost:8080/apis/doacoes
+METODO -> GET
+
+PARA DELETAR
+METODO ->DELETE
+http://localhost:8080/apis/doacoes/1
