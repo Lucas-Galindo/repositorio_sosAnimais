@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sosanimais.com.example.app.controller.service.CompraService;
-import sosanimais.com.example.app.model.Compra;
+import sosanimais.com.example.app.model.entity.Compra;
 import sosanimais.com.example.app.model.util.Erro;
 
 import java.sql.SQLException;
@@ -23,15 +23,12 @@ public class CompraController {
     public ResponseEntity<Object> getAllCompras(@RequestParam(required = false) String filtro) {
         List<Compra> compras = new ArrayList<>();
         try {
-            System.out.println("Filtro recebido: " + filtro);
             if (filtro != null && !filtro.isEmpty()) {
                 compras = compraService.buscarComFiltro(filtro);
             } else {
                 compras = compraService.buscarTodos();
             }
-            System.out.println("Número de compras encontradas: " + compras.size());
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar compras: " + e.getMessage());
             throw new RuntimeException(e);
         }
         if (!compras.isEmpty()) {
@@ -43,7 +40,6 @@ public class CompraController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getCompraById(@PathVariable Long id) {
-        System.out.println("Buscando compra com ID: " + id);
         Compra compra = compraService.buscarPorId(id);
         if (compra != null) {
             return ResponseEntity.ok(compra);
@@ -54,7 +50,22 @@ public class CompraController {
 
     @PostMapping("/registrar")
     public ResponseEntity<Object> addCompra(@RequestBody Compra compra) {
-        System.out.println("Registrando nova compra");
+        if (compra.getFuncCod() == null) {
+            return ResponseEntity.badRequest().body(new Erro("A matrícula do funcionário é obrigatória"));
+        }
+        if (compra.getProdutoNome() == null || compra.getProdutoNome().trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new Erro("O nome do produto é obrigatório"));
+        }
+        if (compra.getQuantidade() <= 0) {
+            return ResponseEntity.badRequest().body(new Erro("A quantidade deve ser maior que zero"));
+        }
+        if (compra.getValorUnitario() <= 0) {
+            return ResponseEntity.badRequest().body(new Erro("O valor unitário deve ser maior que zero"));
+        }
+        if (compra.getDataCompra() == null) {
+            return ResponseEntity.badRequest().body(new Erro("A data da compra é obrigatória"));
+        }
+
         Compra novaCompra = compraService.salvarCompra(compra);
         if (novaCompra != null) {
             return ResponseEntity.ok(novaCompra);
@@ -65,7 +76,6 @@ public class CompraController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateCompra(@PathVariable Long id, @RequestBody Compra compra) {
-        System.out.println("Atualizando compra com ID: " + id);
         compra.setCompraCod(id);
         Compra compraAtualizada = compraService.atualizarCompra(compra);
         if (compraAtualizada != null) {
@@ -78,36 +88,20 @@ public class CompraController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteCompra(@PathVariable Long id) {
         try {
-            System.out.println("=== INÍCIO DO PROCESSO DE EXCLUSÃO DE COMPRA ===");
-            System.out.println("ID da compra a ser excluída: " + id);
-            
             Compra compra = compraService.buscarPorId(id);
-            System.out.println("Compra encontrada: " + (compra != null));
-            
             if (compra == null) {
-                System.out.println("Compra não encontrada no banco de dados!");
-                return ResponseEntity.badRequest().body(new Erro("Compra não encontrada!"));
+                return ResponseEntity.status(404).body(new Erro("Compra não encontrada com ID: " + id));
             }
-            
-            System.out.println("Dados da compra:");
-            System.out.println("ID: " + compra.getCompraCod());
-            System.out.println("Produto: " + compra.getProdutoNome());
-            System.out.println("Funcionário: " + compra.getFuncCod());
             
             boolean status = compraService.deletarCompra(compra);
-            System.out.println("Status da exclusão: " + status);
             
             if (status) {
-                System.out.println("Compra excluída com sucesso!");
-                return ResponseEntity.ok("Compra excluída com sucesso!");
+                return ResponseEntity.ok().body("Compra excluída com sucesso!");
             } else {
-                System.out.println("Falha ao excluir compra!");
-                return ResponseEntity.badRequest().body(new Erro("Erro ao excluir a compra!"));
+                return ResponseEntity.status(409).body(new Erro("Não foi possível excluir a compra"));
             }
         } catch (Exception e) {
-            System.out.println("ERRO durante a exclusão: " + e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(new Erro("Erro ao processar a exclusão: " + e.getMessage()));
+            return ResponseEntity.status(500).body(new Erro("Erro ao processar a exclusão: " + e.getMessage()));
         }
     }
 } 

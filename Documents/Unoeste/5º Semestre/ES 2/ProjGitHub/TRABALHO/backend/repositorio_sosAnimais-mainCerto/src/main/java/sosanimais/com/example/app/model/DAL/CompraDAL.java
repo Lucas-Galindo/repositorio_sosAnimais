@@ -1,7 +1,7 @@
 package sosanimais.com.example.app.model.DAL;
 
 import org.springframework.stereotype.Repository;
-import sosanimais.com.example.app.model.Compra;
+import sosanimais.com.example.app.model.entity.Compra;
 import sosanimais.com.example.app.model.db.IDAL;
 import sosanimais.com.example.app.model.db.SingletonDB;
 
@@ -22,29 +22,20 @@ public class CompraDAL implements IDAL<Compra> {
 
     @Override
     public boolean save(Compra entidade) {
-        System.out.println("=== INÍCIO DO PROCESSO DE SALVAR COMPRA ===");
-        System.out.println("Dados recebidos:");
-        System.out.println("Produto: " + entidade.getProdutoNome());
-        System.out.println("Quantidade: " + entidade.getQuantidade());
-        System.out.println("Valor Unitário: " + entidade.getValorUnitario());
-        System.out.println("ID do funcionário: " + entidade.getFuncCod());
-        System.out.println("Data: " + entidade.getDataCompra());
+        if (entidade.getFuncCod() == null) {
+            return false;
+        }
 
-        // Buscar o último ID da tabela
-        String getLastId = "SELECT MAX(compra_cod) as ultimo_id FROM compra";
-        System.out.println("Buscando último ID...");
+        String getLastId = "SELECT MAX(comp_id) as ultimo_id FROM compra";
         ResultSet rs = SingletonDB.getConexao().consultar(getLastId);
         try {
             if (rs != null && rs.next()) {
                 Long ultimoId = rs.getLong("ultimo_id");
                 entidade.setCompraCod(ultimoId + 1);
-                System.out.println("Último ID obtido: " + ultimoId + ", próximo será: " + (ultimoId + 1));
             } else {
                 entidade.setCompraCod(1L);
-                System.out.println("Primeiro registro, ID será: 1");
             }
         } catch (SQLException e) {
-            System.out.println("ERRO ao obter último ID: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -54,7 +45,7 @@ public class CompraDAL implements IDAL<Compra> {
         String dataCompra = sdf.format(entidade.getDataCompra());
 
         String sql = """
-                    INSERT INTO compra(compra_cod, produto_nome, quantidade, valor_unitario, funcionario_func_cod, data_compra)
+                    INSERT INTO compra(comp_id, produto_prod_nome, comp_qtd, comp_valorfinal, funcionario_func_cod, comp_data)
                     VALUES (#1, '#2', #3, #4, #5, '#6')
                 """;
 
@@ -65,7 +56,6 @@ public class CompraDAL implements IDAL<Compra> {
         sql = sql.replace("#5", String.valueOf(entidade.getFuncCod()));
         sql = sql.replace("#6", dataCompra);
 
-        System.out.println("Enviando o SQL: " + sql);
         return SingletonDB.getConexao().manipular(sql);
     }
 
@@ -77,9 +67,9 @@ public class CompraDAL implements IDAL<Compra> {
 
         String sql = """
                 UPDATE compra 
-                SET produto_nome='#2', quantidade=#3, valor_unitario=#4, 
-                    funcionario_func_cod=#5, data_compra='#6'
-                WHERE compra_cod=#1
+                SET produto_prod_nome='#2', comp_qtd=#3, comp_valorfinal=#4, 
+                    funcionario_func_cod=#5, comp_data='#6'
+                WHERE comp_id=#1
                 """;
 
         sql = sql.replace("#1", String.valueOf(entidade.getCompraCod()));
@@ -89,35 +79,43 @@ public class CompraDAL implements IDAL<Compra> {
         sql = sql.replace("#5", String.valueOf(entidade.getFuncCod()));
         sql = sql.replace("#6", dataCompra);
 
-        System.out.println("Enviando o SQL de atualização: " + sql);
         return SingletonDB.getConexao().manipular(sql);
     }
 
     @Override
     public boolean delete(Compra entidade) {
-        String sql = "DELETE FROM compra WHERE compra_cod = " + entidade.getCompraCod();
-        System.out.println("Enviando o SQL de exclusão: " + sql);
-        return SingletonDB.getConexao().manipular(sql);
+        try {
+            String sqlVerifica = "SELECT * FROM compra WHERE comp_id = " + entidade.getCompraCod();
+            ResultSet rs = SingletonDB.getConexao().consultar(sqlVerifica);
+            
+            if (rs == null || !rs.next()) {
+                return false;
+            }
+
+            String sqlDelete = "DELETE FROM compra WHERE comp_id = " + entidade.getCompraCod();
+            return SingletonDB.getConexao().manipular(sqlDelete);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public Compra get(Long id) {
-        String sql = "SELECT * FROM compra WHERE compra_cod = " + id;
-        System.out.println("Buscando compra por ID: " + sql);
+        String sql = "SELECT * FROM compra WHERE comp_id = " + id;
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
         try {
             if (rs != null && rs.next()) {
                 return new Compra(
-                    rs.getLong("compra_cod"),
-                    rs.getString("produto_nome"),
-                    rs.getInt("quantidade"),
-                    rs.getDouble("valor_unitario"),
+                    rs.getLong("comp_id"),
+                    rs.getString("produto_prod_nome"),
+                    rs.getInt("comp_qtd"),
+                    rs.getDouble("comp_valorfinal"),
                     rs.getLong("funcionario_func_cod"),
-                    rs.getDate("data_compra")
+                    rs.getDate("comp_data")
                 );
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar compra: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -130,26 +128,24 @@ public class CompraDAL implements IDAL<Compra> {
         if (filtro != null && !filtro.isEmpty()) {
             sql += " WHERE " + filtro;
         }
-        sql += " ORDER BY compra_cod ASC";
+        sql += " ORDER BY comp_id ASC";
 
-        System.out.println("Buscando compras: " + sql);
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
         try {
             while (rs != null && rs.next()) {
                 Compra compra = new Compra(
-                    rs.getLong("compra_cod"),
-                    rs.getString("produto_nome"),
-                    rs.getInt("quantidade"),
-                    rs.getDouble("valor_unitario"),
+                    rs.getLong("comp_id"),
+                    rs.getString("produto_prod_nome"),
+                    rs.getInt("comp_qtd"),
+                    rs.getDouble("comp_valorfinal"),
                     rs.getLong("funcionario_func_cod"),
-                    rs.getDate("data_compra")
+                    rs.getDate("comp_data")
                 );
                 compras.add(compra);
             }
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar compras: " + e.getMessage());
             e.printStackTrace();
         }
         return compras;
     }
-} 
+}

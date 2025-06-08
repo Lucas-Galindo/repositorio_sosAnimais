@@ -21,14 +21,6 @@ public class AdocaoDAL implements IDAL<Adocao_Animal> {
 
     @Override
     public boolean save(Adocao_Animal entidade) {
-        System.out.println("=== INÍCIO DO PROCESSO DE SALVAR ADOÇÃO ===");
-        System.out.println("Dados recebidos:");
-        System.out.println("ID da adoção: " + entidade.getAdoCod());
-        System.out.println("Data: " + entidade.getAdoData());
-        System.out.println("ID do funcionário: " + entidade.getFuncCod());
-        System.out.println("ID do animal: " + entidade.getAniCod());
-        System.out.println("Matrícula do adotante: " + entidade.getAdoMat());
-
         // Buscar o último ID da tabela
         String getLastId = "SELECT MAX(adota_cod) as ultimo_id FROM adocao_animal";
         System.out.println("Buscando último ID...");
@@ -56,10 +48,6 @@ public class AdocaoDAL implements IDAL<Adocao_Animal> {
                     INSERT INTO adocao_animal(adota_cod, adota_data, funcionario_func_cod, animal_ani_cod, adotante_mat)
                     VALUES (#1, '#2', #3, #4, #5)
                 """;
-        System.out.println("DataSaida: " + dataAdocao);
-        System.out.println("FuncCod: " + entidade.getFuncCod());
-        System.out.println("IdAni: " + entidade.getAniCod());
-        System.out.println("MatAdotante: " + entidade.getAdoMat());
 
         sql = sql.replace("#1", String.valueOf(entidade.getAdoCod()));
         sql = sql.replace("#2", dataAdocao);
@@ -126,79 +114,108 @@ public class AdocaoDAL implements IDAL<Adocao_Animal> {
 
     @Override
     public boolean update(Adocao_Animal entidade) {
-        System.out.println("=== INÍCIO DO PROCESSO DE ATUALIZAÇÃO DE ADOÇÃO ===");
-        System.out.println("Dados recebidos para atualização:");
-        System.out.println("ID da adoção: " + entidade.getAdoCod());
-        System.out.println("Novo animal: " + entidade.getAniCod());
-        System.out.println("Novo adotante: " + entidade.getAdoMat());
-        System.out.println("Nova data: " + entidade.getAdoData());
-
         try {
-            // Primeiro, buscar os dados atuais da adoção
+            // Buscar dados atuais da adoção
             String sqlBusca = "SELECT animal_ani_cod, adotante_mat FROM adocao_animal WHERE adota_cod = " + entidade.getAdoCod();
             ResultSet rs = SingletonDB.getConexao().consultar(sqlBusca);
             
+            Long animalAntigoId = null;
+            int adotanteAntigoMat = 0;
             if (rs != null && rs.next()) {
-                Long animalAntigo = rs.getLong("animal_ani_cod");
-                int adotanteAntigo = rs.getInt("adotante_mat");
-
-                // Se o animal mudou, atualizar os status
-                if (!animalAntigo.equals(entidade.getAniCod())) {
-                    // Liberar o animal antigo (status = 'D')
-                    String sqlAnimalAntigo = "UPDATE animal SET ani_status = 'D' WHERE ani_cod = " + animalAntigo;
-                    if (!SingletonDB.getConexao().manipular(sqlAnimalAntigo)) {
-                        System.out.println("Erro ao atualizar status do animal antigo");
-                        return false;
-                    }
-
-                    // Marcar o novo animal como adotado (status = 'A')
-                    String sqlAnimalNovo = "UPDATE animal SET ani_status = 'A' WHERE ani_cod = " + entidade.getAniCod();
-                    if (!SingletonDB.getConexao().manipular(sqlAnimalNovo)) {
-                        System.out.println("Erro ao atualizar status do novo animal");
-                        return false;
-                    }
-                }
-
-                // Se o adotante mudou, atualizar as referências
-                if (adotanteAntigo != entidade.getAdoMat()) {
-                    // Remover referência do adotante antigo
-                    String sqlAdotanteAntigo = "UPDATE adotante SET adocao_animal_adota_cod = NULL WHERE adotante_matricula = " + adotanteAntigo;
-                    if (!SingletonDB.getConexao().manipular(sqlAdotanteAntigo)) {
-                        System.out.println("Erro ao atualizar referência do adotante antigo");
-                        return false;
-                    }
-
-                    // Atualizar referência do novo adotante
-                    String sqlAdotanteNovo = "UPDATE adotante SET adocao_animal_adota_cod = " + entidade.getAdoCod() + 
-                                           " WHERE adotante_matricula = " + entidade.getAdoMat();
-                    if (!SingletonDB.getConexao().manipular(sqlAdotanteNovo)) {
-                        System.out.println("Erro ao atualizar referência do novo adotante");
-                        return false;
-                    }
-                }
-
-                // Por fim, atualizar a adoção
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                sdf.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-                String dataAdocao = sdf.format(entidade.getAdoData());
-
-                String sql = """
-                        UPDATE adocao_animal 
-                        SET adota_data='#2', funcionario_func_cod=#3, animal_ani_cod=#4, adotante_mat=#5
-                        WHERE adota_cod=#1
-                        """;
-                sql = sql.replace("#1", "" + entidade.getAdoCod());
-                sql = sql.replace("#2", dataAdocao);
-                sql = sql.replace("#3", String.valueOf(entidade.getFuncCod()));
-                sql = sql.replace("#4", String.valueOf(entidade.getAniCod()));
-                sql = sql.replace("#5", String.valueOf(entidade.getAdoMat()));
-
-                System.out.println("Enviando o SQL de atualização da adoção: " + sql);
-                return SingletonDB.getConexao().manipular(sql);
+                animalAntigoId = rs.getLong("animal_ani_cod");
+                adotanteAntigoMat = rs.getInt("adotante_mat");
             } else {
                 System.out.println("Adoção não encontrada para atualização");
                 return false;
             }
+
+            // Atualizar status dos animais se necessário
+            if (!animalAntigoId.equals(entidade.getAniCod())) {
+                String sqlVerificaAnimal = "SELECT ani_status FROM animal WHERE ani_cod = " + entidade.getAniCod();
+                ResultSet rsAnimal = SingletonDB.getConexao().consultar(sqlVerificaAnimal);
+                
+                if (rsAnimal != null && rsAnimal.next()) {
+                    String statusNovoAnimal = rsAnimal.getString("ani_status");
+                    if (!"D".equals(statusNovoAnimal)) {
+                        System.out.println("O novo animal não está disponível para adoção");
+                        return false;
+                    }
+                } else {
+                    System.out.println("Novo animal não encontrado");
+                    return false;
+                }
+
+                String sqlAnimalAntigo = "UPDATE animal SET ani_status = 'D' WHERE ani_cod = " + animalAntigoId;
+                if (!SingletonDB.getConexao().manipular(sqlAnimalAntigo)) {
+                    System.out.println("Erro ao atualizar status do animal antigo");
+                    return false;
+                }
+
+                String sqlAnimalNovo = "UPDATE animal SET ani_status = 'A' WHERE ani_cod = " + entidade.getAniCod();
+                if (!SingletonDB.getConexao().manipular(sqlAnimalNovo)) {
+                    String sqlReverteAntigo = "UPDATE animal SET ani_status = 'A' WHERE ani_cod = " + animalAntigoId;
+                    SingletonDB.getConexao().manipular(sqlReverteAntigo);
+                    System.out.println("Erro ao atualizar status do novo animal");
+                    return false;
+                }
+            }
+
+            // Formatar data e atualizar adoção
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+            String dataAdocao = sdf.format(entidade.getAdoData());
+
+            String sqlUpdateAdocao = "UPDATE adocao_animal SET adota_data = '" + dataAdocao + 
+                                   "', funcionario_func_cod = " + entidade.getFuncCod() + 
+                                   ", animal_ani_cod = " + entidade.getAniCod() + 
+                                   ", adotante_mat = " + entidade.getAdoMat() + 
+                                   " WHERE adota_cod = " + entidade.getAdoCod();
+
+            if (!SingletonDB.getConexao().manipular(sqlUpdateAdocao)) {
+                if (!animalAntigoId.equals(entidade.getAniCod())) {
+                    String sqlReverteAnimais = "UPDATE animal SET ani_status = 'A' WHERE ani_cod = " + animalAntigoId + ";" +
+                                             "UPDATE animal SET ani_status = 'D' WHERE ani_cod = " + entidade.getAniCod();
+                    SingletonDB.getConexao().manipular(sqlReverteAnimais);
+                }
+                System.out.println("Erro ao atualizar adoção");
+                return false;
+            }
+
+            // Atualizar referências dos adotantes
+            if (adotanteAntigoMat != entidade.getAdoMat()) {
+                String sqlAdotanteAntigo = "UPDATE adotante SET adocao_animal_adota_cod = NULL WHERE adotante_matricula = " + adotanteAntigoMat;
+                SingletonDB.getConexao().manipular(sqlAdotanteAntigo);
+            }
+
+            String sqlAdotanteNovo = "UPDATE adotante SET adocao_animal_adota_cod = " + entidade.getAdoCod() + 
+                                   " WHERE adotante_matricula = " + entidade.getAdoMat();
+            if (!SingletonDB.getConexao().manipular(sqlAdotanteNovo)) {
+                if (!animalAntigoId.equals(entidade.getAniCod())) {
+                    String sqlReverteAnimais = "UPDATE animal SET ani_status = 'A' WHERE ani_cod = " + animalAntigoId + ";" +
+                                             "UPDATE animal SET ani_status = 'D' WHERE ani_cod = " + entidade.getAniCod();
+                    SingletonDB.getConexao().manipular(sqlReverteAnimais);
+                }
+                
+                String sqlReverteAdocao = "UPDATE adocao_animal SET " +
+                                        "adota_data = '" + dataAdocao + "', " +
+                                        "funcionario_func_cod = " + entidade.getFuncCod() + ", " +
+                                        "animal_ani_cod = " + animalAntigoId + ", " +
+                                        "adotante_mat = " + adotanteAntigoMat + " " +
+                                        "WHERE adota_cod = " + entidade.getAdoCod();
+                SingletonDB.getConexao().manipular(sqlReverteAdocao);
+                
+                if (adotanteAntigoMat != entidade.getAdoMat()) {
+                    String sqlReverteAdotanteAntigo = "UPDATE adotante SET adocao_animal_adota_cod = " + entidade.getAdoCod() + 
+                                                     " WHERE adotante_matricula = " + adotanteAntigoMat;
+                    SingletonDB.getConexao().manipular(sqlReverteAdotanteAntigo);
+                }
+                
+                System.out.println("Erro ao atualizar referência do adotante");
+                return false;
+            }
+
+            return true;
+
         } catch (SQLException e) {
             System.out.println("Erro durante a atualização: " + e.getMessage());
             e.printStackTrace();
@@ -236,14 +253,11 @@ public class AdocaoDAL implements IDAL<Adocao_Animal> {
     public Adocao_Animal get(Long id) {
         Adocao_Animal adocao = null;
         String sql = "SELECT * FROM adocao_animal WHERE adota_cod=" + id;
-        System.out.println("[DEBUG] SQL: " + sql);
         ResultSet rs = SingletonDB.getConexao().consultar(sql);
         try {
             if (rs!=null && rs.next()) {
                 Timestamp timestamp = rs.getTimestamp("adota_data");
                 Date dataConvertida = new Date(timestamp.getTime());
-                System.out.println("[DEBUG] Timestamp do banco: " + timestamp);
-                System.out.println("[DEBUG] Data convertida: " + dataConvertida);
                 
                 adocao = new Adocao_Animal(
                     rs.getLong("adota_cod"),

@@ -91,7 +91,7 @@
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    window.location.href = '../pageTelaLogin.html';
+                    window.location.href = '/frontend/frontend-sosanimais/pages/pageTelaLogin.html';
                     return;
                 }
 
@@ -107,12 +107,12 @@
                 }
 
                 localStorage.removeItem('token');
-                window.location.href = '../pageTelaLogin.html';
+                window.location.href = '/frontend/frontend-sosanimais/pages/pageTelaLogin.html';
             } catch (error) {
                 console.error('Erro durante o logout:', error);
                 // Mesmo com erro, vamos fazer logout local
                 localStorage.removeItem('token');
-                window.location.href = '../pageTelaLogin.html';
+                window.location.href = '/frontend/frontend-sosanimais/pages/pageTelaLogin.html';
             }
         });
     });

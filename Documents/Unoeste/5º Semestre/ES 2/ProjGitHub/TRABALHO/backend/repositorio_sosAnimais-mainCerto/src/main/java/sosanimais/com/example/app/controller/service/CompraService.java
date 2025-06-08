@@ -2,7 +2,7 @@ package sosanimais.com.example.app.controller.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sosanimais.com.example.app.model.Compra;
+import sosanimais.com.example.app.model.entity.Compra;
 import sosanimais.com.example.app.model.DAL.CompraDAL;
 
 import java.sql.SQLException;
@@ -15,6 +15,18 @@ public class CompraService {
 
     public Compra salvarCompra(Compra compra) {
         System.out.println("Iniciando salvamento de compra no service");
+        System.out.println("Dados da compra:");
+        System.out.println("Produto: " + compra.getProdutoNome());
+        System.out.println("Quantidade: " + compra.getQuantidade());
+        System.out.println("Valor: " + compra.getValorUnitario());
+        System.out.println("Funcionário (mat): " + compra.getFuncCod());
+        System.out.println("Data: " + compra.getDataCompra());
+
+        if (compra.getFuncCod() == null) {
+            System.out.println("ERRO: Matrícula do funcionário não pode ser nula");
+            return null;
+        }
+
         boolean save = compraDAL.save(compra);
         if (save) {
             System.out.println("Compra salva com sucesso");

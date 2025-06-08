@@ -664,12 +664,40 @@
             // Função para carregar animais
             async function carregarAnimais() {
                 try {
+                    console.log("Iniciando carregamento de animais...");
+                    
+                    // Primeiro, buscar o animal atual da adoção
+                    const adocaoId = new URLSearchParams(window.location.search).get('id');
+                    let animalAtualId = null;
+                    let animalAtualInfo = null;
+
+                    if (adocaoId) {
+                        console.log("Buscando informações da adoção atual:", adocaoId);
+                        const adocaoResponse = await fetchWithAuth(`http://localhost:8080/apis/adocao/${adocaoId}`);
+                        if (adocaoResponse.ok) {
+                            const adocaoAtual = await adocaoResponse.json();
+                            animalAtualId = adocaoAtual.aniCod;
+                            console.log("Animal atual da adoção:", animalAtualId);
+
+                            // Buscar informações detalhadas do animal atual
+                            const animalAtualResponse = await fetchWithAuth(`http://localhost:8080/apis/animal/${animalAtualId}`);
+                            if (animalAtualResponse.ok) {
+                                animalAtualInfo = await animalAtualResponse.json();
+                                console.log("Informações do animal atual:", animalAtualInfo);
+                            }
+                        }
+                    }
+
+                    // Buscar todos os animais
+                    console.log("Buscando lista de todos os animais...");
                     const response = await fetchWithAuth('http://localhost:8080/apis/animal');
                     if (!response.ok) {
                         throw new Error('Erro ao carregar animais');
                     }
 
                     const animais = await response.json();
+                    console.log("Animais recebidos:", animais);
+                    
                     selectAnimais.innerHTML = '<option value="">Selecione um animal</option>';
                     
                     if (!animais || animais.length === 0) {
@@ -677,20 +705,69 @@
                         return;
                     }
 
-                    animais.forEach(animal => {
-                        if (animal && animal.id) {
+                    // Primeiro adicionar o animal atual, se existir
+                    if (animalAtualInfo) {
+                        console.log("Adicionando animal atual ao select:", animalAtualInfo);
+                        const option = document.createElement('option');
+                        option.value = animalAtualInfo.id;
+                        const nome = animalAtualInfo.informacao?.nome || 'Nome não informado';
+                        const raca = animalAtualInfo.informacao?.raca || 'Raça não informada';
+                        option.textContent = `${nome} - ${raca} (Animal atual da adoção)`;
+                        option.style.backgroundColor = '#e8f5e9';
+                        selectAnimais.appendChild(option);
+
+                        const separator = document.createElement('option');
+                        separator.disabled = true;
+                        separator.textContent = '──────────────';
+                        selectAnimais.appendChild(separator);
+                    }
+
+                    // Depois adicionar os animais disponíveis
+                    console.log("Filtrando animais disponíveis...");
+                    const animaisDisponiveis = animais.filter(animal => {
+                        const isDisponivel = animal && 
+                                          animal.id && 
+                                          animal.informacao && 
+                                          animal.informacao.status === 'D' && 
+                                          animal.id !== animalAtualId;
+                        console.log(`Animal ${animal.id}: status = ${animal.informacao?.status}, isDisponivel = ${isDisponivel}`);
+                        return isDisponivel;
+                    });
+
+                    console.log("Animais disponíveis encontrados:", animaisDisponiveis);
+
+                    if (animaisDisponiveis.length === 0) {
+                        const option = document.createElement('option');
+                        option.disabled = true;
+                        option.textContent = 'Nenhum outro animal disponível para adoção';
+                        selectAnimais.appendChild(option);
+                    } else {
+                        const headerOption = document.createElement('option');
+                        headerOption.disabled = true;
+                        headerOption.textContent = `Animais Disponíveis para Adoção (${animaisDisponiveis.length}):`;
+                        selectAnimais.appendChild(headerOption);
+
+                        animaisDisponiveis.forEach(animal => {
+                            console.log("Adicionando animal disponível:", animal);
                             const option = document.createElement('option');
                             option.value = animal.id;
                             const nome = animal.informacao?.nome || 'Nome não informado';
                             const raca = animal.informacao?.raca || 'Raça não informada';
-                            option.textContent = `${nome} - ${raca} (ID: ${animal.id})`;
+                            const especie = animal.informacao?.especie || 'Espécie não informada';
+                            option.textContent = `${nome} - ${raca} (Status: ${animal.informacao.status})`;
                             selectAnimais.appendChild(option);
-                        }
-                    });
+                        });
+                    }
+
+                    // Se tiver animal atual, selecionar ele por padrão
+                    if (animalAtualId) {
+                        selectAnimais.value = animalAtualId;
+                    }
+
                 } catch (error) {
                     console.error('Erro ao carregar animais:', error);
                     showToast('error', 'Erro', 'Erro ao carregar lista de animais');
-                    throw error; // Propaga o erro para ser tratado no loadAdoptionData
+                    throw error;
                 }
             }
 
@@ -789,26 +866,53 @@
                         throw new Error('ID do funcionário não encontrado');
                     }
 
+                    // Validar os IDs antes de enviar
+                    const animalId = Number(selectAnimais.value);
+                    const adotanteId = Number(selectAdotantes.value);
+                    const funcionarioId = Number(funcionarioIdMatch[1]);
+                    const adocaoId = Number(adocaoIdInput.value);
+
+                    if (isNaN(animalId) || isNaN(adotanteId) || isNaN(funcionarioId) || isNaN(adocaoId)) {
+                        throw new Error('IDs inválidos. Verifique os dados.');
+                    }
+
+                    // Validar a data
+                    const dataAdocao = new Date(dataAdocaoInput.value);
+                    if (isNaN(dataAdocao.getTime())) {
+                        throw new Error('Data inválida');
+                    }
+
+                    // Preparar os dados da adoção
                     const adocaoData = {
-                        adoCod: Number(adocaoIdInput.value),
-                        aniCod: Number(selectAnimais.value),
-                        adoMat: Number(selectAdotantes.value),
-                        adoData: dataAdocaoInput.value,
-                        funcCod: Number(funcionarioIdMatch[1])
+                        adoCod: adocaoId,
+                        aniCod: animalId,
+                        adoMat: adotanteId,
+                        funcCod: funcionarioId,
+                        adoData: dataAdocaoInput.value // Enviar a data no formato YYYY-MM-DD
                     };
 
                     console.log('Dados a serem enviados:', adocaoData);
 
-                    const response = await fetchWithAuth(`http://localhost:8080/apis/adocao/${adocaoIdInput.value}`, {
+                    // Atualizar a adoção
+                    const response = await fetchWithAuth(`http://localhost:8080/apis/adocao/${adocaoId}`, {
                         method: 'PUT',
                         body: JSON.stringify(adocaoData)
                     });
 
                     if (!response.ok) {
                         const errorData = await response.text();
-                        console.error('Erro na resposta:', errorData);
-                        throw new Error(errorData || 'Erro ao atualizar adoção');
+                        console.error('Resposta de erro:', errorData);
+                        
+                        try {
+                            const jsonError = JSON.parse(errorData);
+                            throw new Error(jsonError.mensagem || 'Erro ao atualizar adoção');
+                        } catch (e) {
+                            throw new Error(errorData || 'Erro ao atualizar adoção');
+                        }
                     }
+
+                    const responseData = await response.json();
+                    console.log('Resposta do servidor:', responseData);
 
                     showToast('success', 'Sucesso', 'Adoção atualizada com sucesso');
                     setTimeout(() => {
@@ -817,7 +921,7 @@
 
                 } catch (error) {
                     console.error('Erro ao salvar:', error);
-                    showToast('error', 'Erro', error.message || 'Erro ao atualizar adoção');
+                    showToast('error', 'Erro', error.message || 'Erro ao atualizar adoção. Por favor, tente novamente.');
                 }
             }
 

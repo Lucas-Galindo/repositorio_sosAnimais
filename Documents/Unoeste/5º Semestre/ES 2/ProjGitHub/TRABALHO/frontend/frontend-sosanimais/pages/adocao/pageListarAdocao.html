@@ -432,14 +432,56 @@
                     tableCount.textContent = `${adocoes.length} adoção(ões) encontrada(s)`;
 
                     tableBody.innerHTML = '';
-                    adocoes.forEach(adocao => {
+                    
+                    for (const adocao of adocoes) {
+                        try {
+                            // Buscar detalhes do animal
+                            const animalResponse = await fetch(`http://localhost:8080/apis/animal/${adocao.aniCod}`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const animal = animalResponse.ok ? await animalResponse.json() : { informacao: { nome: 'Nome não encontrado' } };
+
+                            // Buscar detalhes do adotante
+                            const adotanteResponse = await fetch(`http://localhost:8080/apis/adotante/${adocao.adoMat}`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const adotante = adotanteResponse.ok ? await adotanteResponse.json() : { pessoa: { nome: 'Nome não encontrado' } };
+
+                            // Buscar detalhes do funcionário
+                            const funcionarioResponse = await fetch('http://localhost:8080/apis/funcionario/lista', {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            const funcionarios = await funcionarioResponse.json();
+                            const funcionario = funcionarios.find(f => f.id === adocao.funcCod);
+                            const funcionarioNome = funcionario?.pessoa?.nome || funcionario?.login || 'Nome não encontrado';
+
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${adocao.adoCod}</td>
+                                <td>${formatDate(adocao.adoData)}</td>
+                                <td>${animal.informacao?.nome || 'N/A'} (ID: ${adocao.aniCod})</td>
+                                <td>${adotante.pessoa?.nome || 'N/A'} (ID: ${adocao.adoMat})</td>
+                                <td>${funcionarioNome} (ID: ${adocao.funcCod})</td>
+                                <td>
+                                    <button class="btn-action" onclick="editAdoption(${adocao.adoCod})" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn-action delete-btn" onclick="deleteAdoption(${adocao.adoCod})" title="Excluir">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            `;
+                            tableBody.appendChild(row);
+                        } catch (error) {
+                            console.error('Erro ao buscar detalhes da adoção:', error);
+                            // Em caso de erro, mostra apenas os IDs
                         const row = document.createElement('tr');
                         row.innerHTML = `
                             <td>${adocao.adoCod}</td>
                             <td>${formatDate(adocao.adoData)}</td>
-                            <td>${adocao.aniCod}</td>
-                            <td>${adocao.adoMat}</td>
-                            <td>${adocao.funcCod}</td>
+                                <td>ID: ${adocao.aniCod}</td>
+                                <td>ID: ${adocao.adoMat}</td>
+                                <td>ID: ${adocao.funcCod}</td>
                             <td>
                                 <button class="btn-action" onclick="editAdoption(${adocao.adoCod})" title="Editar">
                                     <i class="fas fa-edit"></i>
@@ -450,7 +492,8 @@
                             </td>
                         `;
                         tableBody.appendChild(row);
-                    });
+                        }
+                    }
 
                 } catch (error) {
                     console.error('Erro:', error);

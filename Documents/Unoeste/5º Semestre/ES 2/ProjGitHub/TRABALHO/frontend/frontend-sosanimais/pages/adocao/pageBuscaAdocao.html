@@ -550,6 +550,19 @@
             background-color: rgba(220, 53, 69, 0.1);
             color: #dc3545;
         }
+
+        .feedback-text {
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .feedback-text.error {
+            color: #dc3545;
+        }
+
+        .feedback-text.success {
+            color: #28a745;
+        }
     </style>
 </head>
 
@@ -570,22 +583,19 @@
                 <div class="search-body">
                     <form id="searchForm" class="search-form-grid">
                         <div class="search-input-group">
-                            <label for="selectAnimal">Animal</label>
-                            <select id="selectAnimal" class="search-input">
-                                <option value="">Selecione um animal</option>
-                            </select>
+                            <label for="selectAnimal">Animal (ID)</label>
+                            <input type="text" id="selectAnimal" class="search-input" placeholder="Digite o ID do animal">
+                            <div id="animalFeedback" class="feedback-text"></div>
                         </div>
                         <div class="search-input-group">
-                            <label for="selectAdotante">Adotante</label>
-                            <select id="selectAdotante" class="search-input">
-                                <option value="">Selecione um adotante</option>
-                            </select>
+                            <label for="selectAdotante">Adotante (Matrícula)</label>
+                            <input type="text" id="selectAdotante" class="search-input" placeholder="Digite a matrícula do adotante">
+                            <div id="adotanteFeedback" class="feedback-text"></div>
                         </div>
                         <div class="search-input-group">
-                            <label for="selectFuncionario">Funcionário</label>
-                            <select id="selectFuncionario" class="search-input">
-                                <option value="">Selecione um funcionário</option>
-                            </select>
+                            <label for="selectFuncionario">Funcionário (ID)</label>
+                            <input type="text" id="selectFuncionario" class="search-input" placeholder="Digite o ID do funcionário">
+                            <div id="funcionarioFeedback" class="feedback-text"></div>
                         </div>
                         <div class="search-input-group">
                             <label for="search-data-adocao">Data da Adoção</label>
@@ -718,36 +728,120 @@
                 return response;
             }
 
-            // Função para buscar adoções
-            async function searchAdoptions() {
+            // Funções de verificação
+            async function verificarAnimal(id) {
                 try {
-                    console.log('Iniciando busca de adoções...');
-                    // Pega os valores dos filtros
-                    const animal = selectAnimal.value;
-                    const adotante = selectAdotante.value;
-                    const funcionario = selectFuncionario.value;
-                    const data = dataAdocaoInput.value;
-
-                    console.log('Filtros selecionados:', {
-                        animal,
-                        adotante,
-                        funcionario,
-                        data
-                    });
-
-                    // Conta quantos filtros estão preenchidos
-                    let filtrosPreenchidos = 0;
-                    if (animal) filtrosPreenchidos++;
-                    if (adotante) filtrosPreenchidos++;
-                    if (funcionario) filtrosPreenchidos++;
-                    if (data) filtrosPreenchidos++;
-
-                    if (filtrosPreenchidos === 0) {
-                        showToast('warning', 'Atenção', 'Preencha pelo menos um filtro para pesquisar.');
+                    if (!id) {
+                        document.getElementById('animalFeedback').textContent = '';
                         return;
                     }
 
-                    // Monta o filtro SQL
+                    const response = await fetchWithAuth(`http://localhost:8080/apis/animal/${id}`);
+                    if (!response.ok) {
+                        document.getElementById('animalFeedback').className = 'feedback-text error';
+                        document.getElementById('animalFeedback').textContent = 'Animal não encontrado';
+                        return;
+                    }
+
+                    const animal = await response.json();
+                    document.getElementById('animalFeedback').className = 'feedback-text success';
+                    document.getElementById('animalFeedback').textContent = `Animal: ${animal.informacao.nome || 'N/A'}`;
+                } catch (error) {
+                    document.getElementById('animalFeedback').className = 'feedback-text error';
+                    document.getElementById('animalFeedback').textContent = 'Erro ao verificar animal';
+                }
+            }
+
+            async function verificarAdotante(matricula) {
+                try {
+                    if (!matricula) {
+                        document.getElementById('adotanteFeedback').textContent = '';
+                        return;
+                    }
+
+                    const response = await fetchWithAuth(`http://localhost:8080/apis/adotante/${matricula}`);
+                    if (!response.ok) {
+                        document.getElementById('adotanteFeedback').className = 'feedback-text error';
+                        document.getElementById('adotanteFeedback').textContent = 'Adotante não encontrado';
+                        return;
+                    }
+
+                    const adotante = await response.json();
+                    document.getElementById('adotanteFeedback').className = 'feedback-text success';
+                    document.getElementById('adotanteFeedback').textContent = `Adotante: ${adotante.pessoa.nome || 'N/A'}`;
+                } catch (error) {
+                    document.getElementById('adotanteFeedback').className = 'feedback-text error';
+                    document.getElementById('adotanteFeedback').textContent = 'Erro ao verificar adotante';
+                }
+            }
+
+            async function verificarFuncionario(id) {
+                try {
+                    if (!id) {
+                        document.getElementById('funcionarioFeedback').textContent = '';
+                        return;
+                    }
+
+                    const response = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                    if (!response.ok) {
+                        document.getElementById('funcionarioFeedback').className = 'feedback-text error';
+                        document.getElementById('funcionarioFeedback').textContent = 'Erro ao verificar funcionário';
+                        return;
+                    }
+
+                    const funcionarios = await response.json();
+                    const funcionario = funcionarios.find(f => f.id === parseInt(id));
+                    
+                    if (!funcionario) {
+                        document.getElementById('funcionarioFeedback').className = 'feedback-text error';
+                        document.getElementById('funcionarioFeedback').textContent = 'Funcionário não encontrado';
+                        return;
+                    }
+
+                    document.getElementById('funcionarioFeedback').className = 'feedback-text success';
+                    document.getElementById('funcionarioFeedback').textContent = `Funcionário: ${funcionario.pessoa?.nome || funcionario.login || 'N/A'}`;
+                } catch (error) {
+                    document.getElementById('funcionarioFeedback').className = 'feedback-text error';
+                    document.getElementById('funcionarioFeedback').textContent = 'Erro ao verificar funcionário';
+                }
+            }
+
+            // Event listeners para verificação em tempo real
+            document.getElementById('selectAnimal').addEventListener('input', function(e) {
+                const id = e.target.value.trim();
+                if (id) {
+                    verificarAnimal(id);
+                } else {
+                    document.getElementById('animalFeedback').textContent = '';
+                }
+            });
+
+            document.getElementById('selectAdotante').addEventListener('input', function(e) {
+                const matricula = e.target.value.trim();
+                if (matricula) {
+                    verificarAdotante(matricula);
+                } else {
+                    document.getElementById('adotanteFeedback').textContent = '';
+                }
+            });
+
+            document.getElementById('selectFuncionario').addEventListener('input', function(e) {
+                const id = e.target.value.trim();
+                if (id) {
+                    verificarFuncionario(id);
+                } else {
+                    document.getElementById('funcionarioFeedback').textContent = '';
+                }
+            });
+
+            // Função para buscar adoções
+            async function searchAdoptions() {
+                try {
+                    const animal = document.getElementById('selectAnimal').value.trim();
+                    const adotante = document.getElementById('selectAdotante').value.trim();
+                    const funcionario = document.getElementById('selectFuncionario').value.trim();
+                    const data = document.getElementById('search-data-adocao').value;
+
                     let filtro = '';
                     if (animal) filtro += `animal_ani_cod=${animal}`;
                     if (adotante) {
@@ -761,42 +855,28 @@
                     if (data) {
                         if (filtro) filtro += ' AND ';
                         const dataObj = new Date(data);
-                        dataObj.setDate(dataObj.getDate() + 1); // Ajusta o fuso horário adicionando um dia
+                        dataObj.setDate(dataObj.getDate() + 1);
                         const dataFormatada = dataObj.toISOString().split('T')[0];
-                        console.log('Data selecionada:', data);
-                        console.log('Data formatada para busca:', dataFormatada);
                         filtro += `adota_data='${dataFormatada}'`;
                     }
 
-                    console.log('Filtro SQL montado:', filtro);
-
-                    // Monta a URL de busca com o filtro
-                    let url = `http://localhost:8080/apis/adocao?filtro=${encodeURIComponent(filtro)}`;
-                    console.log('URL da busca:', url);
-
+                    const url = `http://localhost:8080/apis/adocao${filtro ? `?filtro=${encodeURIComponent(filtro)}` : ''}`;
                     const response = await fetchWithAuth(url);
-                    console.log('Resposta da API:', response);
 
                     if (!response.ok) {
-                        throw new Error(`Erro na busca: ${response.status} ${response.statusText}`);
+                        throw new Error('Erro ao buscar adoções');
                     }
 
                     const adocoes = await response.json();
-                    console.log('Adoções encontradas:', adocoes);
-                    
-                    if (!Array.isArray(adocoes)) {
-                        console.error('Resposta não é um array:', adocoes);
-                        throw new Error('Formato de resposta inválido');
-                    }
-                    
-                    // Exibe os resultados
                     displayResults(adocoes);
                     
                 } catch (error) {
-                    console.error('Erro na busca de adoções:', error);
-                    showToast('error', 'Erro', 'Erro ao buscar adoções: ' + error.message);
-                    // Limpa os resultados em caso de erro
+                    console.error('Erro na busca:', error);
+                    showToast('error', 'Erro', 'Erro ao realizar a busca');
+                    
+                    // Limpar a tabela e mostrar mensagem de nenhum resultado
                     resultsBody.innerHTML = '';
+                    resultsContainer.classList.add('active');
                     noResults.style.display = 'block';
                     resultsCount.textContent = '0 adoções encontradas';
                 }
@@ -887,7 +967,7 @@
             }
 
             // Função para exibir resultados
-            function displayResults(adocoes) {
+            async function displayResults(adocoes) {
                 resultsBody.innerHTML = '';
                 resultsContainer.classList.add('active');
                 
@@ -900,18 +980,33 @@
                 noResults.style.display = 'none';
                 resultsCount.textContent = `${adocoes.length} adoção(ões) encontrada(s)`;
                 
-                adocoes.forEach(adocao => {
-                    console.log('Data da adoção recebida:', adocao.adoData);
+                for (const adocao of adocoes) {
+                    try {
+                        // Buscar dados do animal
+                        const animalResponse = await fetchWithAuth(`http://localhost:8080/apis/animal/${adocao.aniCod}`);
+                        const animal = await animalResponse.json();
+                        const animalNome = animal.informacao?.nome || 'N/A';
+
+                        // Buscar dados do adotante
+                        const adotanteResponse = await fetchWithAuth(`http://localhost:8080/apis/adotante/${adocao.adoMat}`);
+                        const adotante = await adotanteResponse.json();
+                        const adotanteNome = adotante.pessoa?.nome || 'N/A';
+
+                        // Buscar dados do funcionário
+                        const funcionarioResponse = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                        const funcionarios = await funcionarioResponse.json();
+                        const funcionario = funcionarios.find(f => f.id === adocao.funcCod);
+                        const funcionarioNome = funcionario?.pessoa?.nome || funcionario?.login || 'N/A';
+
                     const dataFormatada = formatDate(adocao.adoData);
-                    console.log('Data formatada para exibição:', dataFormatada);
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${adocao.adoCod || ''}</td>
                         <td>${dataFormatada || ''}</td>
-                        <td>${adocao.aniCod || ''}</td>
-                        <td>${adocao.adoMat || ''}</td>
-                        <td>${adocao.funcCod || ''}</td>
+                            <td>${adocao.aniCod} - ${animalNome}</td>
+                            <td>${adocao.adoMat} - ${adotanteNome}</td>
+                            <td>${adocao.funcCod} - ${funcionarioNome}</td>
                         <td>
                             <button class="btn-action" onclick="editAdoption(${adocao.adoCod})" title="Editar">
                                 <i class="fas fa-edit"></i>
@@ -922,7 +1017,29 @@
                         </td>
                     `;
                     resultsBody.appendChild(row);
-                });
+                    } catch (error) {
+                        console.error('Erro ao buscar detalhes da adoção:', error);
+                        // Em caso de erro, mostra apenas os IDs
+                        const dataFormatada = formatDate(adocao.adoData);
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${adocao.adoCod || ''}</td>
+                            <td>${dataFormatada || ''}</td>
+                            <td>${adocao.aniCod}</td>
+                            <td>${adocao.adoMat}</td>
+                            <td>${adocao.funcCod}</td>
+                            <td>
+                                <button class="btn-action" onclick="editAdoption(${adocao.adoCod})" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action" onclick="deleteAdoption(${adocao.adoCod})" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        `;
+                        resultsBody.appendChild(row);
+                    }
+                }
             }
 
             // Função para formatar data

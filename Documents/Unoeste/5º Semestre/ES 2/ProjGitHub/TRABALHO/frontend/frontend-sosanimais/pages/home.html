@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOS Amigos de Animais - Home</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/main.css">
+    <link rel="stylesheet" href="./assets/main.css">
 
-    <!-- PARTE DOS COMPONENTES -->
-    <link rel="stylesheet" href="assets/css/header.css">
-    <script src="assets/js/header.js"></script>
-    <link rel="stylesheet" href="assets/css/footer.css">
-    <script src="assets/js/footer.js"></script>
-    <link rel="stylesheet" href="assets/css/sidebar.css">
-    <script src="assets/js/sidebar.js"></script>
+    <link rel="stylesheet" href="./assets/css/header.css">
+    <script src="./assets/js/header.js"></script>
+    <link rel="stylesheet" href="./assets/css/footer.css">
+    <script src="./assets/js/footer.js"></script>
+    <link rel="stylesheet" href="./assets/css/sidebar.css">
+    <script src="./assets/js/sidebar.js"></script>
     
     <style>
         .logo-container {
@@ -587,273 +586,232 @@
 </head>
 
 <body>
-    <main-header></main-header>
-    <div class="main-container">
-        <main-sidebar></main-sidebar>
-        <main class="content">
-            <h1 class="page-title">
-                <i class="fas fa-home"></i>
-                Dashboard
-            </h1>
+<main-header></main-header>
+<div class="main-container">
+    <main-sidebar></main-sidebar>
+    
+    <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-home"></i>
+            Dashboard
+        </h1>
 
-            <!-- Welcome Section -->
-            <div class="welcome-section">
-                <div class="welcome-title">Bem-vindo ao SOS Amigos de Animais</div>
-                <div class="welcome-subtitle">Sistema de gestão para cuidado e proteção animal</div>
+        <div class="welcome-section">
+            <div class="welcome-title">Bem-vindo ao SOS Amigos de Animais</div>
+            <div class="welcome-subtitle">Sistema de gestão para cuidado e proteção animal</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Animais no Abrigo</div>
+                    <div class="stat-icon animals">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                </div>
+                <div class="stat-number" id="stat-animais-abrigados">127</div>
+                <div class="stat-description">Animais atualmente sob cuidados</div>
             </div>
 
-            <!-- Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Animais no Abrigo</div>
-                        <div class="stat-icon animals">
-                            <i class="fas fa-paw"></i>
-                        </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Adoções Este Mês</div>
+                    <div class="stat-icon adocoes">
+                        <i class="fas fa-heart"></i>
                     </div>
-                    <div class="stat-number">127</div>
-                    <div class="stat-description">Animais atualmente sob cuidados</div>
                 </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Adoções Este Mês</div>
-                        <div class="stat-icon adocoes">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="stat-number">23</div>
-                    <div class="stat-description">Animais encontraram novos lares</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Funcionários Ativos</div>
-                        <div class="stat-icon funcionarios">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
-                    <div class="stat-number">15</div>
-                    <div class="stat-description">Equipe dedicada ao cuidado</div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-title">Doadores Registrados</div>
-                        <div class="stat-icon doadores">
-                            <i class="fas fa-hands-helping"></i>
-                        </div>
-                    </div>
-                    <div class="stat-number">89</div>
-                    <div class="stat-description">Pessoas generosas que ajudam</div>
-                </div>
+                <div class="stat-number" id="stat-adocoes-mes">23</div>
+                <div class="stat-description">Animais encontraram novos lares</div>
             </div>
 
-            <!-- Dashboard Row -->
-            <div class="dashboard-row">
-                <!-- Recent Activities -->
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <i class="fas fa-clock"></i>
-                            Atividades Recentes
-                        </div>
-                        <a href="#" class="btn btn-outline btn-small">Ver Todas</a>
-                    </div>
-                    <div class="card-body">
-                        <ul class="recent-activity">
-                            <li class="activity-item">
-                                <div class="activity-icon success">
-                                    <i class="fas fa-heart"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Max foi adotado</div>
-                                    <div class="activity-time">Há 2 horas</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon info">
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Novo animal acolhido: Luna</div>
-                                    <div class="activity-time">Há 4 horas</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon warning">
-                                    <i class="fas fa-exchange-alt"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Thor transferido para baia médica</div>
-                                    <div class="activity-time">Ontem</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon success">
-                                    <i class="fas fa-box"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Doação de ração recebida</div>
-                                    <div class="activity-time">Ontem</div>
-                                </div>
-                            </li>
-                            <li class="activity-item">
-                                <div class="activity-icon info">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">Novo funcionário cadastrado</div>
-                                    <div class="activity-time">2 dias atrás</div>
-                                </div>
-                            </li>
-                        </ul>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Funcionários Ativos</div>
+                    <div class="stat-icon funcionarios">
+                        <i class="fas fa-users"></i>
                     </div>
                 </div>
+                <div class="stat-number" id="stat-funcionarios-ativos">15</div>
+                <div class="stat-description">Equipe dedicada ao cuidado</div>
+            </div>
 
-                <!-- Quick Actions -->
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <i class="fas fa-bolt"></i>
-                            Ações Rápidas
-                        </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-title">Doadores Registrados</div>
+                    <div class="stat-icon doadores">
+                        <i class="fas fa-hands-helping"></i>
                     </div>
-                    <div class="card-body">
-                        <div class="quick-actions">
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-plus"></i>
-                                <div class="action-btn-title">Novo Animal</div>
-                                <div class="action-btn-desc">Cadastrar animal</div>
-                            </a>
+                </div>
+                <div class="stat-number" id="stat-doadores-registrados">89</div>
+                <div class="stat-description">Pessoas generosas que ajudam</div>
+            </div>
+        </div>
 
-                            <a href="#" class="action-btn">
+        <div class="dashboard-row">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <i class="fas fa-clock"></i>
+                        Atividades Recentes
+                    </div>
+                    <a href="#" class="btn btn-outline btn-small">Ver Todas</a>
+                </div>
+                <div class="card-body">
+                    <ul class="recent-activity" id="lista-atividades-recentes">
+                        <li class="activity-item">
+                            <div class="activity-icon success">
                                 <i class="fas fa-heart"></i>
-                                <div class="action-btn-title">Nova Adoção</div>
-                                <div class="action-btn-desc">Registrar adoção</div>
-                            </a>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Max foi adotado</div>
+                                <div class="activity-time">Há 2 horas</div>
+                            </div>
+                        </li>
+                        <li class="activity-item">
+                            <div class="activity-icon info">
+                                <i class="fas fa-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Novo animal acolhido: Luna</div>
+                                <div class="activity-time">Há 4 horas</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-exchange-alt"></i>
-                                <div class="action-btn-title">Transferir</div>
-                                <div class="action-btn-desc">Mover animal</div>
-                            </a>
-
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-box"></i>
-                                <div class="action-btn-title">Nova Doação</div>
-                                <div class="action-btn-desc">Registrar doação</div>
-                            </a>
-
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-shopping-cart"></i>
-                                <div class="action-btn-title">Nova Compra</div>
-                                <div class="action-btn-desc">Adicionar compra</div>
-                            </a>
-
-                            <a href="#" class="action-btn">
-                                <i class="fas fa-chart-bar"></i>
-                                <div class="action-btn-title">Relatórios</div>
-                                <div class="action-btn-desc">Ver relatórios</div>
-                            </a>
-                        </div>
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <i class="fas fa-bolt"></i>
+                        Ações Rápidas
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions">
+                        <a href="./Animal/pageCadastroAnimal.html" class="action-btn">
+                            <i class="fas fa-plus"></i>
+                            <div class="action-btn-title">Novo Animal</div>
+                            <div class="action-btn-desc">Cadastrar animal</div>
+                        </a>
+                        <a href="./Adocao/pageRegistrarAdocao.html" class="action-btn">
+                            <i class="fas fa-heart"></i>
+                            <div class="action-btn-title">Nova Adoção</div>
+                            <div class="action-btn-desc">Registrar adoção</div>
+                        </a>
+                        <a href="./transfere/pageTransfere.html" class="action-btn">
+                            <i class="fas fa-exchange-alt"></i>
+                            <div class="action-btn-title">Transferir</div>
+                            <div class="action-btn-desc">Mover animal</div>
+                        </a>
+                        <a href="./Doacao/pageCadastroDoacao.html" class="action-btn">
+                            <i class="fas fa-box"></i>
+                            <div class="action-btn-title">Nova Doação</div>
+                            <div class="action-btn-desc">Registrar doação</div>
+                        </a>
+                        <a href="./Insumo/pageCadastroInsumo.html" class="action-btn"> <i class="fas fa-shopping-cart"></i>
+                            <div class="action-btn-title">Nova Compra</div>
+                            <div class="action-btn-desc">Adicionar compra</div>
+                        </a>
+                        <a href="./Relatorios/pageRelatorios.html" class="action-btn"> <i class="fas fa-chart-bar"></i>
+                            <div class="action-btn-title">Relatórios</div>
+                            <div class="action-btn-desc">Ver relatórios</div>
+                        </a>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 
-    <div id="footer-container"></div>
-    <main-footer></main-footer>
+<main-footer></main-footer>
 
-    <!-- Toast de Notificação -->
-    <div class="toast-container" id="toast-container">
-        <!-- As notificações serão injetadas aqui via JavaScript -->
-    </div>
+<div class="toast-container" id="toast-container">
+</div>
 
-    <!-- JavaScript -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animação de entrada para os cards de estatística
-            const statCards = document.querySelectorAll('.stat-card');
-            statCards.forEach((card, index) => {
-                setTimeout(() => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                    
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 100);
-                }, index * 100);
-            });
-
-            // Funcionalidade dos botões de ação rápida
-            const actionBtns = document.querySelectorAll('.action-btn');
-            actionBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const title = this.querySelector('.action-btn-title').textContent;
-                    showToast('success', 'Navegação', `Redirecionando para ${title}...`);
-                });
-            });
-
-            // Simular notificação de boas-vindas
-            setTimeout(() => {
-                showToast('success', 'Bem-vindo!', 'Sistema carregado com sucesso.');
-            }, 1000);
-        });
-
-        // Função para mostrar toast
-        function showToast(type, title, message) {
-            const toastContainer = document.getElementById('toast-container');
-            
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            
-            const iconClass = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-            
-            toast.innerHTML = `
-                <div class="toast-icon">
-                    <i class="fas ${iconClass}"></i>
-                </div>
-                <div class="toast-content">
-                    <div class="toast-title">${title}</div>
-                    <div class="toast-message">${message}</div>
-                </div>
-                <button class="toast-close">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            toastContainer.appendChild(toast);
-            
-            // Mostrar toast
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-            
-            // Auto remover após 5 segundos
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
-            }, 5000);
-            
-            // Botão de fechar
-            toast.querySelector('.toast-close').addEventListener('click', () => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Remover código duplicado da sidebar
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
             });
         }
-    </script>
+
+        // Animação de entrada para os cards de estatística
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100);
+            }, index * 100);
+        });
+
+        // Funcionalidade dos botões de ação rápida
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href !== "#") {
+                    // A navegação ocorrerá normalmente
+                } else {
+                    e.preventDefault();
+                    const title = this.querySelector('.action-btn-title').textContent;
+                    showToast('info', 'Ação Rápida', `Funcionalidade '${title}' clicada.`);
+                }
+            });
+        });
+        
+        // Simular notificação de boas-vindas
+        setTimeout(() => {
+            showToast('success', 'Bem-vindo!', 'Sistema carregado com sucesso.');
+        }, 1000);
+    });
+
+    // Função para mostrar toast
+    function showToast(type, title, message) {
+        const toastContainer = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        const iconClass = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas ${iconClass}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+            <button class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        toastContainer.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 5000);
+        toast.querySelector('.toast-close').addEventListener('click', () => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        });
+    }
+</script>
 </body>
 </html>
