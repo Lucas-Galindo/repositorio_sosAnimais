@@ -1,0 +1,916 @@
+<!--Colcoar filtros de data, id do funcionário-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Acolhimentos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .form-group {
+          margin-bottom: 1rem;
+          margin-top: 40px;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-dark);
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+          content: '*';
+          color: red;
+          margin-left: 0.25rem;
+        }
+
+        .form-control {
+          width: 50%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }
+
+        /* Estilos para a página de relatório */
+        .search-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .search-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .search-body {
+            padding: 1.5rem;
+        }
+
+        /* Estilos para filtros */
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .filter-checkboxes {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .filter-checkbox-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .filter-checkbox-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-checkbox-option label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+
+        .btn-list-all {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-list-all:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-apply-filters {
+            background-color: var(--color-orange-burnt);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-apply-filters:hover {
+            background-color: #c0774a;
+        }
+
+        .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .results-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-body {
+            padding: 1.5rem;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Estilo zebrado para a tabela */
+        .results-table tbody tr:nth-child(even) {
+            background-color: #f9f7f5;
+        }
+
+        .results-table tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .results-table tbody tr:hover {
+            background-color: #f0ede8 !important;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.25rem;
+        }
+
+        .badge-funcionario {
+            background-color: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .badge-adotante {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-doador {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .no-results h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Toast de Notificação */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-info .toast-icon {
+            color: #17a2b8;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .search-actions {
+                flex-direction: column;
+            }
+
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .search-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .search-header, .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .filter-checkboxes {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script src="scriptAnimal.js"></script>
+    <!-- Header -->
+    <main-header></main-header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <main-sidebar></main-sidebar>
+
+        <!-- Content -->
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-clipboard-list"></i>
+                Relatório de Acolhimentos
+            </h1>
+
+            <!-- Search Form Container -->
+            <div class="search-container">
+                <div class="search-header">
+                    <div class="search-title">Relatório Geral de Acolhimentos</div>
+                </div>
+
+                <div class="search-body">
+                    <!-- Filters Row -->
+                    <div class="filters-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Ordenar por Id:</label>
+                            <select id="sort-order" class="filter-select">
+                                <option value="menor-maior">Menor para o maior</option>
+                                <option value="maior-menor">Maior para o menor</option>
+                            </select>
+                            <div class="form-group">
+                                <label for="ac-id-func">Id do funcionário</label>
+                                <input type="number" id="ac-func" class="form-control" placeholder="Id do funcionário">
+                            </div>
+                            
+                        </div>
+
+                        <div class="filter-group" style="margin-left: 60px;">
+                            
+                            <div class="form-group">
+                                <label class="filter-label" style="margin-top: -40px;">Filtro por data:</label>
+                                 <div style="margin-bottom: 6px;"></div>
+                                <input type="date" id="ac-datai" class="form-control" placeholder="Id do funcionário">
+                                <div style="margin-top: 6px;"></div>
+                                <label for="ac-dataf">até: </label>
+                                <div></div>
+                                <input type="date" id="ac-dataf" class="form-control" placeholder="Id do funcionário">
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Search Actions -->
+                    <div class="search-actions">
+                        <button type="button" id="btn-list-all" class="btn-list-all">
+                            <i class="fas fa-list"></i>
+                            Listar Todos Acolhimentos
+                        </button>
+                        <button type="button" id="btn-apply-filters" class="btn-apply-filters">
+                            <i class="fas fa-filter"></i>
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Container (initially hidden) -->
+            <div class="results-container" id="results-container">
+                <div class="results-header">
+                    <div class="results-title">Resultados do Relatório</div>
+                    <div class="results-count" id="results-count">0 animais encontrados</div>
+                </div>
+
+                <div class="results-body">
+                    <table class="results-table" id="results-table">
+                        <thead>
+                            <tr>
+                                <th>Id Acolhimento</th>
+                                <th>Data</th>
+                                <th>Id Funcionário</th>
+                                <th>Id Animal</th>
+                        </thead>
+                        <tbody id="results-tbody">
+                            <!-- Results will be inserted here via JavaScript -->
+                        </tbody>
+                    </table>
+
+                    <!-- No Results Message (shown when search returns empty) -->
+                    <div class="no-results" id="no-results" style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhum resultado encontrado</h3>
+                        <p>Tente alterar os filtros aplicados.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <main-footer></main-footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container">
+        <!-- Toasts will be inserted here via JavaScript -->
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // DOM Elements
+  const listAllButton = document.getElementById('btn-list-all');
+  const applyFiltersButton = document.getElementById('btn-apply-filters');
+  const resultsContainer = document.getElementById('results-container');
+  const resultsCount = document.getElementById('results-count');
+  const resultsTable = document.getElementById('results-table');
+  const resultsTbody = document.getElementById('results-tbody');
+  const noResults = document.getElementById('no-results');
+  const sortOrderSelect = document.getElementById('sort-order');
+  const filterFuncIdInput = document.getElementById('ac-func');
+  const filterDateStart = document.getElementById('ac-datai');
+  const filterDateEnd = document.getElementById('ac-dataf');
+
+  let allAcolhimentos = [];
+
+  // Toast notification function (generic)
+  function showToast(type, title, message) {
+    const toastContainer = document.getElementById('toast-container');
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    let iconClass;
+    switch(type) {
+      case 'success': iconClass = 'fa-check-circle'; break;
+      case 'error': iconClass = 'fa-exclamation-circle'; break;
+      case 'info': 
+      default: iconClass = 'fa-info-circle';
+    }
+
+    toast.innerHTML = `
+      <i class="fas ${iconClass} toast-icon"></i>
+      <div class="toast-content">
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${message}</div>
+      </div>
+      <button class="toast-close">&times;</button>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+      toast.remove();
+    });
+
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 5000);
+  }
+
+
+  function renderTable(acolhimentos) {
+    resultsTbody.innerHTML = "";
+
+    if (acolhimentos.length === 0) {
+      resultsCount.innerText = "0 acolhimentos encontrados";
+      noResults.style.display = "block";
+      resultsTable.style.display = "none";
+      return;
+    }
+
+    noResults.style.display = "none";
+    resultsTable.style.display = "table";
+    resultsCount.innerText = `${acolhimentos.length} acolhimento${acolhimentos.length > 1 ? 's' : ''} encontrado${acolhimentos.length > 1 ? 's' : ''}`;
+
+    acolhimentos.forEach(ac => {
+      const row = document.createElement('tr');
+
+      // Formatar data (opcional)
+      const data = ac.data ? new Date(ac.data).toLocaleDateString() : '-';
+
+
+      const idFunc = ac.idFunc ? ac.idFunc : '-';
+
+
+      const idAnimal = ac.idAnimal ? ac.idAnimal : '-';
+
+
+      row.innerHTML = `
+        <td>${ac.id ?? '-'}</td>
+        <td>${data}</td>
+        <td>${idFunc}</td>
+        <td>${idAnimal}</td>
+      `;
+
+      resultsTbody.appendChild(row);
+    });
+  }
+
+  // carrega todos acolhimentos function
+  async function loadAllAcolhimentos() {
+    resultsContainer.style.display = 'block';
+    resultsTable.style.display = 'none';
+    noResults.style.display = 'none';
+    resultsCount.innerHTML = '<div class="loading"></div> Carregando...';
+
+    listAllButton.disabled = true;
+    listAllButton.innerHTML = '<div class="loading"></div> Carregando...';
+
+    try {
+      const response = await fetch('http://localhost:8080/apis/acolhimento');
+      if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+
+      const data = await response.json();
+      allAcolhimentos = Array.isArray(data) ? data : [];
+
+      applyFilters();
+    } catch (error) {
+      console.error('Erro ao buscar acolhimentos:', error);
+      resultsCount.innerText = "0 acolhimentos encontrados";
+      noResults.querySelector('h3').innerText = "Erro ao carregar os dados.";
+      noResults.style.display = 'block';
+      showToast('error', 'Erro', `Erro ao carregar acolhimentos: ${error.message}`);
+    } finally {
+      listAllButton.disabled = false;
+      listAllButton.innerHTML = '<i class="fas fa-list"></i> Listar Todos os Acolhimentos';
+    }
+  }
+
+  function applyFilters() {
+    const sortOrder = sortOrderSelect.value;
+    const funcIdFilter = filterFuncIdInput.value.trim();
+    const dateStartFilter = filterDateStart.value;
+    const dateEndFilter = filterDateEnd.value;
+
+    let filtered = allAcolhimentos.filter(ac => {
+      // Filtrar por id do funcionário, se preenchido
+      if (funcIdFilter && ac.idFunc?.toString() !== funcIdFilter) return false;
+
+      // Filtrar por intervalo de datas, se preenchido
+      if (dateStartFilter) {
+        const acDate = new Date(ac.data);
+        const startDate = new Date(dateStartFilter);
+        if (acDate < startDate) return false;
+      }
+      if (dateEndFilter) {
+        const acDate = new Date(ac.data);
+        const endDate = new Date(dateEndFilter);
+        if (acDate > endDate) return false;
+      }
+
+      return true;
+    });
+
+    filtered.sort((a, b) => {
+      if (sortOrder === 'menor-maior') {
+        return (a.id ?? 0) - (b.id ?? 0);
+      } else {
+        return (b.id ?? 0) - (a.id ?? 0);
+      }
+    });
+
+    renderTable(filtered);
+  }
+
+  // Event listeners
+  listAllButton.addEventListener('click', loadAllAcolhimentos);
+  applyFiltersButton.addEventListener('click', () => {
+    if (allAcolhimentos.length === 0) {
+      showToast('info', 'Informação', 'Carregue a lista primeiro para aplicar os filtros.');
+    } else {
+      applyFilters();
+    }
+  });
+
+  sortOrderSelect.addEventListener('change', () => {
+    if (allAcolhimentos.length === 0) {
+      showToast('info', 'Informação', 'Carregue a lista primeiro para aplicar os filtros.');
+    } else {
+      applyFilters();
+    }
+  });
+
+  filterFuncIdInput.addEventListener('input', () => {
+    if (allAcolhimentos.length === 0) {
+      showToast('info', 'Informação', 'Carregue a lista primeiro para aplicar os filtros.');
+    } else {
+      applyFilters();
+    }
+  });
+
+  filterDateStart.addEventListener('change', () => {
+    if (allAcolhimentos.length === 0) {
+      showToast('info', 'Informação', 'Carregue a lista primeiro para aplicar os filtros.');
+    } else {
+      applyFilters();
+    }
+  });
+
+  filterDateEnd.addEventListener('change', () => {
+    if (allAcolhimentos.length === 0) {
+      showToast('info', 'Informação', 'Carregue a lista primeiro para aplicar os filtros.');
+    } else {
+      applyFilters();
+    }
+  });
+
+  // Inicializa carregando todos os acolhimentos
+  loadAllAcolhimentos();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Transferência de Animais</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px;
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }        
+
+        /* Estilos específicos para a página de transferência */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+            content: '*';
+            color: red;
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control.invalid {
+            border-color: red;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .error-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: red;
+        }
+
+        /* Estilos para seleção de tipo de baia */
+        .baia-type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .baia-type-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .baia-type-btn:hover {
+            border-color: var(--color-orange-burnt);
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .baia-type-btn.active {
+            border-color: var(--color-orange-burnt);
+            background-color: var(--color-orange-burnt);
+            color: white;
+        }
+
+        .baia-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .baia-card {
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .baia-card:hover {
+            border-color: var(--color-orange-burnt);
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .baia-card.selected {
+            border-color: var(--color-orange-burnt);
+            background-color: var(--color-orange-burnt);
+            color: white;
+        }
+
+        .baia-card .baia-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .baia-card .baia-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .baia-card.selected .baia-info {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: var(--button-text);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-orange-burnt);
+            color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        /* Notificação Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .baia-list {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 1rem;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .baia-type-selector {
+                flex-direction: column;
+            }
+
+            .baia-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Header -->
+<main-header></main-header>
+
+<!-- Main Container -->
+<div class="main-container">
+    <!-- Sidebar -->
+    <main-sidebar></main-sidebar>
+    
+    <!-- Content -->
+    <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-exchange-alt"></i>
+            Transferência de Animais
+        </h1>
+
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-title">Nova Transferência</div>
+            </div>
+
+            <form class="form-body" id="transferenciaForm">
+                <div class="form-section">
+                    <h3 class="section-title">Informações do Animal</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="animal-identificacao" class="required">ID ou Nome do Animal</label>
+                            <input type="text" id="animal-identificacao" name="animalId" class="form-control" placeholder="Digite o ID ou nome do animal" required>
+                            <div class="error-text" id="animal-error" style="display: none;">Por favor, informe o ID ou nome do animal.</div>
+                            <span class="help-text">Insira o código único ou nome do animal para transferência.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="data-transferencia" class="required">Data e Hora da Transferência</label>
+                            <input type="datetime-local" id="data-transferencia" name="dataTransferencia" class="form-control" required>
+                            <div class="error-text" id="data-error" style="display: none;">Por favor, selecione a data e hora da transferência.</div>
+                            <span class="help-text">Defina quando a transferência será realizada.</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matricula-funcionario" class="required">Matrícula do Funcionário</label>
+                        <input type="number" id="matricula-funcionario" name="matFunc" class="form-control" placeholder="Digite a matrícula do funcionário responsável" required>
+                        <div class="error-text" id="matricula-error" style="display: none;">Por favor, informe a matrícula do funcionário.</div>
+                        <span class="help-text">Matrícula do funcionário responsável pela transferência.</span>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Seleção de Baia</h3>
+                    
+                    <div class="form-group">
+                        <label class="required">Tipo de Baia</label>
+                        <div class="baia-type-selector">
+                            <div class="baia-type-btn" data-type="comum">
+                                <i class="fas fa-home"></i>
+                                Baia Comum
+                            </div>
+                            <div class="baia-type-btn" data-type="medica">
+                                <i class="fas fa-hospital"></i>
+                                Baia Médica
+                            </div>
+                        </div>
+                        <div class="error-text" id="tipo-baia-error" style="display: none;">Por favor, selecione o tipo de baia.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="required">Baia Específica</label>
+                        <div id="baia-list" class="baia-list">
+                            <!-- As baias serão carregadas dinamicamente via JavaScript -->
+                        </div>
+                        <div class="error-text" id="baia-error" style="display: none;">Por favor, selecione uma baia específica.</div>
+                        <span class="help-text">Selecione a baia de destino para o animal.</span>
+                    </div>
+                </d
+
+                <div class="form-actions">
+                    <div class="form-actions-left">
+                        <button type="button" class="btn btn-outline" id="btn-cancel">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                    <div class="form-actions-right">
+                        <button type="button" class="btn btn-primary" id="btn-save">
+                            <i class="fas fa-exchange-alt"></i>
+                            Realizar Transferência
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<div id="footer-container"></div>
+<main-footer></main-footer>
+
+<!-- Toast de Notificação -->
+<div class="toast-container" id="toast-container">
+    <!-- As notificações serão injetadas aqui via JavaScript -->
+</div>
+
+<!-- JavaScript -->
+<script src="transferencia-animais.js"></script> 
+<!--<script src="scripts.js"></script>-->
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+        
+        // JavaScript para controlar os dropdowns
+        const menuButtons = document.querySelectorAll('.menu-button');
+
+        menuButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Encontra o dropdown-menu associado a este botão
+                const dropdownMenu = this.nextElementSibling;
+                const dropdownIcon = this.querySelector('.dropdown-icon');
+
+                // Toggle da classe active
+                dropdownMenu.classList.toggle('active');
+                dropdownIcon.classList.toggle('active');
+
+                // Opcional: Fecha outros dropdowns abertos
+                document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('active');
+                        menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Toggle para exibir/ocultar a sidebar em dispositivos móveis
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Fechar a sidebar quando clicar fora dela em dispositivos móveis
+            document.addEventListener('click', function(event) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickOnToggle = sidebarToggle.contains(event.target);
+
+                if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+
+        
+       
+});
+</script>
+</body>
+</html>
