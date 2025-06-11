@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sosanimais.com.example.app.controller.service.PessoaService;
-import sosanimais.com.example.app.model.DefineFiltro;
+import sosanimais.com.example.app.model.objetosAux.DefineFiltro;
 import sosanimais.com.example.app.model.entity.Pessoa;
 import sosanimais.com.example.app.model.util.Erro;
 

@@ -70,6 +70,16 @@ public class AnimalController {
         else
             return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar o animal"));
     }
+
+    //Lucas - 27/05/25 - Criei esse pq o de cima ta dando um pau ali na transferencia que mds
+    @PutMapping("/{id}/{baia}")
+    public ResponseEntity<Object> updateAnimalBaia(@PathVariable Long id, @PathVariable Long baia){
+        boolean aux=animalService.atualizarBaia(id,baia);
+        if(aux)
+            return ResponseEntity.ok(aux);
+        else
+            return ResponseEntity.badRequest().body(new Erro("Erro ao atualizar baia do animal"));
+    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAnimal(@PathVariable Long id) {
         Animal aux = animalService.buscarPorId(id);

@@ -45,18 +45,22 @@ public class PessoaDAL{
 
     public boolean update(Pessoa entidade) {
 //        System.out.println("***"+entidade.getId()+" "+entidade.getPessoa().getNome());
-        String sql= """
-            UPDATE pessoa SET pess_nome = '#2', pess_cpf = '#3', pess_email = '#5', pess_telefone = #4 WHERE pess_id = '#1';
-            """;
-        sql=sql.replace("'#2'",entidade.getPessoa().getNome());
-        sql=sql.replace("'#3'",entidade.getPessoa().getCpf());
-        sql=sql.replace("'#4'",entidade.getPessoa().getTelefone());
-        sql=sql.replace("'#5'",entidade.getPessoa().getEmail());
-        sql=sql.replace("'#1'","" +entidade.getId());
-//        System.out.println("***"+sql);
+       try{
 
-//        System.out.println(SingletonDB.getConexao().manipular(sql));
-        return SingletonDB.getConexao().manipular(sql);
+           String sql= "UPDATE pessoa SET pess_nome = '#2', pess_cpf = '#3', pess_telefone = '#4', pess_email = '#5'  WHERE pess_id = '#1';";
+           sql=sql.replace("#2",entidade.getPessoa().getNome());
+           sql=sql.replace("#3",entidade.getPessoa().getCpf());
+           sql=sql.replace("#4",entidade.getPessoa().getTelefone());
+           sql=sql.replace("#5",entidade.getPessoa().getEmail());
+           sql=sql.replace("#1","" +entidade.getId());
+           boolean resultado = SingletonDB.getConexao().manipular(sql);
+           return resultado;
+       }catch(Exception e){
+           e.printStackTrace();
+           return false;
+       }
+
+        //return SingletonDB.getConexao().manipular(sql);
     }
 
 
