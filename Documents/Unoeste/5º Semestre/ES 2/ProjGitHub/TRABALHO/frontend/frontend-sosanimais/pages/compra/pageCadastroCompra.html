@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Cadastro de Compra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px;
+            flex: 1;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px;
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }
+
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+            content: '*';
+            color: red;
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        .error-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: red;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--button-secondary-hover);
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main-header></main-header>
+    <div class="main-container">
+        <main-sidebar></main-sidebar>
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-shopping-cart"></i>
+                Cadastro de Compra
+            </h1>
+
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-title">Nova Compra</div>
+                </div>
+
+                <form class="form-body" id="compraForm">
+                    <div class="form-section">
+                        <h3 class="section-title">Informações da Compra</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="produto-nome" class="required">Nome do Produto</label>
+                                <input type="text" id="produto-nome" name="produto_nome" class="form-control" required>
+                                <div class="error-text" id="produto-nome-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quantidade" class="required">Quantidade</label>
+                                <input type="number" id="quantidade" name="quantidade" class="form-control" min="1" required>
+                                <div class="error-text" id="quantidade-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="valor-unitario" class="required">Valor Total (R$)</label>
+                                <input type="number" id="valor-unitario" name="valor_unitario" class="form-control" min="0.01" step="0.01" required>
+                                <div class="error-text" id="valor-unitario-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="data-compra" class="required">Data da Compra</label>
+                                <input type="date" id="data-compra" name="data_compra" class="form-control" required>
+                                <div class="error-text" id="data-compra-error"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="funcionario-nome">Funcionário Responsável</label>
+                                <input type="text" id="funcionario-nome" name="funcionario_nome" class="form-control" readonly>
+                                <input type="hidden" id="funcionario-id" name="funcionario_id">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="btn-save">
+                            <i class="fas fa-save"></i>
+                            Salvar Compra
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+    <main-footer></main-footer>
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos do formulário
+            const compraForm = document.getElementById('compraForm');
+            const produtoNomeInput = document.getElementById('produto-nome');
+            const quantidadeInput = document.getElementById('quantidade');
+            const valorUnitarioInput = document.getElementById('valor-unitario');
+            const dataCompraInput = document.getElementById('data-compra');
+            const funcionarioNomeInput = document.getElementById('funcionario-nome');
+            const funcionarioIdInput = document.getElementById('funcionario-id');
+            const btnCancel = document.getElementById('btn-cancel');
+            const btnSave = document.getElementById('btn-save');
+
+            // Verificar autenticação
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '../auth.html';
+                return;
+            }
+
+            // Função para fazer requisições autenticadas
+            async function fetchWithAuth(url, options = {}) {
+                const defaultOptions = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                };
+                const finalOptions = {
+                    ...defaultOptions,
+                    ...options,
+                    headers: {
+                        ...defaultOptions.headers,
+                        ...(options.headers || {})
+                    }
+                };
+                return fetch(url, finalOptions);
+            }
+
+            // Carregar dados do funcionário
+            async function carregarFuncionario() {
+                try {
+                    const response = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                    if (!response.ok) throw new Error('Erro ao carregar funcionário');
+                    
+                    const funcionarios = await response.json();
+                    const funcionario = funcionarios.find(f => f.login === 'teste@uno.com');
+                    
+                    if (!funcionario) {
+                        showToast('error', 'Erro', 'Funcionário não encontrado');
+                        return;
+                    }
+
+                    const nomeFuncionario = funcionario.pessoa ? funcionario.pessoa.nome : funcionario.login;
+                    funcionarioNomeInput.value = `${nomeFuncionario} (ID: ${funcionario.id})`;
+                    funcionarioIdInput.value = funcionario.id;
+                } catch (error) {
+                    console.error('Erro ao carregar funcionário:', error);
+                    showToast('error', 'Erro', 'Erro ao carregar dados do funcionário');
+                }
+            }
+
+            // Função para validar o formulário
+            function validateForm() {
+                let isValid = true;
+                
+                if (!produtoNomeInput.value.trim()) {
+                    document.getElementById('produto-nome-error').textContent = 'Digite o nome do produto';
+                    isValid = false;
+                }
+                
+                if (!quantidadeInput.value || quantidadeInput.value < 1) {
+                    document.getElementById('quantidade-error').textContent = 'Digite uma quantidade válida';
+                    isValid = false;
+                }
+                
+                if (!valorUnitarioInput.value || valorUnitarioInput.value <= 0) {
+                    document.getElementById('valor-unitario-error').textContent = 'Digite um valor unitário válido';
+                    isValid = false;
+                }
+                
+                if (!dataCompraInput.value) {
+                    document.getElementById('data-compra-error').textContent = 'Selecione a data da compra';
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            // Função para mostrar toast
+            function showToast(type, title, message) {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                
+                let iconClass = 'fa-info-circle';
+                if (type === 'success') iconClass = 'fa-check-circle';
+                if (type === 'error') iconClass = 'fa-exclamation-circle';
+                if (type === 'warning') iconClass = 'fa-exclamation-triangle';
+
+                toast.innerHTML = `
+                    <i class="fas ${iconClass} toast-icon"></i>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                `;
+
+                toastContainer.appendChild(toast);
+                setTimeout(() => toast.classList.add('show'), 10);
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+            }
+
+            // Event Listeners
+            compraForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!validateForm()) {
+                    showToast('warning', 'Atenção', 'Preencha todos os campos obrigatórios corretamente');
+                    return;
+                }
+
+                try {
+                    const dataCompra = new Date(dataCompraInput.value + 'T00:00:00');
+                    const dataFormatada = dataCompra.toISOString().split('T')[0];
+
+                    const compraData = {
+                        produtoNome: produtoNomeInput.value.trim(),
+                        quantidade: parseInt(quantidadeInput.value),
+                        valorUnitario: parseFloat(valorUnitarioInput.value),
+                        dataCompra: dataFormatada,
+                        funcCod: parseInt(funcionarioIdInput.value)
+                    };
+
+                    const response = await fetchWithAuth('http://localhost:8080/apis/compra/registrar', {
+                        method: 'POST',
+                        body: JSON.stringify(compraData)
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        console.log('Erro retornado pelo backend:', error);
+                        if (error.mensagem && error.mensagem.includes("O produto informado não está cadastrado no sistema")) {
+                            document.getElementById('produto-nome-error').textContent = 'Erro: Produto não cadastrado no sistema';
+                            showToast('error', 'Erro', 'Erro: Produto não cadastrado no sistema');
+                        } else {
+                            showToast('error', 'Erro', error.mensagem || 'Erro ao registrar a compra. Tente novamente.');
+                        }
+                        return;
+                    }
+
+                    showToast('success', 'Sucesso', 'Compra registrada com sucesso');
+                    setTimeout(() => {
+                        window.location.href = 'pageBuscaCompra.html';
+                    }, 2000);
+
+                } catch (error) {
+                    globalError.textContent = 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
+                    globalError.classList.add('show');
+                }
+            });
+
+            btnCancel.addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja cancelar? Os dados não salvos serão perdidos.')) {
+                    window.location.href = 'pageBuscaCompra.html';
+                }
+            });
+
+            // Limpar mensagens de erro ao digitar
+            produtoNomeInput.addEventListener('input', () => {
+                document.getElementById('produto-nome-error').textContent = '';
+            });
+
+            quantidadeInput.addEventListener('input', () => {
+                document.getElementById('quantidade-error').textContent = '';
+            });
+
+            valorUnitarioInput.addEventListener('input', () => {
+                document.getElementById('valor-unitario-error').textContent = '';
+            });
+
+            dataCompraInput.addEventListener('input', () => {
+                document.getElementById('data-compra-error').textContent = '';
+            });
+
+            // Carregar dados iniciais
+            carregarFuncionario();
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,888 @@
+<!--Colcoar filtros de data, id do funcionário-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Aplicações</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .form-group {
+          margin-bottom: 1rem;
+          margin-top: 40px;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-dark);
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+          content: '*';
+          color: red;
+          margin-left: 0.25rem;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }
+
+        /* Estilos para a página de relatório */
+        .search-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .search-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .search-body {
+            padding: 1.5rem;
+        }
+
+        /* Estilos para filtros */
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .filter-checkboxes {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .filter-checkbox-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .filter-checkbox-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-checkbox-option label {
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
+            margin-top: 1rem;
+        }
+
+        .btn-list-all {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-list-all:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-apply-filters {
+            background-color: var(--color-orange-burnt);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-apply-filters:hover {
+            background-color: #c0774a;
+        }
+
+        .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .results-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-body {
+            padding: 1.5rem;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Estilo zebrado para a tabela */
+        .results-table tbody tr:nth-child(even) {
+            background-color: #f9f7f5;
+        }
+
+        .results-table tbody tr:nth-child(odd) {
+            background-color: white;
+        }
+
+        .results-table tbody tr:hover {
+            background-color: #f0ede8 !important;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.25rem;
+        }
+
+        .badge-funcionario {
+            background-color: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .badge-adotante {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-doador {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .no-results h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Toast de Notificação */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-info .toast-icon {
+            color: #17a2b8;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+         .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--color-orange-burnt);
+          color: var(--color-orange-burnt);
+          width: 40%;
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .search-actions {
+                flex-direction: column;
+            }
+
+            .filters-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .search-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .search-header, .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .filter-checkboxes {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <main-header></main-header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <main-sidebar></main-sidebar>
+
+        <!-- Content -->
+        <main class="content">
+      <h1 class="page-title">
+        <i class="fas fa-clipboard-list"></i>
+        Relatório de Aplicações
+      </h1>
+
+      <div class="search-container">
+        <div class="search-header">
+          <div class="search-title">Relatório Geral de Aplicações</div>
+        </div>
+        <div class="search-body">
+          <!-- Filtros -->
+          <div class="filters-row">
+            <div class="filter-group">
+              <label class="filter-label">Filtrar por Insumo:</label>
+              <select id="filter-insumo" class="filter-select">
+                <option value="">Todos (med/vac)</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Data Início:</label>
+              <input type="date" id="filter-date-start" class="form-control">
+            </div>
+            <div class="filter-group" >
+              <label class="filter-label">Data Fim:</label>
+              <input type="date" id="filter-date-end" class="form-control">
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Filtrar por Animal:</label>
+              <div style="display:flex; gap:0.5rem;">
+                <input type="text" id="filter-animal" class="form-control" placeholder="ID ou Nome">
+              </div>
+            </div>
+          </div>
+
+          <!-- Ações -->
+          <div class="search-actions">
+            <button type="button" id="btn-list-all" class="btn-list-all">
+              <i class="fas fa-list"></i> Listar Todas as Aplicações
+            </button>
+            <button type="button" id="btn-apply-filters" class="btn-apply-filters">
+              <i class="fas fa-filter"></i> Aplicar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-container" id="results-container">
+        <div class="results-header">
+          <div class="results-title">Resultados do Relatório</div>
+          <div class="results-count" id="results-count">0 aplicações encontradas</div>
+        </div>
+        <div class="results-body">
+          <table class="results-table" id="results-table">
+            <thead>
+                <tr>
+                <th>Animal (ID — Nome)</th>
+                <th>Insumo  (ID — Nome)</th>
+                <th>Data</th>
+                </tr>
+            </thead>
+            <tbody id="results-tbody"></tbody>
+            </table>
+          <div class="no-results" id="no-results">
+            <i class="fas fa-search"></i>
+            <h3>Nenhum resultado encontrado</h3>
+            <p>Verifique os filtros aplicados.</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <main-footer></main-footer>
+  <div class="toast-container" id="toast-container"></div>
+
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const API_APLIC      = 'http://localhost:8080/apis/animal_insumo';
+  const API_INSUMO_IDS = 'http://localhost:8080/apis/insumo/ids/2/6';
+  const API_ANIMAL     = 'http://localhost:8080/apis/animal';
+  const TOKEN          = 'Bearer SEU_TOKEN_AQUI';
+
+  // DOM
+  const btnListAll   = document.getElementById('btn-list-all');
+  const btnApply     = document.getElementById('btn-apply-filters');
+  const selInsumo    = document.getElementById('filter-insumo');
+  const inpDateStart = document.getElementById('filter-date-start');
+  const inpDateEnd   = document.getElementById('filter-date-end');
+  const inpAnimal    = document.getElementById('filter-animal');
+
+  const resultsCt  = document.getElementById('results-container');
+  const resultsCnt = document.getElementById('results-count');
+  const tbl        = document.getElementById('results-table');
+  const tbody      = document.getElementById('results-tbody');
+  const noRes      = document.getElementById('no-results');
+  const toastRoot  = document.getElementById('toast-container');
+
+  let allApps    = [];
+  let insumoMap  = {};
+  let animalMap  = {};
+
+  function showToast(type, title, msg) {
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.innerHTML = `
+      <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'} toast-icon"></i>
+      <div class="toast-content">
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${msg}</div>
+      </div>
+      <button class="toast-close">&times;</button>
+    `;
+    toastRoot.appendChild(t);
+    t.querySelector('.toast-close').onclick = () => t.remove();
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
+    }, 5000);
+  }
+
+  // carrega medicamentos/vacinas
+  async function loadInsumos() {
+    selInsumo.innerHTML = '<option>Carregando...</option>';
+    try {
+      const resp = await fetch(API_INSUMO_IDS, {
+        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
+      });
+      if (!resp.ok) throw new Error(resp.status);
+      const arr = await resp.json();
+      insumoMap = {};
+      selInsumo.innerHTML = '<option value="">Todos (med/vac)</option>';
+      arr.forEach(i => {
+        insumoMap[i.id] = i.nome;
+        const o = document.createElement('option');
+        o.value = i.id;
+        o.text  = `${i.id} — ${i.nome}`;
+        selInsumo.appendChild(o);
+      });
+    } catch (e) {
+      console.error(e);
+      selInsumo.innerHTML = '<option>Erro ao carregar</option>';
+      selInsumo.disabled = true;
+      showToast('error','Erro','Não foi possível carregar insumos.');
+    }
+  }
+
+  // carrega todos os animais
+  async function loadAnimals() {
+    try {
+      const resp = await fetch(API_ANIMAL, {
+        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
+      });
+      if (!resp.ok) throw new Error(resp.status);
+      const arr = await resp.json();
+      animalMap = {};
+      arr.forEach(a => {
+        animalMap[a.id] = a.informacao?.nome || '';
+      });
+    } catch (e) {
+      console.error('Falha ao carregar animais', e);
+    }
+  }
+
+  // carrega aplicações
+  async function loadAll() {
+    resultsCt.style.display = 'block';
+    tbl.style.display       = 'none';
+    noRes.style.display     = 'none';
+    resultsCnt.innerHTML    = '<div class="loading"></div> Carregando...';
+    btnListAll.disabled     = true;
+    try {
+      const resp = await fetch(API_APLIC, {
+        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
+      });
+      if (!resp.ok) throw new Error(resp.status);
+      allApps = await resp.json();
+      applyFilters();
+    } catch (e) {
+      console.error(e);
+      showToast('error','Erro','Falha ao carregar aplicações.');
+      resultsCnt.innerText = '0 aplicações encontradas';
+      noRes.style.display   = 'block';
+    } finally {
+      btnListAll.disabled = false;
+    }
+  }
+
+  // renderiza tabela alinhada a Animal, Insumo, Data
+  function renderTable(list) {
+    tbody.innerHTML = '';
+    if (!list.length) {
+      resultsCnt.innerText = '0 aplicações encontradas';
+      noRes.style.display   = 'block';
+      tbl.style.display     = 'none';
+      return;
+    }
+    noRes.style.display  = 'none';
+    tbl.style.display    = 'table';
+    resultsCnt.innerText = `${list.length} aplicação${list.length>1?'s':''} encontrad${list.length>1?'as':'a'}`;
+
+    list.forEach(app => {
+      const insId = app.insumoIsuId;
+      if (!(insId in insumoMap)) return; // só exibe meds/vacs
+
+      const aniId = app.animalAniCod;
+      const d     = (app.aiDataExecucao||'').split('T')[0] || '-';
+
+      const aniNome = animalMap[aniId] || '-';
+      const insNome = insumoMap[insId];
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${aniId} — ${aniNome}</td>
+        <td>${insId} — ${insNome}</td>
+        <td>${d}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // aplica filtros
+  function applyFilters() {
+    let f = allApps.slice();
+
+    const insF = selInsumo.value;
+    if (insF) f = f.filter(a => a.insumoIsuId?.toString() === insF);
+
+    const start = inpDateStart.value, end = inpDateEnd.value;
+    if (start || end) {
+      f = f.filter(a => {
+        const dt = new Date((a.aiDataExecucao||'').split('T')[0]);
+        if (start && dt < new Date(start)) return false;
+        if (end   && dt > new Date(end))   return false;
+        return true;
+      });
+    }
+
+    const term = inpAnimal.value.trim().toLowerCase();
+    if (term) {
+      f = f.filter(a => {
+        const byId   = a.animalAniCod?.toString() === term;
+        const byName = (animalMap[a.animalAniCod]||'').toLowerCase().includes(term);
+        return byId || byName;
+      });
+    }
+
+    renderTable(f);
+  }
+
+  // eventos
+  btnListAll.onclick    = loadAll;
+  selInsumo.onchange    = applyFilters;
+  inpDateStart.onchange = applyFilters;
+  inpDateEnd.onchange   = applyFilters;
+  btnApply.onclick      = () => allApps.length ? applyFilters() : showToast('info','Info','Primeiro liste.');
+  inpAnimal.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      applyFilters();
+    }
+  });
+
+  // inicializa
+  resultsCt.style.display = 'none';
+  Promise.all([ loadInsumos(), loadAnimals() ]);
+});
+</script>
+</body>
+</html>
+</body>
+</html>

@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Pesquisa de Adoções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: White;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }        
+
+        /* Estilos para a página de pesquisa */
+        .search-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .search-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .search-body {
+            padding: 1.5rem;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .search-type {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-type-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .search-type-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .search-type-option label {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn-search {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn-search:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .btn-list-all {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn-list-all:hover {
+            background-color: var(--button-primary-hover); 
+        }
+
+        .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .results-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-body {
+            padding: 1.5rem;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.25rem;
+        }
+
+        .badge-funcionario {
+            background-color: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .badge-adotante {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-doador {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--color-orange-burnt);
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-action:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .no-results h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Toast de Notificação */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-input-group {
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-280px);
+                transition: transform 0.3s ease;
+                z-index: 999;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+
+            .search-type {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .search-header, .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+
+        .btn-action.delete-btn:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .feedback-text {
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .feedback-text.error {
+            color: #dc3545;
+        }
+
+        .feedback-text.success {
+            color: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+    <main-header></main-header>
+    <div class="main-container">
+        <main-sidebar></main-sidebar>
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-search"></i>
+                Pesquisa de Adoções
+            </h1>
+
+            <div class="search-container">
+                <div class="search-header">
+                    <div class="search-title">Buscar Adoções</div>
+                </div>
+                <div class="search-body">
+                    <form id="searchForm" class="search-form-grid">
+                        <div class="search-input-group">
+                            <label for="selectAnimal">Animal (ID)</label>
+                            <input type="text" id="selectAnimal" class="search-input" placeholder="Digite o ID do animal">
+                            <div id="animalFeedback" class="feedback-text"></div>
+                        </div>
+                        <div class="search-input-group">
+                            <label for="selectAdotante">Adotante (Matrícula)</label>
+                            <input type="text" id="selectAdotante" class="search-input" placeholder="Digite a matrícula do adotante">
+                            <div id="adotanteFeedback" class="feedback-text"></div>
+                        </div>
+                        <div class="search-input-group">
+                            <label for="selectFuncionario">Funcionário (ID)</label>
+                            <input type="text" id="selectFuncionario" class="search-input" placeholder="Digite o ID do funcionário">
+                            <div id="funcionarioFeedback" class="feedback-text"></div>
+                        </div>
+                        <div class="search-input-group">
+                            <label for="search-data-adocao">Data da Adoção</label>
+                            <input type="date" id="search-data-adocao" class="search-input">
+                        </div>
+                    </form>
+                        <div class="search-actions">
+                            <button type="button" id="btn-search-adocoes" class="btn-search">
+                                <i class="fas fa-search"></i>
+                                Pesquisar Adoções
+                            </button>
+                            <button type="button" id="btn-list-all-adocoes" class="btn-list-all">
+                                <i class="fas fa-list"></i>
+                                Listar Todas
+                            </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-container" id="results-container-adocoes">
+                <div class="results-header">
+                    <div class="results-title">Resultados da Pesquisa</div>
+                    <div class="results-count" id="results-count-adocoes">0 adoções encontradas</div>
+                </div>
+                <div class="results-body">
+                    <table class="results-table" id="results-table-adocoes">
+                        <thead>
+                            <tr>
+                                <th>Cód. Adoção</th>
+                                <th>Data</th>
+                                <th>Animal (Cód. - Nome)</th>
+                                <th>Adotante (Mat. - Nome)</th>
+                                <th>Funcionário (Cód. - Nome)</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-tbody-adocoes">
+                            </tbody>
+                    </table>
+                    <div class="no-results" id="no-results-adocoes" style="display: none;">
+                        <i class="fas fa-search"></i>
+                        <h3>Nenhuma adoção encontrada</h3>
+                        <p>Tente outros termos de busca ou liste todas as adoções.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <main-footer></main-footer>
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos dos filtros
+            const selectAnimal = document.getElementById('selectAnimal');
+            const selectAdotante = document.getElementById('selectAdotante');
+            const selectFuncionario = document.getElementById('selectFuncionario');
+            const dataAdocaoInput = document.getElementById('search-data-adocao');
+            const btnSearch = document.getElementById('btn-search-adocoes');
+            const btnListAll = document.getElementById('btn-list-all-adocoes');
+            const resultsBody = document.getElementById('results-tbody-adocoes');
+            const resultsCount = document.getElementById('results-count-adocoes');
+            const noResults = document.getElementById('no-results-adocoes');
+            const resultsContainer = document.getElementById('results-container-adocoes');
+
+            // Função para buscar dados e preencher selects
+            async function fetchWithAuth(url, options = {}) {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '../auth.html';
+                    return;
+                }
+                const defaultOptions = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                };
+                const finalOptions = {
+                    ...defaultOptions,
+                    ...options,
+                    headers: {
+                        ...defaultOptions.headers,
+                        ...(options.headers || {})
+                    }
+                };
+                return fetch(url, finalOptions);
+            }
+
+            // Funções de debug e tratamento de erros
+            function logError(context, error, response = null) {
+                console.error(`[${context}] Erro:`, error);
+                if (response) {
+                    console.error(`[${context}] Status:`, response.status);
+                    console.error(`[${context}] Status Text:`, response.statusText);
+                }
+            }
+
+            async function handleApiError(context, error, response = null) {
+                logError(context, error, response);
+                
+                let errorMessage = 'Erro ao processar a requisição';
+                
+                if (response) {
+                    try {
+                        const errorData = await response.text();
+                        console.error(`[${context}] Resposta do servidor:`, errorData);
+                        console.error(`[${context}] Status:`, response.status);
+                        console.error(`[${context}] Headers:`, Object.fromEntries(response.headers.entries()));
+                        
+                        try {
+                            const jsonError = JSON.parse(errorData);
+                            errorMessage = jsonError.mensagem || jsonError.message || errorData;
+                            console.error(`[${context}] Erro detalhado:`, jsonError);
+                        } catch (e) {
+                            errorMessage = errorData;
+                        }
+                    } catch (e) {
+                        console.error(`[${context}] Erro ao ler resposta:`, e);
+                    }
+                }
+
+                showToast('error', 'Erro', errorMessage);
+            }
+
+            function validateResponse(response, context) {
+                if (!response.ok) {
+                    throw new Error(`Erro na resposta da API: ${response.status} ${response.statusText}`);
+                }
+                return response;
+            }
+
+            // Funções de verificação
+            async function verificarAnimal(id) {
+                try {
+                    if (!id) {
+                        document.getElementById('animalFeedback').textContent = '';
+                        return;
+                    }
+
+                    const response = await fetchWithAuth(`http://localhost:8080/apis/animal/${id}`);
+                    if (!response.ok) {
+                        document.getElementById('animalFeedback').className = 'feedback-text error';
+                        document.getElementById('animalFeedback').textContent = 'Animal não encontrado';
+                        return;
+                    }
+
+                    const animal = await response.json();
+                    document.getElementById('animalFeedback').className = 'feedback-text success';
+                    document.getElementById('animalFeedback').textContent = `Animal: ${animal.informacao.nome || 'N/A'}`;
+                } catch (error) {
+                    document.getElementById('animalFeedback').className = 'feedback-text error';
+                    document.getElementById('animalFeedback').textContent = 'Erro ao verificar animal';
+                }
+            }
+
+            async function verificarAdotante(matricula) {
+                try {
+                    if (!matricula) {
+                        document.getElementById('adotanteFeedback').textContent = '';
+                        return;
+                    }
+
+                    const response = await fetchWithAuth(`http://localhost:8080/apis/adotante/${matricula}`);
+                    if (!response.ok) {
+                        document.getElementById('adotanteFeedback').className = 'feedback-text error';
+                        document.getElementById('adotanteFeedback').textContent = 'Adotante não encontrado';
+                        return;
+                    }
+
+                    const adotante = await response.json();
+                    document.getElementById('adotanteFeedback').className = 'feedback-text success';
+                    document.getElementById('adotanteFeedback').textContent = `Adotante: ${adotante.pessoa.nome || 'N/A'}`;
+                } catch (error) {
+                    document.getElementById('adotanteFeedback').className = 'feedback-text error';
+                    document.getElementById('adotanteFeedback').textContent = 'Erro ao verificar adotante';
+                }
+            }
+
+            async function verificarFuncionario(id) {
+                try {
+                    if (!id) {
+                        document.getElementById('funcionarioFeedback').textContent = '';
+                        return;
+                    }
+
+                    const response = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                    if (!response.ok) {
+                        document.getElementById('funcionarioFeedback').className = 'feedback-text error';
+                        document.getElementById('funcionarioFeedback').textContent = 'Erro ao verificar funcionário';
+                        return;
+                    }
+
+                    const funcionarios = await response.json();
+                    const funcionario = funcionarios.find(f => f.id === parseInt(id));
+                    
+                    if (!funcionario) {
+                        document.getElementById('funcionarioFeedback').className = 'feedback-text error';
+                        document.getElementById('funcionarioFeedback').textContent = 'Funcionário não encontrado';
+                        return;
+                    }
+
+                    document.getElementById('funcionarioFeedback').className = 'feedback-text success';
+                    document.getElementById('funcionarioFeedback').textContent = `Funcionário: ${funcionario.pessoa?.nome || funcionario.login || 'N/A'}`;
+                } catch (error) {
+                    document.getElementById('funcionarioFeedback').className = 'feedback-text error';
+                    document.getElementById('funcionarioFeedback').textContent = 'Erro ao verificar funcionário';
+                }
+            }
+
+            // Event listeners para verificação em tempo real
+            document.getElementById('selectAnimal').addEventListener('input', function(e) {
+                const id = e.target.value.trim();
+                if (id) {
+                    verificarAnimal(id);
+                } else {
+                    document.getElementById('animalFeedback').textContent = '';
+                }
+            });
+
+            document.getElementById('selectAdotante').addEventListener('input', function(e) {
+                const matricula = e.target.value.trim();
+                if (matricula) {
+                    verificarAdotante(matricula);
+                } else {
+                    document.getElementById('adotanteFeedback').textContent = '';
+                }
+            });
+
+            document.getElementById('selectFuncionario').addEventListener('input', function(e) {
+                const id = e.target.value.trim();
+                if (id) {
+                    verificarFuncionario(id);
+                } else {
+                    document.getElementById('funcionarioFeedback').textContent = '';
+                }
+            });
+
+            // Função para buscar adoções
+            async function searchAdoptions() {
+                try {
+                    const animal = document.getElementById('selectAnimal').value.trim();
+                    const adotante = document.getElementById('selectAdotante').value.trim();
+                    const funcionario = document.getElementById('selectFuncionario').value.trim();
+                    const data = document.getElementById('search-data-adocao').value;
+
+                    let filtro = '';
+                    if (animal) filtro += `animal_ani_cod=${animal}`;
+                    if (adotante) {
+                        if (filtro) filtro += ' AND ';
+                        filtro += `adotante_mat=${adotante}`;
+                    }
+                    if (funcionario) {
+                        if (filtro) filtro += ' AND ';
+                        filtro += `funcionario_func_cod=${funcionario}`;
+                    }
+                    if (data) {
+                        if (filtro) filtro += ' AND ';
+                        const dataObj = new Date(data);
+                        dataObj.setDate(dataObj.getDate() + 1);
+                        const dataFormatada = dataObj.toISOString().split('T')[0];
+                        filtro += `adota_data='${dataFormatada}'`;
+                    }
+
+                    const url = `http://localhost:8080/apis/adocao${filtro ? `?filtro=${encodeURIComponent(filtro)}` : ''}`;
+                    const response = await fetchWithAuth(url);
+
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar adoções');
+                    }
+
+                    const adocoes = await response.json();
+                    displayResults(adocoes);
+                    
+                } catch (error) {
+                    console.error('Erro na busca:', error);
+                    showToast('error', 'Erro', 'Erro ao realizar a busca');
+                    
+                    // Limpar a tabela e mostrar mensagem de nenhum resultado
+                    resultsBody.innerHTML = '';
+                    resultsContainer.classList.add('active');
+                    noResults.style.display = 'block';
+                    resultsCount.textContent = '0 adoções encontradas';
+                }
+            }
+
+            // Função para carregar animais
+            async function carregarAnimais() {
+                try {
+                    console.log('Iniciando carregamento de animais...');
+                    const response = await fetchWithAuth('http://localhost:8080/apis/animal');
+                    console.log('Resposta da API de animais:', response);
+
+                    validateResponse(response, 'Carregamento de Animais');
+                    const animais = await response.json();
+                    console.log('Animais carregados:', animais);
+
+                    selectAnimal.innerHTML = '<option value="">Selecione um animal</option>';
+                    animais.forEach(animal => {
+                        if (animal && animal.id) {
+                            const nome = animal.informacao?.nome || 'Nome não informado';
+                            const option = document.createElement('option');
+                            option.value = animal.id;
+                            option.textContent = `${nome} (ID: ${animal.id})`;
+                            selectAnimal.appendChild(option);
+                        }
+                    });
+                    console.log('Select de animais atualizado com sucesso');
+                } catch (error) {
+                    handleApiError('Carregamento de Animais', error);
+                    selectAnimal.innerHTML = '<option value="">Erro ao carregar</option>';
+                }
+            }
+
+            // Função para carregar adotantes
+            async function carregarAdotantes() {
+                try {
+                    console.log('Iniciando carregamento de adotantes...');
+                    const response = await fetchWithAuth('http://localhost:8080/apis/adotante/lista');
+                    console.log('Resposta da API de adotantes:', response);
+
+                    validateResponse(response, 'Carregamento de Adotantes');
+                    const adotantes = await response.json();
+                    console.log('Adotantes carregados:', adotantes);
+
+                    selectAdotante.innerHTML = '<option value="">Selecione um adotante</option>';
+                    adotantes.forEach(adotante => {
+                        if (adotante && adotante.matricula) {
+                            const nome = adotante.pessoa?.nome || 'Nome não informado';
+                            const option = document.createElement('option');
+                            option.value = adotante.matricula;
+                            option.textContent = `${nome} (Matrícula: ${adotante.matricula})`;
+                            selectAdotante.appendChild(option);
+                        }
+                    });
+                    console.log('Select de adotantes atualizado com sucesso');
+                            } catch (error) {
+                    handleApiError('Carregamento de Adotantes', error);
+                    selectAdotante.innerHTML = '<option value="">Erro ao carregar</option>';
+                }
+            }
+
+            // Função para carregar funcionários
+            async function carregarFuncionarios() {
+                try {
+                    console.log('Iniciando carregamento de funcionários...');
+                    const response = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                    console.log('Resposta da API de funcionários:', response);
+
+                    validateResponse(response, 'Carregamento de Funcionários');
+                    const funcionarios = await response.json();
+                    console.log('Funcionários carregados:', funcionarios);
+
+                    selectFuncionario.innerHTML = '<option value="">Selecione um funcionário</option>';
+                    funcionarios.forEach(funcionario => {
+                        if (funcionario && funcionario.id) {
+                            const nome = funcionario.pessoa?.nome || funcionario.login || 'Nome não informado';
+                            const option = document.createElement('option');
+                            option.value = funcionario.id;
+                            option.textContent = `${nome} (ID: ${funcionario.id})`;
+                            selectFuncionario.appendChild(option);
+                        }
+                    });
+                    console.log('Select de funcionários atualizado com sucesso');
+                } catch (error) {
+                    handleApiError('Carregamento de Funcionários', error);
+                    selectFuncionario.innerHTML = '<option value="">Erro ao carregar</option>';
+                }
+            }
+
+            // Função para exibir resultados
+            async function displayResults(adocoes) {
+                resultsBody.innerHTML = '';
+                resultsContainer.classList.add('active');
+                
+                if (!adocoes || adocoes.length === 0) {
+                    noResults.style.display = 'block';
+                    resultsCount.textContent = '0 adoções encontradas';
+                    return;
+                }
+
+                noResults.style.display = 'none';
+                resultsCount.textContent = `${adocoes.length} adoção(ões) encontrada(s)`;
+                
+                for (const adocao of adocoes) {
+                    try {
+                        // Buscar dados do animal
+                        const animalResponse = await fetchWithAuth(`http://localhost:8080/apis/animal/${adocao.aniCod}`);
+                        const animal = await animalResponse.json();
+                        const animalNome = animal.informacao?.nome || 'N/A';
+
+                        // Buscar dados do adotante
+                        const adotanteResponse = await fetchWithAuth(`http://localhost:8080/apis/adotante/${adocao.adoMat}`);
+                        const adotante = await adotanteResponse.json();
+                        const adotanteNome = adotante.pessoa?.nome || 'N/A';
+
+                        // Buscar dados do funcionário
+                        const funcionarioResponse = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                        const funcionarios = await funcionarioResponse.json();
+                        const funcionario = funcionarios.find(f => f.id === adocao.funcCod);
+                        const funcionarioNome = funcionario?.pessoa?.nome || funcionario?.login || 'N/A';
+
+                    const dataFormatada = formatDate(adocao.adoData);
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${adocao.adoCod || ''}</td>
+                        <td>${dataFormatada || ''}</td>
+                            <td>${adocao.aniCod} - ${animalNome}</td>
+                            <td>${adocao.adoMat} - ${adotanteNome}</td>
+                            <td>${adocao.funcCod} - ${funcionarioNome}</td>
+                        <td>
+                            <button class="btn-action" onclick="editAdoption(${adocao.adoCod})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action" onclick="deleteAdoption(${adocao.adoCod})" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    resultsBody.appendChild(row);
+                    } catch (error) {
+                        console.error('Erro ao buscar detalhes da adoção:', error);
+                        // Em caso de erro, mostra apenas os IDs
+                        const dataFormatada = formatDate(adocao.adoData);
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${adocao.adoCod || ''}</td>
+                            <td>${dataFormatada || ''}</td>
+                            <td>${adocao.aniCod}</td>
+                            <td>${adocao.adoMat}</td>
+                            <td>${adocao.funcCod}</td>
+                            <td>
+                                <button class="btn-action" onclick="editAdoption(${adocao.adoCod})" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action" onclick="deleteAdoption(${adocao.adoCod})" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        `;
+                        resultsBody.appendChild(row);
+                    }
+                }
+            }
+
+            // Função para formatar data
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                try {
+                    const date = new Date(dateString);
+                    if (isNaN(date.getTime())) {
+                        console.log('Data inválida:', dateString);
+                        return '';
+                    }
+                    // Remove o ajuste de data anterior
+                    return date.toLocaleDateString('pt-BR');
+                } catch (error) {
+                    console.error('Erro ao formatar data:', error);
+                    return '';
+                }
+            }
+
+            // Botão pesquisar
+            btnSearch.addEventListener('click', function() {
+                btnSearch.dataset.active = 'true';
+                searchAdoptions();
+            });
+
+            // Botão listar todas
+            btnListAll.addEventListener('click', async function() {
+                btnSearch.dataset.active = 'false';
+                selectAnimal.value = '';
+                selectAdotante.value = '';
+                selectFuncionario.value = '';
+                dataAdocaoInput.value = '';
+                // Busca todas as adoções
+                try {
+                    const response = await fetchWithAuth('http://localhost:8080/apis/adocao');
+                    if (!response.ok) throw new Error('Erro ao buscar adoções');
+                    const adocoes = await response.json();
+                    displayResults(adocoes);
+                } catch (error) {
+                    handleApiError('Listar Todas Adoções', error);
+                }
+            });
+
+            // Toast (já existe na página)
+            function showToast(type, title, message) {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                let iconClass = 'fa-info-circle';
+                if (type === 'success') iconClass = 'fa-check-circle';
+                if (type === 'error') iconClass = 'fa-exclamation-circle';
+                if (type === 'warning') iconClass = 'fa-exclamation-triangle';
+                toast.innerHTML = `
+                    <i class="fas ${iconClass} toast-icon"></i>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <button type="button" class="toast-close">&times;</button>
+                `;
+                toastContainer.appendChild(toast);
+                toast.querySelector('.toast-close').addEventListener('click', () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                });
+                setTimeout(() => toast.classList.add('show'), 10);
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+            }
+
+            // Funções de ação (editar, excluir)
+            window.editAdoption = function(id) {
+                window.location.href = `pageAlterarAdocao.html?id=${id}`;
+            };
+            window.deleteAdoption = async function(id) {
+                if (!confirm('Tem certeza que deseja excluir esta adoção?')) {
+                    return;
+                }
+
+                try {
+                    console.log(`Iniciando exclusão da adoção ID: ${id}`);
+                    const response = await fetchWithAuth(`http://localhost:8080/apis/adocao/${id}`, { 
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        let errorMessage = 'Erro ao excluir adoção';
+                        try {
+                            const errorData = await response.text();
+                            console.error('Resposta do servidor:', errorData);
+                            errorMessage = errorData || `Erro ${response.status}: ${response.statusText}`;
+                            try {
+                                const jsonError = JSON.parse(errorData);
+                                errorMessage = jsonError.mensagem || jsonError.message || errorData;
+                            } catch (e) {
+                                // Resposta não é JSON
+                            }
+                        } catch (e) {
+                            console.error('Erro ao ler resposta do servidor:', e);
+                        }
+                        showToast('error', 'Erro', errorMessage);
+                        return;
+                    }
+
+                    showToast('success', 'Sucesso', 'Adoção excluída com sucesso.');
+                    
+                    // Recarrega a lista
+                    const btnSearch = document.getElementById('btn-search-adocoes');
+                    const hasFilters = selectAnimal.value || selectAdotante.value || 
+                                     selectFuncionario.value || dataAdocaoInput.value;
+                    
+                    if (hasFilters) {
+                        console.log('Recarregando resultados da pesquisa filtrada');
+                        searchAdoptions();
+                    } else {
+                        console.log('Recarregando lista completa');
+                        document.getElementById('btn-list-all-adocoes').click();
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir adoção:', error);
+                    showToast('error', 'Erro', error.message || 'Não foi possível conectar ao servidor.');
+                }
+            };
+
+            // Carregar selects ao iniciar
+            carregarAnimais();
+            carregarAdotantes();
+            carregarFuncionarios();
+        });
+    </script>
+</body>
+</html>

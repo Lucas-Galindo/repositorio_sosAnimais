@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<header>
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo-container">
+        <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
+        <div class="title">S.O.S. Amigos de Animais</div>
+    </div>
+    <div class="header-icons">
+        <i class="fas fa-bell notification-icon fa-lg"></i>
+        <div class="profile-container">
+            <div class="profile-icon" id="profileIcon">
+                <i class="fas fa-user fa-lg"></i>
+            </div>
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="dropdown-item" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sair
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+    .profile-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    .profile-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        border-radius: 4px;
+        margin-top: 5px;
+        z-index: 1000;
+    }
+
+    .profile-dropdown .dropdown-item {
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--color-brown-dark);
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .profile-dropdown .dropdown-item:hover {
+        background-color: rgba(211, 122, 71, 0.1);
+    }
+
+    .profile-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileIcon = document.getElementById('profileIcon');
+        const profileDropdown = document.getElementById('profileDropdown');
+        const btnLogout = document.getElementById('btnLogout');
+
+        // Função para mostrar/esconder o dropdown
+        profileIcon.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', function(e) {
+            if (!profileDropdown.contains(e.target) && !profileIcon.contains(e.target)) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+
+        // Função de logout
+        btnLogout.addEventListener('click', async function() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '/frontend/frontend-sosanimais/pages/pageTelaLogin.html';
+                    return;
+                }
+
+                const response = await fetch('http://localhost:8080/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao fazer logout');
+                }
+
+                localStorage.removeItem('token');
+                window.location.href = '/frontend/frontend-sosanimais/pages/pageTelaLogin.html';
+            } catch (error) {
+                console.error('Erro durante o logout:', error);
+                // Mesmo com erro, vamos fazer logout local
+                localStorage.removeItem('token');
+                window.location.href = '/frontend/frontend-sosanimais/pages/pageTelaLogin.html';
+            }
+        });
+    });
+</script>

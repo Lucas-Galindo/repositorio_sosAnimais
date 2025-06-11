@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Mantém o mesmo CSS fornecido anteriormente */
+        :root {
+            --color-orange-burnt: #d37a47;
+            --color-brown-dark: #4a2d21;
+            --color-beige-light: #f2e6db;
+            --color-orange-light: #e59a62;
+            --color-gray-dark: #4d4d4d;
+            --color-orange-burnt-hover: #c06b3a;
+            --color-orange-burnt-active: #b05d2c;
+            --text-dark: var(--color-brown-dark);
+            --text-light: #ffffff;
+            --text-muted: var(--color-gray-dark);
+            --bg-primary: var(--color-beige-light);
+            --bg-secondary: var(--color-orange-burnt);
+            --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+            --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+            --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+        body {
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+        }
+        header {
+            background-color: var(--color-orange-burnt-active);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .login-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow-medium);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        .login-header {
+            background-color: var(--color-orange-burnt);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .login-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .login-body {
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+        .input-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 2.35rem;
+            color: var(--color-gray-dark);
+        }
+        .password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 2.35rem;
+            color: var(--color-gray-dark);
+            cursor: pointer;
+            user-select: none;
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .form-check-input {
+            margin-right: 0.5rem;
+            width: 16px;
+            height: 16px;
+        }
+        .form-check-label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-bottom: 1.5rem;
+            color: var(--color-orange-burnt);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        .btn-login {
+            display: block;
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--color-orange-burnt);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-login:hover {
+            background-color: var(--color-orange-burnt-hover);
+        }
+        .login-footer {
+            padding: 1.5rem 2rem;
+            background-color: #f9f9f9;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        .register-text {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        .register-link {
+            color: var(--color-orange-burnt);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .register-link:hover {
+            text-decoration: underline;
+        }
+        .social-login {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            color: #4d4d4d;
+            border: 1px solid #ddd;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .social-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-small);
+        }
+        footer {
+            background-color: var(--color-orange-burnt-active);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        .footer-text {
+            margin-bottom: 0.5rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .footer-link:hover {
+            text-decoration: underline;
+            opacity: 1;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        .form-control.is-invalid + .input-icon {
+            color: #dc3545;
+        }
+        .form-control.is-invalid ~ .error-message {
+            display: block;
+        }
+        .global-error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .global-error.show {
+            display: block;
+        }
+        @media (max-width: 576px) {
+            header {
+                padding: 1rem;
+            }
+            .title {
+                font-size: 1.4rem;
+            }
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+            .login-card {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .login-body, 
+            .login-footer {
+                padding: 1.5rem;
+            }
+            .main-container {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="/img/imagem.png" alt="Pata de Animal" class="paw-logo">
+            <div class="title">S.O.S. Amigos de Animais</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Acesso ao Sistema</h1>
+                <p class="login-subtitle">Faça login para acessar a plataforma</p>
+            </div>
+            
+            <div class="login-body">
+                <div class="global-error" id="global-error"></div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="login" name="login" class="form-control" placeholder="Seu login" required>
+                        <div class="error-message">Por favor, digite seu login.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="senha" name="senha" class="form-control" placeholder="Sua senha" required>
+                        <i class="fas fa-eye password-toggle" id="password-toggle"></i>
+                        <div class="error-message">A senha é obrigatória.</div>
+                    </div>
+
+                    <button type="submit" class="btn-login">Entrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-text">
+            © 2025 S.O.S. Amigos de Animais. Todos os direitos reservados.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Sobre nós</a>
+            <a href="#" class="footer-link">Termos de Uso</a>
+            <a href="#" class="footer-link">Contato</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordToggle = document.getElementById('password-toggle');
+            const senhaInput = document.getElementById('senha');
+            const loginForm = document.getElementById('login-form');
+            const loginInput = document.getElementById('login');
+            const globalError = document.getElementById('global-error');
+
+            // Exibir mensagem de erro do servidor, se houver
+            const urlParams = new URLSearchParams(window.location.search);
+            const error = urlParams.get('error');
+            if (error) {
+                globalError.textContent = error;
+                globalError.classList.add('show');
+            }
+
+            // Toggle de visibilidade da senha
+            if (passwordToggle && senhaInput) {
+                passwordToggle.addEventListener('click', function() {
+                    const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    senhaInput.setAttribute('type', type);
+                    this.classList.toggle('fa-eye');
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+
+            // Integração com o backend
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    let isValid = true;
+
+                    // Validar login
+                    if (!loginInput.value) {
+                        loginInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        loginInput.classList.remove('is-invalid');
+                    }
+
+                    // Validar senha
+                    if (!senhaInput.value) {
+                        senhaInput.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        senhaInput.classList.remove('is-invalid');
+                    }
+
+                    if (isValid) {
+                        try {
+                            const response = await fetch('http://localhost:8080/auth/login', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    login: loginInput.value,
+                                    senha: senhaInput.value
+                                })
+                            });
+
+                            if (response.ok) {
+                                const data = await response.json();
+                                // Salvar o token JWT
+                                localStorage.setItem('token', data.token);
+                                // Redirecionar para a página principal
+                                window.location.href = '../pages/home.html';
+                            } else {
+                                const error = await response.json();
+                                globalError.textContent = error.message || 'Erro ao fazer login. Verifique suas credenciais.';
+                                globalError.classList.add('show');
+                            }
+                        } catch (error) {
+                            globalError.textContent = 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
+                            globalError.classList.add('show');
+                        }
+                    }
+                });
+            }
+
+            // Remover mensagens de erro quando o usuário começar a digitar
+            const inputs = document.querySelectorAll('.form-control');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('is-invalid');
+                    globalError.classList.remove('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Amigos de Animais - Cadastro de Adoção</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../assets/main.css"> 
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    
+    <style>
+        /* Estilos copiados da pageCadastroPessoa.html para manter a consistência */
+        /* Variaveis de Cor Globais (assumindo que estão em main.css ou definidas aqui) */
+        :root {
+            --color-orange-burnt: #d37a47; /* Laranja Queimado */
+            --color-brown-dark: #4a2d21; /* Marrom Escuro (para texto principal) */
+            --color-beige-light: #f2e6db; /* Bege Claro (para fundo principal) */
+            --color-orange-light: #e59a62; /* Laranja Claro (para acentos, headers de forms) */
+            --color-gray-dark: #4d4d4d; /* Cinza Escuro (para texto secundário, ícones) */
+            
+            --color-orange-burnt-hover: #c06b3a;
+            --color-orange-burnt-active: #b05d2c;
+
+            --text-dark: var(--color-brown-dark);
+            --text-light: #ffffff;
+            --text-muted: var(--color-gray-dark);
+
+            --bg-primary: var(--color-beige-light);
+            --bg-secondary: var(--color-orange-burnt);
+
+            --button-primary: var(--color-orange-burnt);
+            --button-primary-hover: var(--color-orange-burnt-hover);
+            --button-text: var(--text-light);
+            --button-secondary: #a0a0a0; /* Um cinza para botões secundários */
+            --button-secondary-hover: #8c8c8c;
+
+
+            --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+            --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+            --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .paw-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+
+        .title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .notification-icon, .profile-icon {
+            margin-left: 20px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .profile-icon {
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-brown-dark);
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 100px; /* Altura do header */
+            flex: 1;
+        }
+
+        .menu-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-icon {
+            margin-right: 10px;
+        }
+
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+            max-height: 500px; /* Ajuste conforme necessário */
+            transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 3rem; /* Adicionado padding à esquerda para indentação */
+            color: White;
+            font-weight: bold; /* Texto em negrito */
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.95rem; /* Tamanho da fonte dos itens do dropdown */
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-left: 280px; /* Largura da sidebar */
+            background-color: var(--bg-primary); /* Fundo da área de conteúdo */
+        }
+
+        .page-title {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
+            color: var(--color-orange-burnt);
+        }       
+        /* Estilos específicos para a página de cadastro */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.2rem; /* Aumentado para dar mais destaque */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1rem; /* Espaçamento entre as linhas de formulário */
+        }
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .form-group {
+            margin-bottom: 1rem; /* Espaçamento padrão para grupos de formulário */
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+            content: '*';
+            color: red;
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+         /* Especificidade para select para garantir altura consistente */
+        select.form-control {
+            height: calc(1.5em + 1.5rem + 2px); /* Ajuste para corresponder à altura dos inputs */
+            background-color: white; /* Garante fundo branco para selects */
+        }
+
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2); /* Sombra de foco mais suave */
+        }
+
+        .form-control[readonly], .form-control[disabled] {
+            background-color: #e9ecef; /* Fundo para campos readonly/disabled */
+            opacity: 1;
+            cursor: not-allowed;
+        }
+
+
+        .form-control.invalid {
+            border-color: red;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .error-text {
+            display: block; /* Garantir que seja block para ocupar a linha */
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+            color: red;
+            min-height: 1em; /* Para evitar que o layout salte quando o erro aparece/desaparece */
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between; /* Alinha botões nas extremidades */
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+            display: flex;
+            gap: 1rem; /* Espaço entre botões se houver mais de um por lado */
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+            display: flex; /* Para alinhar ícone e texto */
+            align-items: center;
+            justify-content: center;
+            text-decoration: none; /* Remove sublinhado de botões que são links */
+            font-size: 0.95rem; /* Tamanho de fonte dos botões */
+        }
+
+        .btn i {
+            margin-right: 0.5rem; /* Espaço entre ícone e texto do botão */
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+        
+        .btn-secondary {
+            background-color: var(--button-secondary);
+            color: var(--button-text);
+        }
+        .btn-secondary:hover {
+            background-color: var(--button-secondary-hover);
+        }
+
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--color-orange-burnt);
+            color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(211, 122, 71, 0.1); /* Leve fundo laranja no hover */
+        }
+
+        /* Notificação Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            opacity: 0; /* Começa invisível para animação */
+            transform: translateX(100%); /* Começa fora da tela para animação */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon { color: #28a745; }
+        .toast-error .toast-icon { color: #dc3545; }
+        .toast-warning .toast-icon { color: #ffc107; }
+        .toast-info .toast-icon { color: #17a2b8; }
+
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+            line-height: 1; /* Para melhor alinhamento vertical do 'x' */
+        }
+        
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+            /* .form-row {
+                grid-template-columns: 1fr; 
+                gap: 1rem;
+            } */ /* Comentado para manter o grid responsivo padrão, ajuste se necessário */
+
+            .form-actions {
+                flex-direction: column-reverse; /* Botões empilhados em telas menores */
+                gap: 1rem;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+                justify-content: center; /* Centraliza grupos de botões */
+            }
+            .form-actions-right .btn, .form-actions-left .btn {
+                flex-grow: 1; /* Faz botões ocuparem espaço disponível */
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem; /* Reduz padding do header */
+            }
+
+            .sidebar-toggle {
+                display: block; /* Mostra o botão de toggle da sidebar */
+            }
+
+            .sidebar {
+                transform: translateX(-280px); /* Sidebar escondida por padrão */
+                transition: transform 0.3s ease;
+                z-index: 999; /* Sidebar acima do conteúdo */
+                height: 100vh; /* Sidebar ocupa altura total em mobile */
+                top:0; /* Sidebar começa do topo em mobile */
+
+            }
+
+            .sidebar.active {
+                transform: translateX(0); /* Sidebar visível */
+            }
+
+            .content {
+                margin-left: 0; /* Conteúdo ocupa largura total quando sidebar está fechada */
+                width: 100%;
+                padding: 1.5rem; /* Reduz padding do conteúdo */
+            }
+            .main-container {
+                margin-top: 80px; /* Ajusta margem do topo para novo header */
+            }
+
+
+            .title {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+            }
+            .main-container {
+                margin-top: 70px;
+            }
+
+            .paw-logo {
+                width: 30px;
+                height: 30px;
+            }
+
+            .title {
+                font-size: 1.2rem;
+            }
+
+            .header-icons > * {
+                margin-left: 10px;
+            }
+
+            .profile-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+             /* Ajuste para select simples em telas pequenas se necessário */
+            select.form-control:not([multiple]) {
+                padding-right: 1.5rem; /* Menos padding para a seta em telas pequenas */
+                background-size: 0.55em auto;
+            }
+        }
+
+        /* Estilos para o modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 0;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-large);
+        }
+
+        .modal-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .search-box {
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-input.filled {
+            background-color: #f8f9fa;
+            border-color: var(--color-orange-burnt);
+        }
+
+        .btn-select {
+            background-color: var(--button-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+
+        .btn-select:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .form-actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .funcionario-info {
+            background-color: #f8f9fa;
+            padding: 0.75rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .funcionario-info span {
+            color: var(--text-dark);
+        }
+
+        #funcionarioId {
+            color: var(--text-muted);
+            margin-left: 0.5rem;
+        }
+
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-verify {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+
+        .btn-verify:hover {
+            background-color: #218838;
+        }
+
+        .info-display {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .info-display.success {
+            display: block;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .info-display.error {
+            display: block;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .feedback-text {
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .feedback-text.error {
+            color: #dc3545;
+        }
+
+        .feedback-text.success {
+            color: #28a745;
+        }
+
+        .input-group input {
+            border-radius: 4px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 2px rgba(211, 122, 71, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <main-header></main-header>
+    <div class="main-container">
+        <main-sidebar></main-sidebar>
+        <main class="content">
+            <h1 class="page-title">
+                <i class="fas fa-heart"></i>
+                Cadastro de Adoção
+            </h1>
+
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-title">Nova Adoção</div>
+                </div>
+                <div class="form-body">
+                    <form id="adoptionForm">
+                            <div class="form-group">
+                            <label>Animal</label>
+                            <div class="input-group">
+                                <input type="text" id="animalInput" placeholder="Digite o ID do animal ou selecione" class="form-input">
+                                <button type="button" onclick="openAnimalModal()" class="btn-select">
+                                    <i class="fas fa-search"></i>
+                                    Buscar Animal
+                                </button>
+                                </div>
+                            <div id="animalFeedback" class="feedback-text"></div>
+                        </div>
+
+                            <div class="form-group">
+                            <label>Adotante</label>
+                            <div class="input-group">
+                                <input type="text" id="adotanteInput" placeholder="Digite a matrícula do adotante ou selecione" class="form-input">
+                                <button type="button" onclick="openAdotanteModal()" class="btn-select">
+                                    <i class="fas fa-search"></i>
+                                    Buscar Adotante
+                                </button>
+                                </div>
+                            <div id="adotanteFeedback" class="feedback-text"></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Data da Adoção</label>
+                                <input type="date" id="dataAdocao" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Funcionário Responsável</label>
+                                <div class="funcionario-info">
+                                    <span id="funcionarioNome">Carregando...</span>
+                                    <span id="funcionarioId"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i>
+                                Registrar Adoção
+                            </button>
+                    </div>
+                </form>
+            </div>
+    </div>
+
+            <!-- Modal de Seleção de Animal -->
+            <div id="animalModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Selecionar Animal</h2>
+                        <button onclick="closeAnimalModal()" class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="search-box">
+                            <input type="text" id="animalSearch" placeholder="Buscar animal..." class="search-input">
+                        </div>
+                        <div class="table-container">
+                            <table class="modal-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Nome</th>
+                                        <th>Raça</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="animalTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+            <!-- Modal de Seleção de Adotante -->
+            <div id="adotanteModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Selecionar Adotante</h2>
+                        <button onclick="closeAdotanteModal()" class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="search-box">
+                            <input type="text" id="adotanteSearch" placeholder="Buscar adotante..." class="search-input">
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Matrícula</th>
+                                        <th>Nome</th>
+                                        <th>CPF</th>
+                                        <th>Telefone</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adotanteTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="toast-container" class="toast-container"></div>
+        </main>
+    </div>
+    <main-footer></main-footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Elementos dos modais
+        const animalModal = document.getElementById('animalModal');
+        const adotanteModal = document.getElementById('adotanteModal');
+        const animalSearch = document.getElementById('animalSearch');
+        const adotanteSearch = document.getElementById('adotanteSearch');
+        const animalTableBody = document.getElementById('animalTableBody');
+        const adotanteTableBody = document.getElementById('adotanteTableBody');
+
+        // Elementos do formulário
+        const animalInput = document.getElementById('animalInput');
+        const adotanteInput = document.getElementById('adotanteInput');
+        const animalId = document.getElementById('animalId');
+        const adotanteId = document.getElementById('adotanteId');
+            const adoptionForm = document.getElementById('adoptionForm');
+
+        // Carregar funcionário logado ao iniciar
+        carregarFuncionarioLogado();
+
+        // Funções para os modais
+        window.openAnimalModal = function() {
+            animalModal.style.display = 'block';
+            loadAnimais();
+        }
+
+        window.closeAnimalModal = function() {
+            animalModal.style.display = 'none';
+        }
+
+        window.openAdotanteModal = function() {
+            adotanteModal.style.display = 'block';
+            loadAdotantes();
+        }
+
+        window.closeAdotanteModal = function() {
+            adotanteModal.style.display = 'none';
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            if (event.target == animalModal) {
+                closeAnimalModal();
+            }
+            if (event.target == adotanteModal) {
+                closeAdotanteModal();
+            }
+        }
+
+        // Função para buscar com autenticação
+            async function fetchWithAuth(url, options = {}) {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '../auth.html';
+                    return;
+                }
+                const defaultOptions = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                };
+                const finalOptions = {
+                    ...defaultOptions,
+                    ...options,
+                    headers: {
+                        ...defaultOptions.headers,
+                        ...(options.headers || {})
+                    }
+                };
+                return fetch(url, finalOptions);
+            }
+
+        // Carregar funcionário logado
+        async function carregarFuncionarioLogado() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    window.location.href = '../auth.html';
+                    return;
+                }
+
+                // Decodificar o token JWT para obter o email do usuário
+                const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+                const userEmail = tokenPayload.sub; // sub é o email do usuário
+
+                const response = await fetchWithAuth('http://localhost:8080/apis/funcionario/lista');
+                if (!response.ok) throw new Error('Erro ao carregar funcionário');
+                
+                const funcionarios = await response.json();
+                const funcionario = funcionarios.find(f => f.login === userEmail);
+                
+                if (!funcionario) {
+                    showToast('error', 'Erro', 'Funcionário não encontrado');
+                    return;
+                }
+
+                const nomeFuncionario = funcionario.pessoa ? funcionario.pessoa.nome : funcionario.login;
+                document.getElementById('funcionarioNome').textContent = nomeFuncionario;
+                document.getElementById('funcionarioId').textContent = `(ID: ${funcionario.id})`;
+                window.funcionarioId = funcionario.id;
+                
+                localStorage.setItem('funcionarioId', funcionario.id);
+                localStorage.setItem('funcionarioNome', nomeFuncionario);
+                } catch (error) {
+                console.error('Erro ao carregar funcionário:', error);
+                showToast('error', 'Erro', 'Não foi possível carregar as informações do funcionário');
+                // Redirecionar para a página de login em caso de erro de autenticação
+                if (error.message.includes('401') || error.message.includes('403')) {
+                    window.location.href = '../auth.html';
+                }
+            }
+        }
+
+        // Carregar animais disponíveis
+        async function loadAnimais() {
+            try {
+                const response = await fetchWithAuth('http://localhost:8080/apis/animal');
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar animais');
+                }
+
+                const animais = await response.json();
+                const animalTableBody = document.getElementById('animalTableBody');
+                animalTableBody.innerHTML = '';
+
+                // Filtrar apenas animais com status 'D' (disponível) e ordenar por ID
+                const animaisDisponiveis = animais
+                    .filter(animal => animal && animal.informacao && animal.informacao.status === 'D')
+                    .sort((a, b) => a.id - b.id);
+
+                if (animaisDisponiveis.length === 0) {
+                    animalTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center">Nenhum animal disponível para adoção</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                animaisDisponiveis.forEach(animal => {
+                    if (animal && animal.informacao) {
+                        const row = document.createElement('tr');
+                        row.style.cursor = 'pointer';
+                        row.innerHTML = `
+                            <td>${animal.id}</td>
+                            <td>${animal.informacao.nome || 'N/A'}</td>
+                            <td>${animal.informacao.raca || 'N/A'}</td>
+                            <td>${animal.informacao.status === 'D' ? 'Disponível' : 'N/A'}</td>
+                        `;
+                        row.onclick = () => {
+                            document.getElementById('animalInput').value = animal.id;
+                            verificarAnimal(animal.id);
+                            closeAnimalModal();
+                        };
+                        animalTableBody.appendChild(row);
+                    }
+                });
+
+                // Atualizar a função de busca do modal
+                if (animalSearch) {
+                    animalSearch.addEventListener('input', function(e) {
+                        const searchTerm = e.target.value.toLowerCase();
+                        const rows = animalTableBody.getElementsByTagName('tr');
+                        
+                        Array.from(rows).forEach(row => {
+                            if (row.cells.length > 1) { // Verifica se não é a linha de "nenhum animal disponível"
+                                const nome = row.cells[1].textContent.toLowerCase();
+                                const raca = row.cells[2].textContent.toLowerCase();
+                                const matches = nome.includes(searchTerm) || raca.includes(searchTerm);
+                                row.style.display = matches ? '' : 'none';
+                            }
+                        });
+                    });
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar animais:', error);
+                showToast('error', 'Erro', 'Erro ao carregar lista de animais');
+            }
+        }
+
+        // Função para selecionar animal do modal
+        window.selecionarAnimal = function(id, nome) {
+            document.getElementById('animalInput').value = id;
+            verificarAnimal(id); // Chama a verificação para atualizar o feedback
+            closeAnimalModal();
+        }
+
+        // Carregar adotantes
+        async function loadAdotantes() {
+            try {
+                console.log('Carregando adotantes...');
+                const response = await fetchWithAuth('http://localhost:8080/apis/adotante/lista');
+                if (!response.ok) {
+                    console.error('Erro na resposta da API:', response.status, response.statusText);
+                    throw new Error('Erro ao carregar adotantes');
+                }
+                
+                const adotantes = await response.json();
+                console.log('Adotantes carregados:', adotantes);
+                renderAdotantesTable(adotantes);
+                        } catch (error) {
+                console.error('Erro ao carregar adotantes:', error);
+                showToast('error', 'Erro', 'Erro ao carregar adotantes');
+            }
+        }
+
+        // Renderizar tabela de adotantes
+        function renderAdotantesTable(adotantes) {
+            if (!adotanteTableBody) {
+                console.error('Elemento adotanteTableBody não encontrado');
+                return;
+            }
+
+            adotanteTableBody.innerHTML = '';
+            adotantes.forEach(adotante => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${adotante.matricula}</td>
+                    <td>${adotante.pessoa?.nome || 'N/A'}</td>
+                    <td>${adotante.pessoa?.cpf || 'N/A'}</td>
+                    <td>${adotante.pessoa?.telefone || 'N/A'}</td>
+                `;
+                row.onclick = () => {
+                    document.getElementById('adotanteInput').value = adotante.matricula;
+                    verificarAdotante(adotante.matricula);
+                    closeAdotanteModal();
+                };
+                adotanteTableBody.appendChild(row);
+            });
+        }
+
+        // Selecionar adotante
+        function selectAdotante(adotante) {
+            const adotanteInput = document.getElementById('adotanteInput');
+            if (!adotanteInput) {
+                console.error('Elemento adotanteInput não encontrado');
+                return;
+            }
+            adotanteInput.value = adotante.matricula;
+            verificarAdotante(adotante.matricula);
+            adotanteInput.classList.add('filled');
+        }
+
+        // Busca em tempo real para animais
+        if (animalSearch) {
+            animalSearch.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const rows = animalTableBody.getElementsByTagName('tr');
+                
+                Array.from(rows).forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        }
+
+        // Busca em tempo real para adotantes
+        if (adotanteSearch) {
+            adotanteSearch.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const rows = adotanteTableBody.getElementsByTagName('tr');
+                
+                Array.from(rows).forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        }
+
+        // Função para verificar se o animal existe e está disponível
+        async function verificarAnimal(id) {
+            try {
+                if (!id) {
+                    document.getElementById('animalFeedback').textContent = '';
+                    return false;
+                }
+
+                const response = await fetchWithAuth(`http://localhost:8080/apis/animal/${id}`);
+                    if (!response.ok) {
+                    document.getElementById('animalFeedback').className = 'feedback-text error';
+                    document.getElementById('animalFeedback').textContent = 'Animal não encontrado';
+                    return false;
+                }
+
+                const animal = await response.json();
+                if (animal.informacao.status !== 'D') {
+                    document.getElementById('animalFeedback').className = 'feedback-text error';
+                    document.getElementById('animalFeedback').textContent = 'Animal não está disponível para adoção';
+                    return false;
+                }
+
+                document.getElementById('animalFeedback').className = 'feedback-text success';
+                document.getElementById('animalFeedback').textContent = `Animal encontrado: ${animal.informacao.nome} (${animal.informacao.raca})`;
+                return true;
+                } catch (error) {
+                document.getElementById('animalFeedback').className = 'feedback-text error';
+                document.getElementById('animalFeedback').textContent = 'Erro ao verificar animal';
+                return false;
+            }
+        }
+
+        // Função para verificar se o adotante existe
+        async function verificarAdotante(matricula) {
+            try {
+                if (!matricula) {
+                    document.getElementById('adotanteFeedback').textContent = '';
+                    return false;
+                }
+
+                const response = await fetchWithAuth(`http://localhost:8080/apis/adotante/${matricula}`);
+                if (!response.ok) {
+                    document.getElementById('adotanteFeedback').className = 'feedback-text error';
+                    document.getElementById('adotanteFeedback').textContent = 'Adotante não encontrado';
+                    return false;
+                }
+
+                const adotante = await response.json();
+                document.getElementById('adotanteFeedback').className = 'feedback-text success';
+                document.getElementById('adotanteFeedback').textContent = `Adotante encontrado: ${adotante.pessoa.nome}`;
+                return true;
+            } catch (error) {
+                document.getElementById('adotanteFeedback').className = 'feedback-text error';
+                document.getElementById('adotanteFeedback').textContent = 'Erro ao verificar adotante';
+                return false;
+            }
+        }
+
+        // Adicionar event listeners para verificação em tempo real
+        document.getElementById('animalInput').addEventListener('input', async function(e) {
+            const id = e.target.value.trim();
+            if (id) {
+                await verificarAnimal(id);
+            } else {
+                document.getElementById('animalFeedback').textContent = '';
+            }
+        });
+
+        document.getElementById('adotanteInput').addEventListener('input', async function(e) {
+            const matricula = e.target.value.trim();
+            if (matricula) {
+                await verificarAdotante(matricula);
+            } else {
+                document.getElementById('adotanteFeedback').textContent = '';
+            }
+        });
+
+        // Modificar a função de salvar para incluir as verificações
+        async function salvarAdocao(event) {
+            event.preventDefault();
+
+            const animalId = document.getElementById('animalInput').value.trim();
+            const adotanteMatricula = document.getElementById('adotanteInput').value.trim();
+            const dataSelecionada = document.getElementById('dataAdocao').value.trim();
+
+            if (!animalId || !adotanteMatricula || !dataSelecionada) {
+                showToast('error', 'Erro', 'Preencha todos os campos obrigatórios');
+                return;
+            }
+
+            const animalValido = await verificarAnimal(animalId);
+            const adotanteValido = await verificarAdotante(adotanteMatricula);
+
+            if (!animalValido || !adotanteValido) {
+                showToast('error', 'Erro', 'Verifique os dados informados');
+                return;
+            }
+
+            try {
+                const adocaoData = {
+                    aniCod: parseInt(animalId),
+                    adoMat: parseInt(adotanteMatricula),
+                    funcCod: window.funcionarioId,
+                    adoData: dataSelecionada
+                };
+
+                            const response = await fetchWithAuth('http://localhost:8080/apis/adocao/registrar', {
+                                method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(adocaoData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao registrar adoção');
+                }
+
+                showToast('success', 'Sucesso', 'Adoção registrada com sucesso');
+                setTimeout(() => {
+                    window.location.href = 'pageBuscaAdocao.html';
+                }, 2000);
+
+                        } catch (error) {
+                console.error('Erro ao salvar:', error);
+                showToast('error', 'Erro', 'Erro ao registrar adoção');
+            }
+        }
+
+        // Atualizar os event listeners
+        document.getElementById('adoptionForm').addEventListener('submit', salvarAdocao);
+
+        // Toast
+        window.showToast = function(type, title, message) {
+                const toastContainer = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+            let iconClass = 'fa-info-circle';
+                if (type === 'success') iconClass = 'fa-check-circle';
+                if (type === 'error') iconClass = 'fa-exclamation-circle';
+
+                toast.innerHTML = `
+                    <i class="fas ${iconClass} toast-icon"></i>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                    <button type="button" class="toast-close">&times;</button>
+                `;
+
+                toastContainer.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            toast.querySelector('.toast-close').onclick = () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+            };
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
