@@ -39,11 +39,15 @@ public class BaiasDAL {
     public boolean update(Baias entidade) {
 
         String sql = """
-                UPDATE baia SET baia_qtde = #2', baia_nome = '#3', baia_categoria = '#4' WHERE baia_id =#1;
+                UPDATE baia SET baia_qtde = #2, baia_nome = '#3', baia_categoria = '#4' WHERE baia_id =#1;
                 """;
         sql = sql.replace("#2",""+ entidade.getQuantidadeAnimais());
         sql = sql.replace("#3", entidade.getNome());
-        sql = sql.replace("#4", entidade.getCategoria());
+        if(entidade.getCategoria()==null){
+            sql = sql.replace("#4", "");
+        }
+        else
+            sql = sql.replace("#4", entidade.getCategoria());
         sql = sql.replace("#1",""+ entidade.getId());
 
         return SingletonDB.getConexao().manipular(sql);

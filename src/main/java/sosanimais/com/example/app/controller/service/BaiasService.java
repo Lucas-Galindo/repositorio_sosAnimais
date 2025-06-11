@@ -1,12 +1,13 @@
 package sosanimais.com.example.app.controller.service;
 
 
+import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.model.DAL.BaiasDAL;
 import sosanimais.com.example.app.model.entity.Baias;
 import sosanimais.com.example.app.model.entity.Baias;
 
 import java.util.List;
-
+@Service
 public class BaiasService {
 
 

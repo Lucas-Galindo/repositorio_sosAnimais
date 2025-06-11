@@ -14,7 +14,7 @@ public class Baias {
         this.id = id;
         this.quantidadeAnimais = quantidadeAnimais;
         this.nome = nome;
-        this.categoria = categoria;
+       // this.categoria = categoria;
     }
 
     public String getNome() {
