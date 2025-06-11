@@ -459,7 +459,17 @@
                         body: JSON.stringify(compraData)
                     });
 
-                    if (!response.ok) throw new Error('Erro ao salvar compra');
+                    if (!response.ok) {
+                        const error = await response.json();
+                        console.log('Erro retornado pelo backend:', error);
+                        if (error.mensagem && error.mensagem.includes("O produto informado não está cadastrado no sistema")) {
+                            document.getElementById('produto-nome-error').textContent = 'Erro: Produto não cadastrado no sistema';
+                            showToast('error', 'Erro', 'Erro: Produto não cadastrado no sistema');
+                        } else {
+                            showToast('error', 'Erro', error.mensagem || 'Erro ao registrar a compra. Tente novamente.');
+                        }
+                        return;
+                    }
 
                     showToast('success', 'Sucesso', 'Compra registrada com sucesso');
                     setTimeout(() => {
@@ -467,8 +477,8 @@
                     }, 2000);
 
                 } catch (error) {
-                    console.error('Erro ao salvar:', error);
-                    showToast('error', 'Erro', 'Erro ao registrar compra');
+                    globalError.textContent = 'Erro ao conectar com o servidor. Tente novamente mais tarde.';
+                    globalError.classList.add('show');
                 }
             });
 

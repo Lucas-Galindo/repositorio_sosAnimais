@@ -60,7 +60,7 @@ public class CompraController {
             return ResponseEntity.badRequest().body(new Erro("A quantidade deve ser maior que zero"));
         }
         if (compra.getValorUnitario() <= 0) {
-            return ResponseEntity.badRequest().body(new Erro("O valor unitário deve ser maior que zero"));
+            return ResponseEntity.badRequest().body(new Erro("O valor final deve ser maior que zero"));
         }
         if (compra.getDataCompra() == null) {
             return ResponseEntity.badRequest().body(new Erro("A data da compra é obrigatória"));
@@ -70,6 +70,9 @@ public class CompraController {
         if (novaCompra != null) {
             return ResponseEntity.ok(novaCompra);
         } else {
+            if (compraService.getLastError() != null && compraService.getLastError().contains("Produto não encontrado")) {
+                return ResponseEntity.badRequest().body(new Erro("O produto informado não está cadastrado no sistema"));
+            }
             return ResponseEntity.badRequest().body(new Erro("Erro ao salvar a compra"));
         }
     }

@@ -1,9 +1,10 @@
 package sosanimais.com.example.app.model.DAL;
 
+import org.springframework.stereotype.Repository;
 import sosanimais.com.example.app.model.ProdutoInformacao;
-// Certifique-se de que SingletonDB.getConexao() retorna uma instância de sosanimais.com.example.app.model.db.Conexao
 import sosanimais.com.example.app.model.db.SingletonDB;
 import sosanimais.com.example.app.model.entity.Produto;
+import sosanimais.com.example.app.model.db.IDAL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,13 +13,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProdutoDAL {
+@Repository
+public class ProdutoDAL implements IDAL<Produto> {
 
+    @Override
     public boolean save(Produto produto) {
         ProdutoInformacao info = produto.getProduto();
-        String sql = "INSERT INTO produto (produto_nome, produto_descricao, produto_preco, produto_validade) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO produto (prod_nome, prod_descricao, prod_preco, prod_validade) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = SingletonDB.getConexao().getConnect(); // MODIFICADO AQUI para usar getConnect()
+        try (Connection conn = SingletonDB.getConexao().getConnect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, info.getNome());
@@ -39,129 +42,74 @@ public class ProdutoDAL {
         }
     }
 
-    public Produto get(int id) {
-        String sql = "SELECT * FROM produto WHERE produto_id = ?";
-        ResultSet rs = null;
-        try (Connection conn = SingletonDB.getConexao().getConnect(); // MODIFICADO AQUI
-            PreparedStatement pstmt = conn.prepareStatement(sql)){
-            
-            pstmt.setInt(1,id);
-            rs = pstmt.executeQuery();
+    @Override
+    public boolean update(Produto entidade) {
+        // Implementar o método update
+        return false;
+    }
 
-            if (rs.next()) {
-                ProdutoInformacao info = new ProdutoInformacao(
-                        rs.getString("produto_nome"),
-                        rs.getString("produto_descricao"),
-                        rs.getDouble("produto_preco"),
-                        rs.getString("produto_validade") // Assegure que a coluna existe no BD
-                );
-                return new Produto(rs.getInt("produto_id"), info);
+    @Override
+    public boolean delete(Produto entidade) {
+        try {
+            String sql = "DELETE FROM produto WHERE prod_id = ?";
+            try (Connection conn = SingletonDB.getConexao().getConnect();
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setLong(1, entidade.getId());
+                return pstmt.executeUpdate() > 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Produto get(Long id) {
+        String sql = "SELECT * FROM produto WHERE prod_id = ?";
+        try (Connection conn = SingletonDB.getConexao().getConnect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setLong(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                ProdutoInformacao info = new ProdutoInformacao(
+                    rs.getString("prod_nome"),
+                    rs.getString("prod_descricao"),
+                    rs.getDouble("prod_preco"),
+                    rs.getString("prod_validade")
+                );
+                return new Produto(rs.getLong("prod_id"), info);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if(rs!=null) try{ rs.close(); } catch(SQLException s){ s.printStackTrace(); }
         }
         return null;
     }
 
-    public List<Produto> getAll() {
-        List<Produto> lista = new ArrayList<>();
+    @Override
+    public List<Produto> get(String filtro) {
+        List<Produto> produtos = new ArrayList<>();
         String sql = "SELECT * FROM produto";
-        
-        try (Connection conn = SingletonDB.getConexao().getConnect(); // MODIFICADO AQUI
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery()){
+        if (filtro != null && !filtro.isEmpty()) {
+            sql += " WHERE " + filtro;
+        }
+        sql += " ORDER BY prod_id ASC";
 
-            while (rs.next()) {
+        ResultSet rs = SingletonDB.getConexao().consultar(sql);
+        try {
+            while (rs != null && rs.next()) {
                 ProdutoInformacao info = new ProdutoInformacao(
-                        rs.getString("produto_nome"),
-                        rs.getString("produto_descricao"),
-                        rs.getDouble("produto_preco"),
-                        rs.getString("produto_validade") // Assegure que a coluna existe no BD
+                    rs.getString("prod_nome"),
+                    rs.getString("prod_descricao"),
+                    rs.getDouble("prod_preco"),
+                    rs.getString("prod_validade")
                 );
-                lista.add(new Produto(rs.getInt("produto_id"), info));
+                produtos.add(new Produto(rs.getLong("prod_id"), info));
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
-        return lista;
-    }
-
-    public boolean delete(int id) {
-        String sql = "DELETE FROM produto WHERE produto_id = ?";
-         try (Connection conn = SingletonDB.getConexao().getConnect(); // MODIFICADO AQUI
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public List<Produto> getByName(String nome) {
-        List<Produto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM produto WHERE LOWER(produto_nome) LIKE LOWER(?)";
-        ResultSet rs = null;
-        try (Connection conn = SingletonDB.getConexao().getConnect(); // MODIFICADO AQUI
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, "%" + nome + "%");
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                 ProdutoInformacao info = new ProdutoInformacao(
-                        rs.getString("produto_nome"),
-                        rs.getString("produto_descricao"),
-                        rs.getDouble("produto_preco"),
-                        rs.getString("produto_validade") // Assegure que a coluna existe no BD
-                );
-                lista.add(new Produto(rs.getInt("produto_id"), info));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } finally {
-            if(rs!=null) try{ rs.close(); } catch(SQLException s){ s.printStackTrace(); }
-        }
-        return lista;
-    }
-
-    public List<Produto> getByValidade(String validade) {
-        List<Produto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM produto WHERE produto_validade = ?"; // Assegure que a coluna existe no BD
-        ResultSet rs = null; 
-        try (Connection conn = SingletonDB.getConexao().getConnect(); // MODIFICADO AQUI
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, validade);
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                 ProdutoInformacao info = new ProdutoInformacao(
-                        rs.getString("produto_nome"),
-                        rs.getString("produto_descricao"),
-                        rs.getDouble("produto_preco"),
-                        rs.getString("produto_validade")
-                );
-                lista.add(new Produto(rs.getInt("produto_id"), info));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } finally {
-            if(rs!=null) try{ rs.close(); } catch(SQLException s){ s.printStackTrace(); }
-        }
-        return lista;
+        return produtos;
     }
 }

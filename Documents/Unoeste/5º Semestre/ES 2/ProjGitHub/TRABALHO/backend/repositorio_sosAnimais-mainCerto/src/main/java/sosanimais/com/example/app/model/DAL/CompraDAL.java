@@ -39,7 +39,8 @@ public class CompraDAL implements IDAL<Compra> {
             e.printStackTrace();
             return false;
         }
-
+        
+        //Deixando a data certa
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
         String dataCompra = sdf.format(entidade.getDataCompra());

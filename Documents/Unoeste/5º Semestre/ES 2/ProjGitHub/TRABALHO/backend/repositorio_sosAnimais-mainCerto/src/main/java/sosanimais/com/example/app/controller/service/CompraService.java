@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.model.entity.Compra;
 import sosanimais.com.example.app.model.DAL.CompraDAL;
+import sosanimais.com.example.app.model.DAL.ProdutoDAL;
+import sosanimais.com.example.app.model.entity.Produto;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,10 +14,23 @@ import java.util.List;
 public class CompraService {
     @Autowired
     private CompraDAL compraDAL;
+    
+    @Autowired
+    private ProdutoService prodServ;
+
+    private String lastError;
+
+    public String getLastError() {
+        return lastError;
+    }
+
+    private void setLastError(String error) {
+        this.lastError = error;
+    }
 
     public Compra salvarCompra(Compra compra) {
-        System.out.println("Iniciando salvamento de compra no service");
-        System.out.println("Dados da compra:");
+        setLastError(null);
+        System.out.println("Iniciando salvamento de compra-----------------");
         System.out.println("Produto: " + compra.getProdutoNome());
         System.out.println("Quantidade: " + compra.getQuantidade());
         System.out.println("Valor: " + compra.getValorUnitario());
@@ -23,7 +38,16 @@ public class CompraService {
         System.out.println("Data: " + compra.getDataCompra());
 
         if (compra.getFuncCod() == null) {
-            System.out.println("ERRO: Matrícula do funcionário não pode ser nula");
+            setLastError("Matrícula do funcionário não pode ser nula");
+            System.out.println("ERRO: " + getLastError());
+            return null;
+        }
+
+        // Verificar se o produto existe
+        List<Produto> produtos = prodServ.getByName(compra.getProdutoNome());
+        if (produtos == null || produtos.isEmpty()) {
+            setLastError("Produto não encontrado no cadastro");
+            System.out.println("ERRO: " + getLastError());
             return null;
         }
 
@@ -32,12 +56,12 @@ public class CompraService {
             System.out.println("Compra salva com sucesso");
             return compra;
         }
-        System.out.println("Erro ao salvar compra");
+        setLastError("Erro ao salvar compra");
+        System.out.println(getLastError());
         return null;
     }
 
     public Compra atualizarCompra(Compra compra) {
-        System.out.println("Iniciando atualização de compra no service");
         boolean update = compraDAL.update(compra);
         if (update) {
             System.out.println("Compra atualizada com sucesso");
@@ -48,11 +72,6 @@ public class CompraService {
     }
 
     public boolean deletarCompra(Compra compra) {
-        System.out.println("=== SERVICE: Iniciando exclusão de compra ===");
-        System.out.println("Dados da compra no service:");
-        System.out.println("ID: " + compra.getCompraCod());
-        System.out.println("Produto: " + compra.getProdutoNome());
-        
         try {
             boolean result = compraDAL.delete(compra);
             System.out.println("Resultado da exclusão no service: " + result);

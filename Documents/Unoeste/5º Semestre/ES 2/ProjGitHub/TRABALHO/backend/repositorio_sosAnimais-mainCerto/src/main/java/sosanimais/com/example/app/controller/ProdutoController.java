@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/produtos")
+@RequestMapping("/apis/produtos")
 public class ProdutoController {
 
     private final ProdutoService produtoService = new ProdutoService();
@@ -29,7 +29,7 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> buscarProdutoPorId(@PathVariable int id) {
+    public ResponseEntity<Object> buscarProdutoPorId(@PathVariable Long id) {
         Produto produto = produtoService.buscarProdutoPorId(id);
         if (produto != null) {
             return ResponseEntity.ok(produto);
@@ -44,16 +44,16 @@ public class ProdutoController {
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deletarProduto(@PathVariable int id) {
-        Produto existente = produtoService.buscarProdutoPorId(id);
+    public ResponseEntity<Object> deletarProduto(@PathVariable Produto produto) {
+        Produto existente = produtoService.buscarProdutoPorId(produto.getId());
         if (existente == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Produto não encontrado com ID: " + id + " para exclusão."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Produto não encontrado com ID: " + produto.getId() + " para exclusão."));
         }
-        boolean deletou = produtoService.deletarProduto(id);
+        boolean deletou = produtoService.deletarProduto(produto);
         if (deletou) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Erro("Erro ao deletar produto com ID: " + id));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Erro("Erro ao deletar produto com ID: " + produto.getId()));
     }
 
     @GetMapping("/nome/{nome}")
@@ -61,7 +61,7 @@ public class ProdutoController {
         if (nome == null || nome.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(new Erro("O nome para busca não pode ser vazio."));
         }
-        List<Produto> filtrados = produtoService.buscarProdutosPorNome(nome);
+        List<Produto> filtrados = produtoService.getByName(nome);
 
         if (filtrados.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Nenhum produto com o nome similar a '" + nome + "' foi encontrado."));
@@ -74,7 +74,7 @@ public class ProdutoController {
          if (validade == null || validade.trim().isEmpty()) {
             return ResponseEntity.badRequest().body(new Erro("A validade para busca não pode ser vazia."));
         }
-        List<Produto> filtrados = produtoService.buscarProdutosPorValidade(validade);
+        List<Produto> filtrados = produtoService.getByValidade(validade);
 
         if (filtrados.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Nenhum produto com a validade '" + validade + "' foi encontrado."));

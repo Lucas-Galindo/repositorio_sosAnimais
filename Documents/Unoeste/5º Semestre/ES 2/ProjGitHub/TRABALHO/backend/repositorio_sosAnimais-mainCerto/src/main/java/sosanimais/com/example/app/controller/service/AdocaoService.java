@@ -28,8 +28,7 @@ public class AdocaoService {
     }
 
     public boolean deletarAdocao(Adocao_Animal ad) {
-        System.out.println("=== SERVICE: Iniciando exclusão de adoção ===");
-        System.out.println("Dados da adoção no service:");
+        System.out.println("SERVICE: Iniciando exclusão de adoção");
         System.out.println("ID: " + ad.getAdoCod());
         System.out.println("Animal: " + ad.getAniCod());
         System.out.println("Adotante: " + ad.getAdoMat());

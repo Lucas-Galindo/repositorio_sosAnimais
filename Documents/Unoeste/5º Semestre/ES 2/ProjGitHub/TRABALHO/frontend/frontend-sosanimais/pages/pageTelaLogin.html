@@ -404,7 +404,7 @@
                                 // Salvar o token JWT
                                 localStorage.setItem('token', data.token);
                                 // Redirecionar para a página principal
-                                window.location.href = '/frontend/frontend-sosanimais/pages/home.html';
+                                window.location.href = '../pages/home.html';
                             } else {
                                 const error = await response.json();
                                 globalError.textContent = error.message || 'Erro ao fazer login. Verifique suas credenciais.';

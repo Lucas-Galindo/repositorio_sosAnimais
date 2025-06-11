@@ -40,6 +40,9 @@ public class Funcionario extends Pessoa implements UserDetails {
         this.role = role;
     }
 
+    public Funcionario(){
+    }
+
     public int getMatricula() {
         return matricula;
     }

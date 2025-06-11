@@ -488,7 +488,21 @@
                         body: JSON.stringify(compraData)
                     });
 
-                    if (!response.ok) throw new Error('Erro ao atualizar compra');
+                    if (!response.ok) {
+                        const error = await response.json();
+                        if (error.message) {
+                            if (error.message.includes("produto não está cadastrado")) {
+                                document.getElementById('produto-nome-error').textContent = 'Erro: Produto não cadastrado';
+                                produtoNomeInput.classList.add('is-invalid');
+                                showToast('error', 'Erro', 'Erro: Produto não cadastrado');
+                            } else {
+                                showToast('error', 'Erro', error.message);
+                            }
+                        } else {
+                            showToast('error', 'Erro', 'Erro ao atualizar a compra. Tente novamente.');
+                        }
+                        return;
+                    }
 
                     showToast('success', 'Sucesso', 'Compra atualizada com sucesso');
                     setTimeout(() => {

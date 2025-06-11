@@ -9,7 +9,7 @@ public class Compra {
     private int comp_qtd;
     private double comp_valorTotal;
     private Long funcionario_func_cod;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "America/Sao_Paulo")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "America/Sao_Paulo")//Formato da data do front
     private Date comp_data;
 
     public Compra() {

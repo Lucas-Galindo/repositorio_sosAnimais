@@ -1,6 +1,5 @@
 package sosanimais.com.example.app.controller.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import sosanimais.com.example.app.Security_JWT.FuncionarioRole;
@@ -42,24 +41,25 @@ public class FuncionarioService {
     }
 
     
-    public UserDetails buscaLogin(String login){
-        String sql;
-        ResultSet acesso;
-        sql = "SELECT * FROM funcionario WHERE func_login = '"+ login + "'";
-        acesso = SingletonDB.getConexao().consultar(sql);
-        try{
-            if(acesso.next()){
+    public UserDetails buscaLogin(String login) {
+        if (login == null || login.trim().isEmpty()) {
+            return null;
+        }
+
+        String sql = "SELECT * FROM funcionario WHERE func_login = '" + login + "'";
+        ResultSet acesso = SingletonDB.getConexao().consultar(sql);
+        
+        try {
+            if (acesso != null && acesso.next()) {
                 String loginF = acesso.getString("func_login");
                 String senha = acesso.getString("func_senha");
                 String role = acesso.getString("func_role");
                 return new Funcionario(loginF, senha, FuncionarioRole.valueOf(role.toUpperCase()));
             }
-            else
-                return null;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
     }
 
     public int contarAdmins() {
