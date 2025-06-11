@@ -3,19 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de Acolhimentos</title>
+    <title>Alterar Categoria</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/main.css">
-    <script href="./assets/scripts.js"></script>
-
-    <!-- PARTE DOS COMPONENTES -->
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <script src="../assets/js/header.js"></script>
-    <link rel="stylesheet" href="../assets/css/footer.css">
-    <script src="../assets/js/footer.js"></script>
-    <link rel="stylesheet" href="../assets/css/sidebar.css">
-    <script src="../assets/js/sidebar.js"></script>
-
     <style>
         /* Estilos existentes - incorporando do arquivo fornecido */
         :root {
@@ -147,85 +136,6 @@
 
         .menu-item {
           border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-                 .results-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow-small);
-            overflow: hidden;
-            display: none;
-        }
-
-        .results-container.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .results-header {
-            background-color: var(--color-orange-light);
-            color: white;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .results-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .results-count {
-            background-color: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .results-body {
-            padding: 1.5rem;
-        }
-
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .results-table th {
-            background-color: #f5f5f5;
-            text-align: left;
-            padding: 0.75rem 1rem;
-            font-weight: bold;
-            color: var(--text-dark);
-            border-bottom: 2px solid #ddd;
-        }
-
-        .results-table td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #eee;
-            color: var(--text-dark);
-        }
-
-        .results-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .results-table tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        /* Estilo zebrado para a tabela */
-        .results-table tbody tr:nth-child(even) {
-            background-color: #f9f7f5;
-        }
-
-        .results-table tbody tr:nth-child(odd) {
-            background-color: white;
-        }
-
-        .results-table tbody tr:hover {
-            background-color: #f0ede8 !important;
         }
 
         .menu-button {
@@ -766,129 +676,252 @@
         }
     </style>
 </head>
+
 <body>
-  <script src="../assets/js/sidebar.js"></script>
+    <script src="scriptAcolhimento.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
     <!-- Header -->
-    <main-header></main-header>
+    <header>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo-container">
+            <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
+            <div class="title">S.O.S. Amigos de Animais</div>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-bell notification-icon fa-lg"></i>
+            <div class="profile-icon">
+                <i class="fas fa-user fa-lg"></i>
+            </div>
+        </div>
+    </header>
 
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
-        <main-sidebar></main-sidebar>
+        <aside class="sidebar" id="sidebar" >
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-home menu-icon"></i>
+                        Dashboard
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-chart-line"></i>
+                        Estatísticas
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        Calendário
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-paw menu-icon"></i>
+                        Animais
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu active">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-list"></i>
+                        Listar todos
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-plus-circle"></i>
+                        Cadastrar novo
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-search"></i>
+                        Buscar animal
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-user-friends menu-icon"></i>
+                        Adoções
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-clipboard-list"></i>
+                        Pedidos de adoção
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-check-circle"></i>
+                        Adoções concluídas
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-check"></i>
+                        Verificar adotante
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-heart menu-icon"></i>
+                        Doações
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-hand-holding-heart"></i>
+                        Receber doação
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-history"></i>
+                        Histórico
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-file-alt menu-icon"></i>
+                        Relatórios
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-paw"></i>
+                        Animais
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-home"></i>
+                        Adoções
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-heart"></i>
+                        Doações
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-friends"></i>
+                        Voluntários
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <button class="menu-button">
+                    <div class="menu-button-content">
+                        <i class="fas fa-cog menu-icon"></i>
+                        Configurações
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-cog"></i>
+                        Perfil
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-users-cog"></i>
+                        Usuários
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </aside>
 
         <!-- Content -->
-    <main class="content">
+        <main class="content">
         <h1 class="page-title">
-            <i class="fas fa-plus-circle"></i>
-            Registro de Medicação ou Vacinação
+            <i class="fas fa-search"></i>
+            Pesquisa de Categoria
         </h1>
 
         <div class="form-container">
             <div class="form-header">
-                <div class="form-title">Novo Registro de Aplicação</div>
+                <div class="form-title">Buscar Categoria</div>
             </div>
-
-            <form class="form-body">
+            <div class="form-body">
                 <div class="form-section">
-                    <h3 class="section-title">Informações Básicas</h3>
-                    <div class="form-row">
+                    <div class="form-row" style="align-items:flex-end; gap:1rem;">
+                        <div class="form-group" style="flex:1">
+                            <label for="cat-search-input" class="required">ID ou Nome da Categoria</label>
+                            <input type="text" id="cat-search-input" class="form-control"
+                                   placeholder="Digite ID ou nome"/>
+                        </div>
                         <div class="form-group">
-                            <label for="aplicacao-data" class="required">Data da aplicação</label>
-                            <input type="date" id="aplicacao-data" class="form-control" required>
-                        </div>
-
-                        <div class="form-group" style="flex:2">
-                            <label for="animal-busca" class="required">Animal (ID ou Nome)</label>
-                            <div style="display:flex;gap:0.5rem;">
-                                <input type="text" id="animal-busca" class="form-control" placeholder="Digite ID ou nome">
-                                <button type="button" id="btn-buscar-animal" class="btn btn-outline">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <table class="results-table small-table" id="animal-tbl" style="display:none;">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nome</th>
-                                        <th>Raça</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                        <div class="form-group" style="flex:2">
-                            <label for="funcionario-busca" class="required">Funcionário (ID ou Nome)</label>
-                            <div style="display:flex;gap:0.5rem;">
-                                <input type="text" id="funcionario-busca" class="form-control" placeholder="Digite ID ou nome">
-                                <button type="button" id="btn-buscar-funcionario" class="btn btn-outline">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            <table class="results-table small-table" id="funcionario-tbl" style="display:none;">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Login</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="insumo-select" class="required">Insumo</label>
-                            <select id="insumo-select" class="form-control" required>
-                                <option>Carregando...</option>
-                            </select>
+                            <button type="button" id="btn-search-cat" class="btn btn-primary"
+                                    style="margin-top:1.8rem;">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary" id="btn-registrar">
-                        <i class="fas fa-check"></i> Registrar
-                    </button>
                 </div>
-            </form>
+
+                <div id="list-section-cat" class="form-section" style="display:none;">
+                    <h3 class="section-title">Selecione uma categoria</h3>
+                    <table class="results-table" id="cat-list-table">
+                        <thead>
+                            <tr><th>ID</th><th>Nome</th><th>Descrição</th><th>Ações</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div id="edit-section-cat" class="form-section" style="display:none;">
+                    <h3 class="section-title">Dados da Categoria</h3>
+                    <input type="hidden" id="edit-id-cat"> <div class="form-row">
+                        <div class="form-group" style="flex:1">
+                            <label for="cat-nome-edit" class="required">Nome</label>
+                            <input type="text" id="cat-nome-edit" class="form-control" required/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cat-desc-edit">Descrição</label>
+                        <textarea id="cat-desc-edit" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-row" style="margin-top:1rem; justify-content: flex-end; gap: 1rem;">
+                        <button type="button" id="btn-update-cat" class="btn btn-success">
+                            <i class="fas fa-check"></i> Confirmar Alterações
+                        </button>
+                        <button type="button" id="btn-delete-cat" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Excluir Categoria
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div id="toast-container" class="toast-container"></div>
-
+        <div id="toast-container-cat" class="toast-container"></div>
     </main>
 
-    
-    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const API_INSUMO = 'http://localhost:8080/apis/insumo/ids/2/6';
-        const API_ANIMAL = 'http://localhost:8080/apis/animal';
-        const API_FUNCIONARIO = 'http://localhost:8080/apis/funcionario';
-        // CORRIGIDO: O erro era "anismal_insumo". Agora é "animal_insumo".
-        const API_APLICACAO = 'http://localhost:8080/apis/animal_insumo'; 
-        const TOKEN = 'Bearer SEU_TOKEN_AQUI'; // **ATENÇÃO: Substitua este token pelo seu JWT real**
+        const API_BASE = 'http://localhost:8080/apis/categoria';
+        const TOKEN = 'Bearer SEU_TOKEN_AQUI'; // **ATENÇÃO: Este TOKEN expira. Use um token válido.**
 
         // --- Elementos DOM ---
-        const formApp = document.querySelector('.form-body form'); // Referência ao formulário principal
-        const selectInsumo = document.getElementById('insumo-select');
-        const btnBuscarAnimal = document.getElementById('btn-buscar-animal');
-        const inputAnimal = document.getElementById('animal-busca');
-        const animalTbl = document.getElementById('animal-tbl');
-        const animalTbody = animalTbl.querySelector('tbody');
+        const catSearchInput = document.getElementById('cat-search-input');
+        const btnSearchCat = document.getElementById('btn-search-cat');
+        const listSectionCat = document.getElementById('list-section-cat');
+        const listTbodyCat = document.querySelector('#cat-list-table tbody');
+        const editSectionCat = document.getElementById('edit-section-cat');
+        const editIdCatField = document.getElementById('edit-id-cat'); // Campo escondido para o ID
+        const catNomeEditField = document.getElementById('cat-nome-edit');
+        const catDescEditField = document.getElementById('cat-desc-edit');
+        const btnUpdateCat = document.getElementById('btn-update-cat');
+        const btnDeleteCat = document.getElementById('btn-delete-cat'); // Botão de excluir
+        const toastRootCat = document.getElementById('toast-container-cat');
 
-        const btnBuscarFuncionario = document.getElementById('btn-buscar-funcionario');
-        const inputFuncionario = document.getElementById('funcionario-busca');
-        const funcionarioTbl = document.getElementById('funcionario-tbl');
-        const funcionarioTbody = funcionarioTbl.querySelector('tbody');
-
-        const btnRegistrar = document.getElementById('btn-registrar');
-        const dataField = document.getElementById('aplicacao-data');
-        const toastRoot = document.getElementById('toast-container');
-
-        let currentAnimal = null;
-        let currentFuncionario = null;
-        let lastSearchedAnimals = []; // Armazena a lista da última busca de animais
-        let lastSearchedFuncionarios = []; // Armazena a lista da última busca de funcionários
+        // --- Variáveis de Dados ---
+        let categoriasData = []; // Armazena os resultados da busca atual
 
         // --- Funções de Utilidade (Toast) ---
         function showToast(type, title, msg) {
@@ -902,7 +935,7 @@
                 </div>
                 <button class="toast-close">&times;</button>
             `;
-            toastRoot.appendChild(t);
+            toastRootCat.appendChild(t);
             t.querySelector('.toast-close').onclick = () => t.remove();
             setTimeout(() => t.classList.add('show'), 10);
             setTimeout(() => {
@@ -911,257 +944,184 @@
             }, 5000);
         }
 
-        // --- Carrega Insumos (Categorias 2 e 6) ---
-        (async function loadInsumos() {
-            selectInsumo.innerHTML = '<option value="">Selecione o insumo</option>';
-            selectInsumo.disabled = true;
-            try {
-                const resp = await fetch(API_INSUMO, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': TOKEN
-                    }
-                });
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                const items = await resp.json();
-                selectInsumo.innerHTML = '<option value="">Selecione o insumo</option>';
-                items.forEach(i => {
-                    const o = document.createElement('option');
-                    o.value = i.id;
-                    o.text = i.nome;
-                    selectInsumo.appendChild(o);
-                });
-                selectInsumo.disabled = false;
-            } catch (e) {
-                console.error('Erro ao carregar insumos:', e);
-                selectInsumo.innerHTML = '<option value="">Erro ao carregar</option>';
-                selectInsumo.disabled = true;
-                showToast('error', 'Erro', 'Não foi possível carregar insumos.');
+        // --- Funções de Busca de Categoria ---
+        async function buscarCategoria() {
+            const term = catSearchInput.value.trim();
+            if (!term) {
+                return showToast('error', 'Erro', 'Digite o ID ou o Nome da Categoria para buscar.');
             }
-        })();
 
-        // --- Lógica de Seleção de Animal ---
-        function handleAnimalSelection(animal) {
-            currentAnimal = animal;
-            inputAnimal.value = `${animal.informacao?.nome || ''} (ID: ${animal.id})`;
-            animalTbl.style.display = 'none';
-            showToast('success', 'Animal Selecionado', `Animal ${animal.informacao?.nome || ''} (ID: ${animal.id}) selecionado.`);
-        }
-
-        // --- Buscar Animal ---
-        btnBuscarAnimal.addEventListener('click', async () => {
-            const term = inputAnimal.value.trim();
-            if (!term) return showToast('error', 'Erro', 'Digite ID ou nome do animal para buscar.');
-
-            const url = /^\d+$/.test(term)
-                ? `${API_ANIMAL}/id/${term}`
-                : `${API_ANIMAL}/nome/${encodeURIComponent(term)}`;
-
-            animalTbody.innerHTML = '';
-            animalTbl.style.display = 'none';
-            currentAnimal = null;
+            listSectionCat.style.display = 'none';
+            editSectionCat.style.display = 'none';
+            categoriasData = []; // Limpa os dados de categorias anteriores
 
             try {
-                const resp = await fetch(url, {
-                    headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
-                });
+                let list = [];
+                let url;
 
-                if (!resp.ok) {
-                    const errorText = await resp.text();
-                    throw new Error(errorText || 'Animal não encontrado.');
-                }
-
-                let data = await resp.json();
-                lastSearchedAnimals = Array.isArray(data) ? data : [data];
-
-                if (lastSearchedAnimals.length === 0) {
-                    showToast('error', 'Erro', 'Nenhum animal encontrado com este termo.');
-                    return;
-                }
-
-                lastSearchedAnimals.forEach(a => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${a.id || '-'}</td>
-                        <td>${a.informacao?.nome || '-'}</td>
-                        <td>${a.informacao?.raca || 'SRD'}</td>
-                        <td>
-                            <button type="button" class="btn-select" data-animal-id="${a.id}">
-                                Selecionar
-                            </button>
-                        </td>
-                    `;
-                    animalTbody.appendChild(tr);
-                });
-
-                animalTbl.style.display = 'table';
-                showToast('info', 'Animal(is) Carregado(s)', 'Selecione um animal na lista se houver múltiplos.');
-
-            } catch (e) {
-                console.error('Erro na busca de animal:', e);
-                showToast('error', 'Erro', e.message);
-            }
-        });
-
-        // Delegação de eventos para botões de seleção de animal
-        animalTbody.addEventListener('click', (e) => {
-            const selectBtn = e.target.closest('.btn-select');
-            if (selectBtn && selectBtn.dataset.animalId) {
-                const animalId = selectBtn.dataset.animalId;
-                const selectedAnimal = lastSearchedAnimals.find(a => a.id == animalId);
-                if (selectedAnimal) {
-                    handleAnimalSelection(selectedAnimal);
+                if (/^\d+$/.test(term)) {
+                    url = `${API_BASE}/id/${term}`;
                 } else {
-                    showToast('error', 'Erro', 'Animal selecionado não encontrado nos resultados.');
+                    url = `${API_BASE}/nome/${encodeURIComponent(term)}`;
                 }
-            }
-        });
 
-        inputAnimal.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                btnBuscarAnimal.click();
-            }
-        });
-
-        // --- Lógica de Seleção de Funcionário ---
-        function handleFuncionarioSelection(funcionario) {
-            currentFuncionario = funcionario;
-            inputFuncionario.value = `${funcionario.login || ''} (Matrícula: ${funcionario.matricula})`;
-            funcionarioTbl.style.display = 'none';
-            showToast('success', 'Funcionário Selecionado', `Funcionário ${funcionario.login || ''} (Matrícula: ${funcionario.matricula}) selecionado.`);
-        }
-
-        // --- Buscar Funcionário ---
-        btnBuscarFuncionario.addEventListener('click', async () => {
-            const term = inputFuncionario.value.trim();
-            if (!term) return showToast('error', 'Erro', 'Digite ID ou nome do funcionário para buscar.');
-
-            let url;
-            if (/^\d+$/.test(term)) {
-                url = `${API_FUNCIONARIO}/${term}`;
-            } else {
-                url = `${API_FUNCIONARIO}/lista/${encodeURIComponent(term)}`;
-            }
-
-            funcionarioTbody.innerHTML = '';
-            funcionarioTbl.style.display = 'none';
-            currentFuncionario = null;
-
-            try {
                 const resp = await fetch(url, {
                     headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
                 });
 
                 if (!resp.ok) {
-                    const errorText = await resp.text();
-                    if (resp.status === 400 || resp.status === 404) {
-                        throw new Error('Nenhum funcionário encontrado com o termo informado.');
-                    }
-                    throw new Error(errorText || 'Erro desconhecido ao buscar funcionário.');
-                }
-
-                let data = await resp.json();
-                lastSearchedFuncionarios = Array.isArray(data) ? data : (data ? [data] : []);
-
-                if (lastSearchedFuncionarios.length === 0) {
-                    showToast('error', 'Erro', 'Nenhum funcionário encontrado com este termo.');
-                    return;
+                    if (resp.status === 404) throw new Error('Categoria não encontrada.');
+                    throw new Error(await resp.text() || 'Erro ao buscar categoria.');
                 }
                 
-                lastSearchedFuncionarios.forEach(f => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${f.matricula ?? '-'}</td>
-                        <td>${f.login || '-'}</td>
-                        <td>
-                            <button type="button" class="btn-select" data-funcionario-id="${f.matricula}">
-                                Selecionar
-                            </button>
-                        </td>
-                    `;
-                    funcionarioTbody.appendChild(tr);
-                });
+                const data = await resp.json();
+                list = Array.isArray(data) ? data : [data]; // Garante que seja um array, mesmo para um único resultado
 
-                funcionarioTbl.style.display = 'table';
-                showToast('info', 'Funcionário(s) Carregado(s)', 'Selecione um funcionário na lista se houver múltiplos.');
+                if (list.length === 0) {
+                    throw new Error('Nenhuma categoria encontrada com o termo informado.');
+                }
+
+                categoriasData = list; // Armazena todos os resultados da busca
+
+                if (list.length > 1) {
+                    // Exibir lista para seleção se houver múltiplos resultados
+                    listTbodyCat.innerHTML = '';
+                    list.forEach(cat => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${cat.id ?? '-'}</td>
+                            <td>${cat.nome ?? '-'}</td>
+                            <td>${cat.descricao || '-'}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm btn-action" data-id="${cat.id}" data-action="edit">
+                                    <i class="fas fa-edit"></i> Selecionar
+                                </button>
+                            </td>
+                        `;
+                        // Delegação de evento para o botão 'Selecionar'
+                        tr.querySelector('.btn-action').onclick = () => preencherEdicaoCategoria(cat.id);
+                        listTbodyCat.appendChild(tr);
+                    });
+                    listSectionCat.style.display = 'block';
+                    showToast('info', 'Múltiplos Resultados', 'Selecione uma categoria na lista.');
+                } else {
+                    // Apenas um resultado, preencher diretamente o formulário
+                    preencherEdicaoCategoria(list[0].id);
+                    showToast('success', 'Categoria Encontrada', 'Dados carregados para edição.');
+                }
 
             } catch (e) {
-                console.error('Erro na busca de funcionário:', e);
-                showToast('error', 'Erro', e.message);
+                console.error('Erro na busca de categoria:', e);
+                showToast('error', 'Erro na Busca', e.message);
+                listSectionCat.style.display = 'none'; // Garante que a lista não apareça vazia
             }
-        });
+        }
 
-        // Delegação de eventos para botões de seleção de funcionário
-        funcionarioTbody.addEventListener('click', (e) => {
-            const selectBtn = e.target.closest('.btn-select');
-            if (selectBtn && selectBtn.dataset.funcionarioId) {
-                const funcionarioId = selectBtn.dataset.funcionarioId;
-                const selectedFuncionario = lastSearchedFuncionarios.find(f => f.matricula == funcionarioId);
-                if (selectedFuncionario) {
-                    handleFuncionarioSelection(selectedFuncionario);
-                } else {
-                    showToast('error', 'Erro', 'Funcionário selecionado não encontrado nos resultados.');
-                }
+        // --- Funções de Edição de Categoria ---
+        function preencherEdicaoCategoria(categoriaId) {
+            const categoria = categoriasData.find(c => c.id == categoriaId);
+            if (!categoria) {
+                return showToast('error', 'Erro', 'Dados da categoria não encontrados para edição.');
             }
-        });
 
-        inputFuncionario.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                btnBuscarFuncionario.click();
+            editIdCatField.value = categoria.id || '';
+            catNomeEditField.value = categoria.nome || '';
+            catDescEditField.value = categoria.descricao || '';
+
+            listSectionCat.style.display = 'none'; // Oculta a lista de seleção
+            editSectionCat.style.display = 'block'; // Exibe o formulário de edição
+            window.scrollTo({ top: editSectionCat.offsetTop, behavior: 'smooth' });
+        }
+
+        async function atualizarCategoria() {
+            const id = editIdCatField.value;
+            if (!id) {
+                return showToast('error', 'Erro', 'ID da categoria para atualização não encontrado.');
             }
-        });
 
-        // --- Registrar aplicação ---
-        document.querySelector('.form-body').addEventListener('submit', async (e) => {
-            e.preventDefault(); // Previne o comportamento padrão de envio do formulário
+            const payload = {
+                id: parseInt(id, 10), // Envie o ID no payload se o backend espera
+                nome: catNomeEditField.value.trim(),
+                descricao: catDescEditField.value.trim(),
+            };
+            
+            // Se a descrição estiver vazia, remova-a para não enviar string vazia se o backend preferir null
+            if (!payload.descricao) delete payload.descricao;
 
-            const dataAplic = dataField.value;
-            const insumoId = parseInt(selectInsumo.value, 10);
-
-            if (!dataAplic || !currentAnimal || !currentFuncionario || isNaN(insumoId) || selectInsumo.value === "") {
-                return showToast('error', 'Erro', 'Por favor, preencha a data, selecione um animal, um funcionário e um insumo.');
+            if (!payload.nome) {
+                return showToast('error', 'Erro', 'O nome da categoria é obrigatório.');
             }
 
             try {
-                const payload = {
-                    animalAniCod: currentAnimal.id,
-                    insumoIsuId: insumoId,
-                    funcionarioFuncCod: currentFuncionario.matricula, // Usando 'matricula' do funcionário
-                    aiDataExecucao: dataAplic
-                };
-                console.log('Payload para POST:', payload);
-
-                const resp = await fetch(API_APLICACAO, {
-                    method: 'POST',
+                const res = await fetch(`${API_BASE}/${id}`, {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': TOKEN
+                        'Authorization': TOKEN,
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload),
                 });
 
-                if (!resp.ok) {
-                    const txt = await resp.text();
-                    throw new Error(txt || resp.statusText);
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Erro ao atualizar categoria.');
                 }
 
-                showToast('success', 'Sucesso', 'Aplicação registrada com sucesso!');
-                // Limpa o formulário e reseta o estado
-                document.querySelector('.form-body form').reset(); 
-                animalTbl.style.display = 'none';
-                animalTbody.innerHTML = '';
-                currentAnimal = null;
-                funcionarioTbl.style.display = 'none';
-                funcionarioTbody.innerHTML = '';
-                currentFuncionario = null;
-                selectInsumo.value = "";
+                showToast('success', 'Sucesso', 'Categoria atualizada com sucesso!');
+                editSectionCat.style.display = 'none';
+                catSearchInput.value = ''; // Limpa a busca
+                categoriasData = []; // Limpa o estado
             } catch (e) {
-                console.error('Erro ao registrar aplicação:', e);
+                showToast('error', 'Erro', e.message);
+            }
+        }
+
+        // --- Função de Exclusão de Categoria ---
+        async function excluirCategoria() {
+            const id = editIdCatField.value; // Pega o ID do campo escondido
+            if (!id) {
+                return showToast('error', 'Erro', 'Nenhuma categoria selecionada para exclusão.');
+            }
+
+            if (!confirm(`Tem certeza que deseja excluir a categoria com ID ${id}? Esta ação é irreversível!`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN,
+                    },
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Erro ao excluir categoria.');
+                }
+
+                showToast('success', 'Sucesso', 'Categoria excluída com sucesso!');
+                editSectionCat.style.display = 'none'; // Oculta o formulário
+                catSearchInput.value = ''; // Limpa a busca
+                categoriasData = []; // Limpa o estado
+            } catch (e) {
+                showToast('error', 'Erro', e.message);
+            }
+        }
+
+        // --- Event Listeners ---
+        btnSearchCat.addEventListener('click', buscarCategoria);
+        catSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarCategoria();
             }
         });
+        btnUpdateCat.addEventListener('click', atualizarCategoria);
+        btnDeleteCat.addEventListener('click', excluirCategoria); // Listener para o botão de excluir
     });
     </script>
+
 </body>
 </html>

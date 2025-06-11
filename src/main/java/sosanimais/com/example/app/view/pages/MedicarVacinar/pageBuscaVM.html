@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Acolhimentos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+
+    <style>
+        /* Estilos existentes - incorporando do arquivo fornecido */
+        :root {
+          /* Cores primárias */
+          --color-orange-burnt: #d37a47; /* Laranja queimado (fundo do logo) */
+          --color-brown-dark: #4a2d21;   /* Marrom escuro (silhueta do gato e texto "S.O.S.") */
+          --color-beige-light: #f2e6db;  /* Bege claro (fundo geral) */
+          
+          /* Cores secundárias */
+          --color-orange-light: #e59a62; /* Laranja claro (contorno do cão) */
+          --color-gray-dark: #4d4d4d;    /* Cinza escuro (texto "Amigos de Animais") */
+          
+          /* Variações para elementos de interface (opcionais) */
+          --color-orange-burnt-hover: #c06b3a; /* Versão mais escura para hover */
+          --color-orange-burnt-active: #b05d2c; /* Versão ainda mais escura para active */
+          
+          /* Cores de texto */
+          --text-dark: var(--color-brown-dark);
+          --text-light: #ffffff;
+          --text-muted: var(--color-gray-dark);
+          
+          /* Cores de fundo */
+          --bg-primary: var(--color-beige-light);
+          --bg-secondary: var(--color-orange-burnt);
+          --bg-accent: var(--color-orange-light);
+          
+          /* Cores de borda */
+          --border-primary: var(--color-orange-burnt);
+          --border-secondary: var(--color-orange-light);
+          
+          /* Cores de elementos interativos */
+          --button-primary: var(--color-orange-burnt);
+          --button-primary-hover: var(--color-orange-burnt-hover);
+          --button-secondary: var(--color-brown-dark);
+          --button-text: var(--color-beige-light);
+          
+          /* Sombras */
+          --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+          --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+          --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+        }
+
+        header {
+          display: flex;
+          background-color: var(--color-orange-burnt-active);
+          padding: 1rem 4rem;
+          align-items: center;
+          justify-content: space-between;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          height: 100px;
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 1000;
+        }
+
+        body {
+          background-color: var(--bg-primary);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .logo-container {
+          display: flex;
+          align-items: center;
+        }
+
+        .paw-logo {
+          width: 40px;
+          height: 40px;
+          margin-right: 15px;
+          filter: brightness(0) invert(1);
+        }
+
+        .title {
+          color: white;
+          font-size: 1.8rem;
+          font-weight: bold;
+        }
+
+        .header-icons {
+          display: flex;
+          align-items: center;
+        }
+
+        .notification-icon, .profile-icon {
+          margin-left: 20px;
+          cursor: pointer;
+          color: white;
+        }
+
+         /* Estilos para a página de pesquisa */
+        .search-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .search-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .search-body {
+            padding: 1.5rem;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .search-type {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-type-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .search-type-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .search-type-option label {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-search {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-search:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .results-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-body {
+            padding: 1.5rem;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.25rem;
+        }
+
+        .badge-funcionario {
+            background-color: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .badge-adotante {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-doador {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--color-orange-burnt);
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-action:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .no-results h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Toast de Notificação */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        .profile-icon {
+          background-color: #e8e8e8;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--color-brown-dark);
+        }
+
+        .main-container {
+          display: flex;
+          margin-top: 100px; /* Altura do header */
+          flex: 1;
+        }
+
+        .sidebar {
+          width: 280px;
+          height: calc(100vh - 100px); /* Altura da viewport menos a altura do header */
+          background-color: var(--color-orange-burnt);
+          color: white;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+          overflow-y: auto;
+          position: fixed;
+          top: 100px; /* Posiciona abaixo do header */
+        }
+
+        .menu-item {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          padding: 1rem 1.5rem;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1rem;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+          display: flex;
+          align-items: center;
+        }
+
+        .menu-icon {
+          margin-right: 10px;
+        }
+
+        .dropdown-icon {
+          transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+          transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease-out;
+          background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+          max-height: 500px;
+          transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem 0.75rem 3rem;
+          color: White;
+          font-weight: bold;
+          text-decoration: none;
+          transition: background-color 0.3s;
+          font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+          flex: 1;
+          padding: 2rem;
+          margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+          color: var(--text-dark);
+          margin-bottom: 1.5rem;
+          font-size: 1.8rem;
+          display: flex;
+          align-items: center;
+        }
+
+        .page-title i {
+          margin-right: 0.5rem;
+          color: var(--color-orange-burnt);
+        }
+
+       footer {
+          background-color: var(--color-orange-burnt-active);
+          color: white;
+          padding: 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+          margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .footer-logo {
+          display: flex;
+          align-items: center;
+        }
+
+        .footer-brand {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .footer-links {
+          display: flex;
+          gap: 20px;
+        }
+
+        .footer-link {
+          color: white;
+          text-decoration: none;
+          transition: opacity 0.3s;
+        }
+
+        .footer-link:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
+
+        .footer-copyright {
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+
+        .sidebar-toggle {
+          display: none;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+
+        /* Estilos específicos para a página de cadastro */
+        .form-container {
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: var(--shadow-small);
+          margin-bottom: 2rem;
+          overflow: hidden;
+        }
+
+        .form-header {
+          background-color: var(--color-orange-light);
+          color: white;
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .form-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .form-steps {
+          display: flex;
+          background-color: var(--bg-primary);
+          border-bottom: 1px solid #eee;
+        }
+
+        .form-step {
+          padding: 1rem 1.5rem;
+          cursor: pointer;
+          color: var(--text-muted);
+          font-weight: bold;
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .form-step i {
+          margin-right: 0.5rem;
+        }
+
+        .form-step.active {
+          color: var(--color-orange-burnt);
+          background-color: white;
+        }
+
+        .form-step.active::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background-color: var(--color-orange-burnt);
+        }
+
+        .form-step.completed {
+          color: green;
+        }
+
+        .form-body {
+          padding: 1.5rem;
+        }
+
+        .form-section {
+          margin-bottom: 2rem;
+        }
+
+        .section-title {
+          color: var(--text-dark);
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-dark);
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+          content: '*';
+          color: red;
+          margin-left: 0.25rem;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: var(--color-orange-burnt);
+          box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control.invalid {
+          border-color: red;
+        }
+
+        .help-text {
+          display: block;
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+        }
+
+        .error-text {
+          display: block;
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: red;
+        }
+
+        .form-check {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-check-input {
+          margin-right: 0.5rem;
+          width: 16px;
+          height: 16px;
+        }
+
+        .form-check-label {
+          font-size: 0.9rem;
+          color: var(--text-dark);
+        }
+
+        .radio-group {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .file-upload {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .file-preview {
+          width: 100%;
+          height: 150px;
+          border: 1px dashed #ddd;
+          border-radius: 4px;
+          background-color: #f9f9f9;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .file-preview-icon {
+          color: #ddd;
+          font-size: 3rem;
+        }
+
+        .file-preview-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: none;
+        }
+
+        .file-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: space-between;
+          padding-top: 1.5rem;
+          margin-top: 1.5rem;
+          border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .btn {
+          padding: 0.75rem 1.25rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background-color 0.3s, opacity 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .btn i {
+          margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+          background-color: var(--button-primary);
+          color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+          background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+          background-color: var(--button-secondary);
+          color: var(--button-text);
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--color-orange-burnt);
+          color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+          background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .btn-danger {
+          background-color: #dc3545;
+          color: white;
+        }
+
+        .btn-danger:hover {
+          background-color: #c82333;
+        }
+
+        .btn-success {
+          background-color: #28a745;
+          color: white;
+        }
+
+        .btn-success:hover {
+          background-color: #218838;
+        }
+
+        .autocomplete-container {
+          position: relative;
+        }
+
+        .autocomplete-results {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          max-height: 200px;
+          overflow-y: auto;
+          background-color: white;
+          border: 1px solid #ddd;
+          border-top: none;
+          border-radius: 0 0 4px 4px;
+          z-index: 10;
+          display: none;
+        }
+
+        .autocomplete-item {
+          padding: 0.75rem;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .autocomplete-item:hover {
+          background-color: #f5f5f5;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+          .form-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          
+          .form-actions {
+            flex-direction: column-reverse;
+            gap: 1rem;
+          }
+          
+          .form-actions-left,
+          .form-actions-right {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+
+        @media (max-width: 768px) {
+          header {
+            padding: 1rem 2rem;
+          }
+          
+          .sidebar-toggle {
+            display: block;
+          }
+          
+          .sidebar {
+            transform: translateX(-280px);
+            transition: transform 0.3s ease;
+            z-index: 999;
+          }
+          
+          .sidebar.active {
+            transform: translateX(0);
+          }
+          
+          .content {
+            margin-left: 0;
+            width: 100%;
+            padding: 1.5rem;
+          }
+          
+          footer {
+            margin-left: 0;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+          }
+          
+          .footer-links {
+            flex-direction: column;
+            gap: 10px;
+          }
+          
+          .title {
+            font-size: 1.4rem;
+          }
+          
+          .form-steps {
+            overflow-x: auto;
+            justify-content: flex-start;
+          }
+          
+          .form-step {
+            flex-shrink: 0;
+          }
+        }
+
+        @media (max-width: 480px) {
+          header {
+            padding: 1rem;
+          }
+          
+          .paw-logo {
+            width: 30px;
+            height: 30px;
+          }
+          
+          .title {
+            font-size: 1.2rem;
+          }
+          
+          .header-icons > * {
+            margin-left: 10px;
+          }
+          
+          .profile-icon {
+            width: 35px;
+            height: 35px;
+          }
+          
+          .content {
+            padding: 1rem;
+          }
+          
+          .form-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+          }
+        }
+    </style>
+</head>
+<body>
+  <script src="../assets/js/sidebar.js"></script>
+    <script src="scriptAcolhimento.js"></script>
+    <!-- Header -->
+    <main-header></main-header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <main-sidebar></main-sidebar>
+
+        <!-- Content -->
+          <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-search"></i>
+            Pesquisa de Aplicação (Vacina/Medicamento)
+        </h1>
+
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-title">Buscar Aplicação</div>
+            </div>
+            <div class="form-body">
+                <div class="form-section">
+                    <h3 class="section-title">Parâmetros de Busca</h3>
+                    <div class="form-row" style="align-items:flex-end;">
+                        <div class="form-group" style="flex:1">
+                            <label for="app-search-input" class="required">ID do registro ou nome do animal</label>
+                            <input type="text" id="app-search-input" class="form-control" placeholder="Ex: 12 ou Rex" />
+                        </div>
+                        <div class="form-group" style="flex:auto; display:flex; align-items:flex-end;">
+                            <button type="button" id="btn-search-app" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Pesquisar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="list-section-app" class="form-section" style="display:none;">
+                    <h3 class="section-title">Resultados da Pesquisa</h3>
+                    <table class="results-table" id="app-list-table-app">
+                        <thead>
+                            <tr>
+                                <th>ID Registro</th>
+                                <th>ID Animal</th>
+                                <th>Nome Animal</th>
+                                <th>ID Insumo</th>
+                                <th>Nome Insumo</th>
+                                <th>ID Funcionário</th> <th>Nome Funcionário</th> <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div id="edit-section-app" class="form-section" style="display:none;">
+                    <h3 class="section-title">Dados da Aplicação</h3>
+                    <input type="hidden" id="edit-id-app"> <div class="form-row" style="gap:1rem;">
+                        <div class="form-group" style="flex:1">
+                            <label for="app-animal-edit" class="required">Animal</label>
+                            <select id="app-animal-edit" class="form-control"></select>
+                        </div>
+                        <div class="form-group" style="flex:1">
+                            <label for="app-insumo-edit" class="required">Insumo</label>
+                            <select id="app-insumo-edit" class="form-control"></select>
+                        </div>
+                        <div class="form-group" style="flex:1">
+                            <label for="app-funcionario-edit" class="required">Funcionário</label>
+                            <select id="app-funcionario-edit" class="form-control"></select>
+                        </div>
+                        <div class="form-group" style="flex:1">
+                            <label for="app-date-edit" class="required">Data da aplicação</label>
+                            <input type="date" id="app-date-edit" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top:1rem; justify-content: flex-end; gap: 1rem;">
+                        <button type="button" id="btn-update-app" class="btn btn-success">
+                            <i class="fas fa-check"></i> Confirmar Alterações
+                        </button>
+                        <button type="button" id="btn-delete-app" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Excluir Aplicação
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            
+        </div>
+
+        <div id="toast-container-app" class="toast-container"></div>
+    </main>
+    
+    
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const API_APLICACAO_BASE = 'http://localhost:8080/apis/animal_insumo';
+        const API_INSUMO_IDS = 'http://localhost:8080/apis/insumo/ids/2/6'; 
+        const API_ANIMAL = 'http://localhost:8080/apis/animal';
+        const API_FUNCIONARIO = 'http://localhost:8080/apis/funcionario'; // Nova API para funcionário
+        const TOKEN = 'Bearer SEU_TOKEN_AQUI'; // **ATENÇÃO: Substitua este token pelo seu JWT real**
+
+        // --- Elementos DOM ---
+        const appSearchInput = document.getElementById('app-search-input');
+        const btnSearchApp = document.getElementById('btn-search-app');
+        const listSectionApp = document.getElementById('list-section-app');
+        const listTbodyApp = document.querySelector('#app-list-table-app tbody');
+        const editSectionApp = document.getElementById('edit-section-app');
+        const editIdAppField = document.getElementById('edit-id-app'); 
+
+        const appAnimalEditField = document.getElementById('app-animal-edit');
+        const appInsumoEditField = document.getElementById('app-insumo-edit');
+        const appFuncionarioEditField = document.getElementById('app-funcionario-edit'); // Select de Funcionário para edição
+        const appDateEditField = document.getElementById('app-date-edit');
+        
+        const btnUpdateApp = document.getElementById('btn-update-app');
+        const btnDeleteApp = document.getElementById('btn-delete-app');
+        const toastRootApp = document.getElementById('toast-container-app');
+
+        // --- Mapas e Listas de Dados ---
+        let aplicacoesData = []; // Armazena os resultados da busca atual
+        let animalMap = {};      // id -> nome do animal
+        let insumoMap = {};      // id -> nome do insumo
+        let funcionarioMap = {}; // id -> nome/login do funcionário
+        let animalsList = [];    // lista completa de animais para o select de edição
+        let insumosList = [];    // lista completa de insumos para o select de edição
+        let funcionariosList = []; // lista completa de funcionários para o select de edição
+
+        // --- Funções de Utilidade (Toast) ---
+        function showToast(type, title, msg) {
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${msg}</div>
+                </div>
+                <button class="toast-close">&times;</button>
+            `;
+            toastRootApp.appendChild(t);
+            t.querySelector('.toast-close').onclick = () => t.remove();
+            setTimeout(() => t.classList.add('show'), 10);
+            setTimeout(() => {
+                t.classList.remove('show');
+                setTimeout(() => t.remove(), 300);
+            }, 5000);
+        }
+
+        // --- Carregamento de Dados Iniciais para Selects e Mapas ---
+        async function loadAllAnimalsInsumosFuncionarios() {
+            // Desabilita selects enquanto carrega
+            appAnimalEditField.innerHTML = '<option value="">Carregando...</option>';
+            appAnimalEditField.disabled = true;
+            appInsumoEditField.innerHTML = '<option value="">Carregando...</option>';
+            appInsumoEditField.disabled = true;
+            appFuncionarioEditField.innerHTML = '<option value="">Carregando...</option>';
+            appFuncionarioEditField.disabled = true;
+
+            try {
+                // Carrega animais
+                const animalResp = await fetch(API_ANIMAL, { headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN } });
+                if (!animalResp.ok) throw new Error('Não foi possível carregar animais.');
+                animalsList = await animalResp.json();
+                appAnimalEditField.innerHTML = '<option value="">Selecione o animal</option>';
+                animalsList.forEach(a => {
+                    const nome = a.informacao?.nome || '—';
+                    animalMap[a.id] = nome;
+                    const o = document.createElement('option');
+                    o.value = a.id;
+                    o.text = `${a.id} — ${nome}`;
+                    appAnimalEditField.appendChild(o);
+                });
+                appAnimalEditField.disabled = false;
+
+                // Carrega insumos (vacinas/medicamentos)
+                const insumoResp = await fetch(API_INSUMO_IDS, { headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN } });
+                if (!insumoResp.ok) throw new Error('Não foi possível carregar insumos.');
+                insumosList = await insumoResp.json();
+                appInsumoEditField.innerHTML = '<option value="">Selecione o insumo</option>';
+                insumosList.forEach(i => {
+                    insumoMap[i.id] = i.nome;
+                    const o = document.createElement('option');
+                    o.value = i.id;
+                    o.text = `${i.id} — ${i.nome}`;
+                    appInsumoEditField.appendChild(o);
+                });
+                appInsumoEditField.disabled = false;
+
+                // NOVO: Carrega funcionários
+                const funcionarioResp = await fetch(API_FUNCIONARIO + "/lista", { 
+                    headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                });
+                if (!funcionarioResp.ok) throw new Error('Não foi possível carregar funcionários.');
+                funcionariosList = await funcionarioResp.json();
+                appFuncionarioEditField.innerHTML = '<option value="">Selecione o funcionário</option>';
+                funcionariosList.forEach(f => {
+                    const nomeFunc = f.nome || f.login || '—'; // Preferir nome, senão login
+                    funcionarioMap[f.matricula] = nomeFunc; // Usar matricula como ID
+                    const o = document.createElement('option');
+                    o.value = f.matricula;
+                    o.text = `${f.matricula} — ${nomeFunc}`;
+                    appFuncionarioEditField.appendChild(o);
+                });
+                appFuncionarioEditField.disabled = false;
+
+            } catch (e) {
+                console.error('Erro ao carregar dados iniciais:', e);
+                showToast('error', 'Erro', 'Não foi possível carregar listas para edição: ' + e.message);
+                // Manter campos desabilitados em caso de erro
+                appAnimalEditField.disabled = true;
+                appInsumoEditField.disabled = true;
+                appFuncionarioEditField.disabled = true;
+            }
+        }
+
+        // --- Funções de Busca de Aplicação ---
+        async function buscarAplicacao() {
+            const term = appSearchInput.value.trim();
+            if (!term) {
+                return showToast('error', 'Erro', 'Digite o ID do registro ou o nome do animal para buscar.');
+            }
+
+            listSectionApp.style.display = 'none';
+            editSectionApp.style.display = 'none';
+            aplicacoesData = []; // Limpa os dados antes de uma nova busca
+
+            try {
+                let list = [];
+                let url;
+
+                if (/^\d+$/.test(term)) { // Se é um número, busca por ID do Registro
+                    url = `${API_APLICACAO_BASE}/id/${term}`;
+                } else { // Se não é número, busca por nome do Animal
+                    const animalRes = await fetch(`${API_ANIMAL}/nome/${encodeURIComponent(term)}`, {
+                        headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                    });
+                    if (!animalRes.ok) {
+                        if (animalRes.status === 404) throw new Error('Animal não encontrado com esse nome.');
+                        throw new Error(await animalRes.text() || 'Erro ao buscar animal por nome.');
+                    }
+                    const animalData = await animalRes.json();
+                    const animalFound = Array.isArray(animalData) ? animalData[0] : animalData;
+
+                    if (!animalFound || !animalFound.id) throw new Error('Nenhum animal encontrado com o nome fornecido.');
+
+                    url = `${API_APLICACAO_BASE}/animal/${animalFound.id}`;
+                }
+                
+                const res = await fetch(url, { headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN } });
+                if (!res.ok) {
+                    if (res.status === 404) throw new Error('Nenhuma aplicação encontrada.');
+                    throw new Error(await res.text() || 'Erro ao buscar aplicação.');
+                }
+                list = await res.json();
+                list = Array.isArray(list) ? list : (list ? [list] : []); // Garante que é um array
+
+                if (!list || list.length === 0) {
+                    showToast('error', 'Erro', 'Nenhuma aplicação encontrada com o termo informado.');
+                    return;
+                }
+
+                aplicacoesData = list; // Armazena os dados completos
+
+                if (list.length > 1) {
+                    // Exibir lista para seleção se houver múltiplos resultados
+                    listTbodyApp.innerHTML = '';
+                    list.forEach(app => {
+                        const animalNome = animalMap[app.animalAniCod] || 'Desconhecido';
+                        const insumoNome = insumoMap[app.insumoIsuId] || 'Desconhecido';
+                        const funcionarioNome = funcionarioMap[app.funcionarioFuncCod] || 'Desconhecido'; // NOVO
+                        const dataFormatada = (app.aiDataExecucao || '').split('T')[0];
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${app.aiId ?? '-'}</td>
+                            <td>${app.animalAniCod ?? '-'}</td>
+                            <td>${animalNome}</td>
+                            <td>${app.insumoIsuId ?? '-'}</td>
+                            <td>${insumoNome}</td>
+                            <td>${app.funcionarioFuncCod ?? '-'}</td> <td>${funcionarioNome}</td> <td>${dataFormatada}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm btn-action" data-id="${app.aiId}" data-action="edit">
+                                    <i class="fas fa-edit"></i> Selecionar
+                                </button>
+                            </td>
+                        `;
+                        listTbodyApp.appendChild(tr);
+                    });
+                    listSectionApp.style.display = 'block';
+                    showToast('info', 'Múltiplos Resultados', 'Selecione uma aplicação na lista para Alterar ou Excluir.');
+                } else {
+                    // Apenas um resultado, preencher diretamente o formulário
+                    preencherEdicaoAplicacao(list[0].aiId);
+                    showToast('success', 'Aplicação Encontrada', 'Dados carregados para edição e exclusão.');
+                }
+
+            } catch (e) {
+                console.error('Erro na busca de aplicação:', e);
+                showToast('error', 'Erro na Busca', e.message);
+                listSectionApp.style.display = 'none';
+            }
+        }
+
+        // --- Funções de Edição de Aplicação ---
+        function preencherEdicaoAplicacao(aplicacaoId) {
+            const aplicacao = aplicacoesData.find(a => a.aiId == aplicacaoId);
+            if (!aplicacao) {
+                return showToast('error', 'Erro', 'Dados da aplicação não encontrados para edição.');
+            }
+
+            editIdAppField.value = aplicacao.aiId || '';
+            appAnimalEditField.value = aplicacao.animalAniCod || '';
+            appInsumoEditField.value = aplicacao.insumoIsuId || '';
+            appFuncionarioEditField.value = aplicacao.funcionarioFuncCod || ''; // NOVO: Preencher select de funcionário
+            appDateEditField.value = (aplicacao.aiDataExecucao || '').split('T')[0] || '';
+
+            listSectionApp.style.display = 'none'; // Oculta a lista de seleção
+            editSectionApp.style.display = 'block'; // Exibe o formulário de edição
+            window.scrollTo({ top: editSectionApp.offsetTop, behavior: 'smooth' });
+        }
+
+        async function atualizarAplicacao() {
+            const id = editIdAppField.value;
+            if (!id) {
+                return showToast('error', 'Erro', 'ID da aplicação para atualização não encontrado.');
+            }
+
+            const payload = {
+                aiId: parseInt(id, 10), // O ID do registro de aplicação no payload (se sua API espera)
+                animalAniCod: parseInt(appAnimalEditField.value, 10),
+                insumoIsuId: parseInt(appInsumoEditField.value, 10),
+                funcionarioFuncCod: parseInt(appFuncionarioEditField.value, 10), // NOVO: Obter ID do funcionário
+                aiDataExecucao: appDateEditField.value,
+            };
+
+            if (isNaN(payload.animalAniCod) || isNaN(payload.insumoIsuId) || isNaN(payload.funcionarioFuncCod) || !payload.aiDataExecucao) {
+                return showToast('error', 'Erro', 'Por favor, preencha todos os campos obrigatórios (Animal, Insumo, Funcionário, Data).');
+            }
+
+            try {
+                const res = await fetch(`${API_APLICACAO_BASE}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Erro ao atualizar aplicação.');
+                }
+
+                showToast('success', 'Sucesso', 'Aplicação atualizada com sucesso!');
+                editSectionApp.style.display = 'none';
+                appSearchInput.value = ''; // Limpa a busca
+                aplicacoesData = []; 
+                // Recarrega os dados para ter a lista atualizada
+                // ou limpa a tabela para forçar uma nova busca se o usuário pesquisar novamente
+                listTbodyApp.innerHTML = ''; 
+                listSectionApp.style.display = 'none';
+            } catch (e) {
+                showToast('error', 'Erro', e.message);
+            }
+        }
+
+        // --- Função de Exclusão de Aplicação ---
+        async function excluirAplicacao() {
+            const id = editIdAppField.value; // Pega o ID do campo escondido
+            if (!id) {
+                return showToast('error', 'Erro', 'Nenhuma aplicação selecionada para exclusão.');
+            }
+
+            if (!confirm(`Tem certeza que deseja excluir a aplicação com ID ${id}? Esta ação é irreversível!`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_APLICACAO_BASE}/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN,
+                    },
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Erro ao excluir aplicação.');
+                }
+
+                showToast('success', 'Sucesso', 'Aplicação excluída com sucesso!');
+                editSectionApp.style.display = 'none'; // Oculta o formulário
+                appSearchInput.value = ''; // Limpa a busca
+                aplicacoesData = [];
+                // Recarrega os dados para ter a lista atualizada
+                // ou limpa a tabela para forçar uma nova busca se o usuário pesquisar novamente
+                listTbodyApp.innerHTML = ''; 
+                listSectionApp.style.display = 'none';
+            } catch (e) {
+                showToast('error', 'Erro', e.message);
+            }
+        }
+
+        // --- Event Listeners ---
+        btnSearchApp.addEventListener('click', buscarAplicacao);
+        appSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarAplicacao();
+            }
+        });
+        btnUpdateApp.addEventListener('click', atualizarAplicacao);
+        btnDeleteApp.addEventListener('click', excluirAplicacao);
+
+        // Delegação de eventos para os botões de ação na tabela de resultados de aplicações
+        listTbodyApp.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-action');
+            if (btn && btn.dataset.id && btn.dataset.action) {
+                const id = btn.dataset.id;
+                const action = btn.dataset.action;
+
+                if (action === 'edit') {
+                    preencherEdicaoAplicacao(id);
+                } else if (action === 'delete') {
+                    excluirAplicacao(id); 
+                }
+            }
+        });
+
+        // --- Inicialização: Carrega listas de animais, insumos e funcionários ao carregar a página ---
+        loadAllAnimalsInsumosFuncionarios();
+    });
+    </script>
+
+</body>
+</html>

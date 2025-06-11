@@ -44,6 +44,7 @@ public class Animal {
             this.idAcolhimento = idAcolhimento;
         }
 
+
         public AnimalInformacao getInformacao () {
             return informacao;
         }

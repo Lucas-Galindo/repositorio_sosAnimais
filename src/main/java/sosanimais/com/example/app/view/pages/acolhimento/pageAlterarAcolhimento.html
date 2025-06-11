@@ -699,142 +699,7 @@
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-home menu-icon"></i>
-                        Dashboard
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-chart-line"></i>
-                        Estatísticas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        Calendário
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-paw menu-icon"></i>
-                        Animais
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu active">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-list"></i>
-                        Listar todos
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-plus-circle"></i>
-                        Cadastrar novo
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-search"></i>
-                        Buscar animal
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-user-friends menu-icon"></i>
-                        Adoções
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-clipboard-list"></i>
-                        Pedidos de adoção
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-check-circle"></i>
-                        Adoções concluídas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-check"></i>
-                        Verificar adotante
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-heart menu-icon"></i>
-                        Doações
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-hand-holding-heart"></i>
-                        Receber doação
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-history"></i>
-                        Histórico
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-file-alt menu-icon"></i>
-                        Relatórios
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-paw"></i>
-                        Animais
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-home"></i>
-                        Adoções
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-heart"></i>
-                        Doações
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-friends"></i>
-                        Voluntários
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-cog menu-icon"></i>
-                        Configurações
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-cog"></i>
-                        Perfil
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users-cog"></i>
-                        Usuários
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sair
-                    </a>
-                </div>
-            </div>
-        </aside>
+         <main-sidebar></main-sidebar>
 
         <!-- Content -->
         <main class="content">
@@ -923,6 +788,8 @@
 
   <div id="toast-container" class="toast-container"></div>
 </main>
+
+<main-footer></main-footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -1058,4 +925,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 </body>
+
 </html>

@@ -616,75 +616,83 @@
 
         <!-- Content -->
         <main class="content">
-      <h1 class="page-title">
-        <i class="fas fa-clipboard-list"></i>
-        Relatório de Aplicações
-      </h1>
+        <h1 class="page-title">
+            <i class="fas fa-clipboard-list"></i>
+            Relatório de Aplicações
+        </h1>
 
-      <div class="search-container">
-        <div class="search-header">
-          <div class="search-title">Relatório Geral de Aplicações</div>
-        </div>
-        <div class="search-body">
-          <!-- Filtros -->
-          <div class="filters-row">
-            <div class="filter-group">
-              <label class="filter-label">Filtrar por Insumo:</label>
-              <select id="filter-insumo" class="filter-select">
-                <option value="">Todos (med/vac)</option>
-              </select>
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-title">Relatório Geral de Aplicações</div>
             </div>
-            <div class="filter-group">
-              <label class="filter-label">Data Início:</label>
-              <input type="date" id="filter-date-start" class="form-control">
-            </div>
-            <div class="filter-group" >
-              <label class="filter-label">Data Fim:</label>
-              <input type="date" id="filter-date-end" class="form-control">
-            </div>
-            <div class="filter-group">
-              <label class="filter-label">Filtrar por Animal:</label>
-              <div style="display:flex; gap:0.5rem;">
-                <input type="text" id="filter-animal" class="form-control" placeholder="ID ou Nome">
-              </div>
-            </div>
-          </div>
+            <div class="search-body">
+                <!-- Filtros -->
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label class="filter-label">Filtrar por Insumo:</label>
+                        <select id="filter-insumo" class="filter-select">
+                            <option value="">Todos (med/vac)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Data Início:</label>
+                        <input type="date" id="filter-date-start" class="form-control">
+                    </div>
+                    <div class="filter-group" >
+                        <label class="filter-label">Data Fim:</label>
+                        <input type="date" id="filter-date-end" class="form-control">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Filtrar por Animal:</label>
+                        <div style="display:flex; gap:0.5rem;">
+                            <input type="text" id="filter-animal" class="form-control" placeholder="ID ou Nome">
+                        </div>
+                    </div>
+                    <!-- NOVO: Filtro por Funcionário -->
+                    <div class="filter-group">
+                        <label class="filter-label">Filtrar por Funcionário:</label>
+                        <div style="display:flex; gap:0.5rem;">
+                            <input type="text" id="filter-funcionario" class="form-control" placeholder="ID ou Nome">
+                        </div>
+                    </div>
+                </div>
 
-          <!-- Ações -->
-          <div class="search-actions">
-            <button type="button" id="btn-list-all" class="btn-list-all">
-              <i class="fas fa-list"></i> Listar Todas as Aplicações
-            </button>
-            <button type="button" id="btn-apply-filters" class="btn-apply-filters">
-              <i class="fas fa-filter"></i> Aplicar Filtros
-            </button>
-          </div>
+                <!-- Ações -->
+                <div class="search-actions">
+                    <button type="button" id="btn-list-all" class="btn-list-all">
+                        <i class="fas fa-list"></i> Listar Todas as Aplicações
+                    </button>
+                    <button type="button" id="btn-apply-filters" class="btn-apply-filters">
+                        <i class="fas fa-filter"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="results-container" id="results-container">
-        <div class="results-header">
-          <div class="results-title">Resultados do Relatório</div>
-          <div class="results-count" id="results-count">0 aplicações encontradas</div>
+        <div class="results-container" id="results-container">
+            <div class="results-header">
+                <div class="results-title">Resultados do Relatório</div>
+                <div class="results-count" id="results-count">0 aplicações encontradas</div>
+            </div>
+            <div class="results-body">
+                <table class="results-table" id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Animal (ID — Nome)</th>
+                            <th>Insumo (ID — Nome)</th>
+                            <th>Funcionário (Matrícula — Login)</th> <!-- NOVO: Coluna para Funcionário -->
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody"></tbody>
+                </table>
+                <div class="no-results" id="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>Nenhum resultado encontrado</h3>
+                    <p>Verifique os filtros aplicados.</p>
+                </div>
+            </div>
         </div>
-        <div class="results-body">
-          <table class="results-table" id="results-table">
-            <thead>
-                <tr>
-                <th>Animal (ID — Nome)</th>
-                <th>Insumo  (ID — Nome)</th>
-                <th>Data</th>
-                </tr>
-            </thead>
-            <tbody id="results-tbody"></tbody>
-            </table>
-          <div class="no-results" id="no-results">
-            <i class="fas fa-search"></i>
-            <h3>Nenhum resultado encontrado</h3>
-            <p>Verifique os filtros aplicados.</p>
-          </div>
-        </div>
-      </div>
     </main>
   </div>
   <main-footer></main-footer>
@@ -692,195 +700,254 @@
 
  <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const API_APLIC      = 'http://localhost:8080/apis/animal_insumo';
-  const API_INSUMO_IDS = 'http://localhost:8080/apis/insumo/ids/2/6';
-  const API_ANIMAL     = 'http://localhost:8080/apis/animal';
-  const TOKEN          = 'Bearer SEU_TOKEN_AQUI';
+    const API_APLIC = 'http://localhost:8080/apis/animal_insumo';
+    const API_INSUMO_IDS = 'http://localhost:8080/apis/insumo/ids/2/6'; 
+    const API_ANIMAL = 'http://localhost:8080/apis/animal';
+    const API_FUNCIONARIO = 'http://localhost:8080/apis/funcionario';
+    const TOKEN = 'Bearer SEU_TOKEN_AQUI'; 
 
-  // DOM
-  const btnListAll   = document.getElementById('btn-list-all');
-  const btnApply     = document.getElementById('btn-apply-filters');
-  const selInsumo    = document.getElementById('filter-insumo');
-  const inpDateStart = document.getElementById('filter-date-start');
-  const inpDateEnd   = document.getElementById('filter-date-end');
-  const inpAnimal    = document.getElementById('filter-animal');
+    // DOM Elements
+    const btnListAll = document.getElementById('btn-list-all');
+    const btnApply = document.getElementById('btn-apply-filters');
+    const selInsumo = document.getElementById('filter-insumo');
+    const inpDateStart = document.getElementById('filter-date-start');
+    const inpDateEnd = document.getElementById('filter-date-end');
+    const inpAnimal = document.getElementById('filter-animal');
+    const inpFuncionario = document.getElementById('filter-funcionario');
 
-  const resultsCt  = document.getElementById('results-container');
-  const resultsCnt = document.getElementById('results-count');
-  const tbl        = document.getElementById('results-table');
-  const tbody      = document.getElementById('results-tbody');
-  const noRes      = document.getElementById('no-results');
-  const toastRoot  = document.getElementById('toast-container');
+    const resultsCt = document.getElementById('results-container');
+    const resultsCnt = document.getElementById('results-count');
+    const tbl = document.getElementById('results-table');
+    const tbody = document.getElementById('results-tbody');
+    const noRes = document.getElementById('no-results');
+    const toastRoot = document.getElementById('toast-container');
 
-  let allApps    = [];
-  let insumoMap  = {};
-  let animalMap  = {};
+    let allApps = []; 
+    let insumoMap = {};
+    let animalMap = {};
+    let funcionarioMap = {};
 
-  function showToast(type, title, msg) {
-    const t = document.createElement('div');
-    t.className = `toast toast-${type}`;
-    t.innerHTML = `
-      <i class="fas ${type==='success'?'fa-check-circle':'fa-exclamation-circle'} toast-icon"></i>
-      <div class="toast-content">
-        <div class="toast-title">${title}</div>
-        <div class="toast-message">${msg}</div>
-      </div>
-      <button class="toast-close">&times;</button>
-    `;
-    toastRoot.appendChild(t);
-    t.querySelector('.toast-close').onclick = () => t.remove();
-    setTimeout(() => t.classList.add('show'), 10);
-    setTimeout(() => {
-      t.classList.remove('show');
-      setTimeout(() => t.remove(), 300);
-    }, 5000);
-  }
-
-  // carrega medicamentos/vacinas
-  async function loadInsumos() {
-    selInsumo.innerHTML = '<option>Carregando...</option>';
-    try {
-      const resp = await fetch(API_INSUMO_IDS, {
-        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
-      });
-      if (!resp.ok) throw new Error(resp.status);
-      const arr = await resp.json();
-      insumoMap = {};
-      selInsumo.innerHTML = '<option value="">Todos (med/vac)</option>';
-      arr.forEach(i => {
-        insumoMap[i.id] = i.nome;
-        const o = document.createElement('option');
-        o.value = i.id;
-        o.text  = `${i.id} — ${i.nome}`;
-        selInsumo.appendChild(o);
-      });
-    } catch (e) {
-      console.error(e);
-      selInsumo.innerHTML = '<option>Erro ao carregar</option>';
-      selInsumo.disabled = true;
-      showToast('error','Erro','Não foi possível carregar insumos.');
-    }
-  }
-
-  // carrega todos os animais
-  async function loadAnimals() {
-    try {
-      const resp = await fetch(API_ANIMAL, {
-        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
-      });
-      if (!resp.ok) throw new Error(resp.status);
-      const arr = await resp.json();
-      animalMap = {};
-      arr.forEach(a => {
-        animalMap[a.id] = a.informacao?.nome || '';
-      });
-    } catch (e) {
-      console.error('Falha ao carregar animais', e);
-    }
-  }
-
-  // carrega aplicações
-  async function loadAll() {
-    resultsCt.style.display = 'block';
-    tbl.style.display       = 'none';
-    noRes.style.display     = 'none';
-    resultsCnt.innerHTML    = '<div class="loading"></div> Carregando...';
-    btnListAll.disabled     = true;
-    try {
-      const resp = await fetch(API_APLIC, {
-        headers: { 'Content-Type':'application/json', 'Authorization': TOKEN }
-      });
-      if (!resp.ok) throw new Error(resp.status);
-      allApps = await resp.json();
-      applyFilters();
-    } catch (e) {
-      console.error(e);
-      showToast('error','Erro','Falha ao carregar aplicações.');
-      resultsCnt.innerText = '0 aplicações encontradas';
-      noRes.style.display   = 'block';
-    } finally {
-      btnListAll.disabled = false;
-    }
-  }
-
-  // renderiza tabela alinhada a Animal, Insumo, Data
-  function renderTable(list) {
-    tbody.innerHTML = '';
-    if (!list.length) {
-      resultsCnt.innerText = '0 aplicações encontradas';
-      noRes.style.display   = 'block';
-      tbl.style.display     = 'none';
-      return;
-    }
-    noRes.style.display  = 'none';
-    tbl.style.display    = 'table';
-    resultsCnt.innerText = `${list.length} aplicação${list.length>1?'s':''} encontrad${list.length>1?'as':'a'}`;
-
-    list.forEach(app => {
-      const insId = app.insumoIsuId;
-      if (!(insId in insumoMap)) return; // só exibe meds/vacs
-
-      const aniId = app.animalAniCod;
-      const d     = (app.aiDataExecucao||'').split('T')[0] || '-';
-
-      const aniNome = animalMap[aniId] || '-';
-      const insNome = insumoMap[insId];
-
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${aniId} — ${aniNome}</td>
-        <td>${insId} — ${insNome}</td>
-        <td>${d}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  }
-
-  // aplica filtros
-  function applyFilters() {
-    let f = allApps.slice();
-
-    const insF = selInsumo.value;
-    if (insF) f = f.filter(a => a.insumoIsuId?.toString() === insF);
-
-    const start = inpDateStart.value, end = inpDateEnd.value;
-    if (start || end) {
-      f = f.filter(a => {
-        const dt = new Date((a.aiDataExecucao||'').split('T')[0]);
-        if (start && dt < new Date(start)) return false;
-        if (end   && dt > new Date(end))   return false;
-        return true;
-      });
+    // Toast Function
+    function showToast(type, title, msg) {
+        const t = document.createElement('div');
+        t.className = `toast toast-${type}`;
+        t.innerHTML = `
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${msg}</div>
+            </div>
+            <button class="toast-close">&times;</button>
+        `;
+        toastRoot.appendChild(t);
+        t.querySelector('.toast-close').onclick = () => t.remove();
+        setTimeout(() => t.classList.add('show'), 10);
+        setTimeout(() => {
+            t.classList.remove('show');
+            setTimeout(() => t.remove(), 300);
+        }, 5000);
     }
 
-    const term = inpAnimal.value.trim().toLowerCase();
-    if (term) {
-      f = f.filter(a => {
-        const byId   = a.animalAniCod?.toString() === term;
-        const byName = (animalMap[a.animalAniCod]||'').toLowerCase().includes(term);
-        return byId || byName;
-      });
+    // Load Insumos for filter dropdown
+    async function loadInsumos() {
+        selInsumo.innerHTML = '<option value="">Todos (med/vac)</option>';
+        try {
+            const resp = await fetch(API_INSUMO_IDS, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const arr = await resp.json();
+            insumoMap = {}; 
+            selInsumo.innerHTML = '<option value="">Todos (med/vac)</option>';
+            arr.forEach(i => {
+                insumoMap[i.id] = i.nome;
+                const o = document.createElement('option');
+                o.value = i.id;
+                o.text = `${i.id} — ${i.nome}`;
+                selInsumo.appendChild(o);
+            });
+        } catch (e) {
+            console.error('Erro ao carregar insumos:', e);
+            selInsumo.innerHTML = '<option value="">Erro ao carregar</option>';
+            selInsumo.disabled = true;
+            showToast('error', 'Erro', 'Não foi possível carregar insumos.');
+        }
     }
 
-    renderTable(f);
-  }
-
-  // eventos
-  btnListAll.onclick    = loadAll;
-  selInsumo.onchange    = applyFilters;
-  inpDateStart.onchange = applyFilters;
-  inpDateEnd.onchange   = applyFilters;
-  btnApply.onclick      = () => allApps.length ? applyFilters() : showToast('info','Info','Primeiro liste.');
-  inpAnimal.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      applyFilters();
+    // Load Animals for mapping
+    async function loadAnimals() {
+        try {
+            const resp = await fetch(API_ANIMAL, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const arr = await resp.json();
+            animalMap = {}; 
+            arr.forEach(a => {
+                animalMap[a.id] = a.informacao?.nome || '';
+            });
+        } catch (e) {
+            console.error('Falha ao carregar animais:', e);
+            showToast('error', 'Erro', 'Não foi possível carregar animais.');
+        }
     }
-  });
 
-  // inicializa
-  resultsCt.style.display = 'none';
-  Promise.all([ loadInsumos(), loadAnimals() ]);
+    // Load Funcionarios for mapping
+    async function loadFuncionarios() {
+        try {
+            const resp = await fetch(API_FUNCIONARIO + "/lista", {
+                headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const arr = await resp.json();
+            funcionarioMap = {}; 
+            arr.forEach(f => {
+                funcionarioMap[f.matricula] = f.nome || f.login || ''; 
+            });
+        } catch (e) {
+            console.error('Falha ao carregar funcionários:', e);
+            showToast('error', 'Erro', 'Não foi possível carregar funcionários.');
+        }
+    }
+
+    // Load all applications
+    async function loadAllApps() {
+        resultsCt.style.display = 'block';
+        tbl.style.display = 'none';
+        noRes.style.display = 'none';
+        resultsCnt.innerHTML = '<div class="loading"></div> Carregando...';
+        btnListAll.disabled = true;
+        btnApply.disabled = true;
+
+        try {
+            const resp = await fetch(API_APLIC, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            allApps = await resp.json();
+            applyFilters(); // Apply current filters after loading all data
+        } catch (e) {
+            console.error('Erro ao carregar aplicações:', e);
+            showToast('error', 'Erro', 'Falha ao carregar aplicações.');
+            resultsCnt.innerText = '0 aplicações encontradas';
+            noRes.style.display = 'block';
+        } finally {
+            btnListAll.disabled = false;
+            btnApply.disabled = false;
+        }
+    }
+
+    // Render filtered applications table
+    function renderTable(list) {
+        tbody.innerHTML = '';
+        if (!list.length) {
+            resultsCnt.innerText = '0 aplicações encontradas';
+            noRes.style.display = 'block';
+            tbl.style.display = 'none';
+            return;
+        }
+        noRes.style.display = 'none';
+        tbl.style.display = 'table';
+        resultsCnt.innerText = `${list.length} aplicação${list.length > 1 ? 's' : ''} encontrad${list.length > 1 ? 'as' : 'a'}`;
+
+        list.forEach(app => {
+            const aniId = app.animalAniCod;
+            const insId = app.insumoIsuId;
+            const funcId = app.funcionarioFuncCod;
+
+            const aniNome = animalMap[aniId] || '-';
+            const insNome = insumoMap[insId] || '-';
+            const funcNome = funcionarioMap[funcId] || '-';
+
+            const d = (app.aiDataExecucao || '').split('T')[0] || '-';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${aniId} — ${aniNome}</td>
+                <td>${insId} — ${insNome}</td>
+                <td>${funcId ?? '-'} — ${funcNome}</td>
+                <td>${d}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Apply filters
+    function applyFilters() {
+        let f = allApps.slice(); // Start with a copy of all applications
+
+        // Filtro: Apenas insumos com código 2 ou 6,
+        // mas somente se o filtro de insumo geral NÃO estiver selecionado (ou seja, "Todos")
+        const currentSelectedInsumoFilter = selInsumo.value;
+        if (!currentSelectedInsumoFilter) { // Se o filtro de insumo NÃO está selecionado (é "Todos")
+            f = f.filter(a => a.insumoIsuId === 2 || a.insumoIsuId === 6);
+        } else { // Se um insumo específico foi selecionado no filtro
+            f = f.filter(a => a.insumoIsuId?.toString() === currentSelectedInsumoFilter);
+        }
+
+        // Filtro por Data Início/Fim
+        const start = inpDateStart.value;
+        const end = inpDateEnd.value;
+        if (start || end) {
+            f = f.filter(a => {
+                const appDate = new Date(a.aiDataExecucao);
+                if (start && appDate < new Date(start + 'T00:00:00')) return false;
+                if (end && appDate > new Date(end + 'T23:59:59')) return false;
+                return true;
+            });
+        }
+
+        // Filtro por Animal (ID or Name)
+        const termAnimal = inpAnimal.value.trim().toLowerCase();
+        if (termAnimal) {
+            f = f.filter(a => {
+                const byId = a.animalAniCod?.toString() === termAnimal;
+                const byName = (animalMap[a.animalAniCod] || '').toLowerCase().includes(termAnimal);
+                return byId || byName;
+            });
+        }
+
+        // Filtro por Funcionario (ID or Login/Name)
+        const termFuncionario = inpFuncionario.value.trim().toLowerCase();
+        if (termFuncionario) {
+            f = f.filter(a => {
+                const byId = a.funcionarioFuncCod?.toString() === termFuncionario;
+                const byLogin = (funcionarioMap[a.funcionarioFuncCod] || '').toLowerCase().includes(termFuncionario);
+                return byId || byLogin;
+            });
+        }
+
+        renderTable(f);
+    }
+
+    // Event Listeners
+    btnListAll.onclick = loadAllApps;
+    btnApply.onclick = () => {
+        if (allApps.length > 0) {
+            applyFilters();
+        } else {
+            showToast('info', 'Info', 'Primeiro clique em "Listar Todas as Aplicações" para carregar os dados.');
+        }
+    };
+
+    selInsumo.onchange = applyFilters;
+    inpDateStart.onchange = applyFilters;
+    inpDateEnd.onchange = applyFilters;
+    inpAnimal.addEventListener('input', applyFilters);
+    inpFuncionario.addEventListener('input', applyFilters);
+    
+    // Initial load: fetch all necessary maps, then applications
+    resultsCt.style.display = 'none'; 
+    Promise.all([loadInsumos(), loadAnimals(), loadFuncionarios()])
+        .then(() => {
+            // Após carregar todos os mapas, a página está pronta para carregar os dados.
+            // A chamada para loadAllApps() está agora no botão "Listar Todas".
+            showToast('success', 'Pronto', 'Dados de filtros carregados. Clique em "Listar Todas as Aplicações".');
+        })
+        .catch(error => {
+            console.error("Erro na inicialização:", error);
+            showToast('error', 'Erro', 'Falha na inicialização do relatório.');
+        });
 });
 </script>
 </body>

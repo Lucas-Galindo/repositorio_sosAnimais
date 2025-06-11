@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOS Amigos de Animais - Cadastro</title>
+    <title>Relatório de Acolhimentos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
     <style>
         /* Estilos existentes - incorporando do arquivo fornecido */
         :root {
@@ -679,161 +689,12 @@
 <body>
     <script src="scriptAnimal.js"></script>
     <!-- Header -->
-    <header>
-        <button class="sidebar-toggle" id="sidebarToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="logo-container">
-            <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
-            <div class="title">S.O.S. Amigos de Animais</div>
-        </div>
-        <div class="header-icons">
-            <i class="fas fa-bell notification-icon fa-lg"></i>
-            <div class="profile-icon">
-                <i class="fas fa-user fa-lg"></i>
-            </div>
-        </div>
-    </header>
+    <main-header></main-header>
 
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-home menu-icon"></i>
-                        Dashboard
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-chart-line"></i>
-                        Estatísticas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        Calendário
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-paw menu-icon"></i>
-                        Animais
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu active">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-list"></i>
-                        Listar todos
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-plus-circle"></i>
-                        Cadastrar novo
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-search"></i>
-                        Buscar animal
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-user-friends menu-icon"></i>
-                        Adoções
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-clipboard-list"></i>
-                        Pedidos de adoção
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-check-circle"></i>
-                        Adoções concluídas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-check"></i>
-                        Verificar adotante
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-heart menu-icon"></i>
-                        Doações
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-hand-holding-heart"></i>
-                        Receber doação
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-history"></i>
-                        Histórico
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-file-alt menu-icon"></i>
-                        Relatórios
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-paw"></i>
-                        Animais
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-home"></i>
-                        Adoções
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-heart"></i>
-                        Doações
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-friends"></i>
-                        Voluntários
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-cog menu-icon"></i>
-                        Configurações
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-cog"></i>
-                        Perfil
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users-cog"></i>
-                        Usuários
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sair
-                    </a>
-                </div>
-            </div>
-        </aside>
+        <main-sidebar></main-sidebar>
 
         <!-- Content -->
         <main class="content">
@@ -848,24 +709,7 @@
                 </div>
                 
                 <div class="form-steps">
-                  <!--
-                    <div class="form-step active">
-                        <i class="fas fa-info-circle"></i>
-                        Informações Básicas
-                    </div>-->
-                    <!--
-                    <div class="form-step">
-                        <i class="fas fa-heartbeat"></i>
-                        Saúde e Cuidados
-                    </div>
-                    <div class="form-step">
-                        <i class="fas fa-paw"></i>
-                        Características
-                    </div>
-                    <div class="form-step">
-                        <i class="fas fa-camera"></i>
-                        Fotos e Documentos
-                    </div>-->
+
                 </div>
                 
                 <form class="form-body">
@@ -889,40 +733,17 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="animal-breed">Raça</label>
+                                <label for="animal-breed" class="required">Raça</label>
                                 <div class="autocomplete-container">
-                                    <input type="text" id="animal-breed" class="form-control" placeholder="Digite para buscar raças...">
+                                    <input type="text" id="animal-breed" class="form-control" placeholder="Digite para buscar raças..." required>
                                     <div class="autocomplete-results" id="breed-results">
                                         <!-- Resultados da pesquisa aparecerão aqui -->
                                     </div>
                                 </div>
-                                <span class="help-text">Deixe em branco para SRD (Sem Raça Definida)</span>
+                                <span class="help-text">Insira a raça do animal ou SRD(Sem Raça Definida)</span>
                             </div>
                         </div>
-                        
-                            <!--
-                            <div class="form-group">
-                                <label for="animal-gender" class="required">Sexo</label>
-                                <div class="radio-group">
-                                    <div class="form-check">
-                                        <input type="radio" id="gender-male" name="animal-gender" class="form-check-input" value="male" required>
-                                        <label for="gender-male" class="form-check-label">Macho</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" id="gender-female" name="animal-gender" class="form-check-input" value="female" required>
-                                        <label for="gender-female" class="form-check-label">Fêmea</label>
-                                    </div>
-                                </div>
-                            </div>
-                            -->
-                            <div class="form-group">
-                                <label for="animal-size" class="required">Status de vida</label>
-                                <select id="animal-size" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="V">Vivo</option>
-                                    <option value="M">Morto</option>
-                                </select>
-                            </div>
+
                         </div>
                         <div class="form-group">
                             <label for="animal-age" class="required">Idade Aproximada(Anos)</label>
@@ -937,48 +758,15 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="animal-age" >Id da Baia:</label>
-                            <div style="display: flex; gap: 1rem;">
-                                <input type="number" id="baia-id-fk" class="form-control" min="0" style="width: 70%;">
-                            </div>
+                          <label class="required" for="baia-id-fk">Baia:</label>
+                          <div style="display: flex; gap: 1rem;">
+                              <select id="baia-id-fk" class="form-control" style="width: 70%;" required>
+                                  <option value="">Carregando baias...</option>
+                              </select>
+                          </div>
                         </div>
                         
-                        <!--
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="animal-color" class="required">Cor Predominante</label>
-                                <select id="animal-color" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="black">Preto</option>
-                                    <option value="white">Branco</option>
-                                    <option value="brown">Marrom</option>
-                                    <option value="gray">Cinza</option>
-                                    <option value="golden">Dourado</option>
-                                    <option value="brindle">Tigrado</option>
-                                    <option value="spotted">Malhado</option>
-                                    <option value="bicolor">Bicolor</option>
-                                    <option value="tricolor">Tricolor</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="intake-date" class="required">Data de Entrada</label>
-                                <input type="date" id="intake-date" class="form-control" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="intake-source" class="required">Origem</label>
-                                <select id="intake-source" class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="rescue">Resgate</option>
-                                    <option value="surrender">Entrega Voluntária</option>
-                                    <option value="born">Nascido na Instituição</option>
-                                    <option value="transfer">Transferência</option>
-                                    <option value="other">Outra</option>
-                                </select>
-                            </div>
-                            -->
+                      
                         </div>
                         
                         <div class="form-group">
@@ -990,94 +778,7 @@
                         </button>
                     </div>
 
-                    
-                    
-                    <!-- Seção 2: Saúde e Cuidados (Oculto por padrão) -->
-                     <!-- 
-                    <div class="form-section" style="display: none;">
-                        <h3 class="section-title">Saúde e Cuidados</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="required">Estado de Saúde</label>
-                                <select class="form-control" required>
-                                    <option value="">Selecione...</option>
-                                    <option value="healthy">Saudável</option>
-                                    <option value="minor">Problemas Menores</option>
-                                    <option value="treatment">Em Tratamento</option>
-                                    <option value="chronic">Condição Crônica</option>
-                                    <option value="urgent">Necessita Atendimento Urgente</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Condições Médicas</label>
-                                <input type="text" class="form-control" placeholder="Descreva condições médicas, se houver">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Alergias Conhecidas</label>
-                                <input type="text" class="form-control" placeholder="Alergias ou sensibilidades">
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="required">Castrado/Esterilizado</label>
-                                <div class="radio-group">
-                                    <div class="form-check">
-                                        <input type="radio" id="neutered-yes" name="neutered" class="form-check-input" value="yes" required>
-                                        <label for="neutered-yes" class="form-check-label">Sim</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" id="neutered-no" name="neutered" class="form-check-input" value="no" required>
-                                        <label for="neutered-no" class="form-check-label">Não</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="radio" id="neutered-scheduled" name="neutered" class="form-check-input" value="scheduled" required>
-                                        <label for="neutered-scheduled" class="form-check-label">Agendado</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Data da Castração</label>
-                                <input type="date" class="form-control">
-                                <span class="help-text">Deixe em branco se não for castrado ou se for agendado para o futuro</span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Veterinário Responsável</label>
-                                <input type="text" class="form-control" placeholder="Nome do veterinário">
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Vacinações</label>
-                            <div class="form-check">
-                                <input type="checkbox" id="vaccine-rabies" class="form-check-input">
-                                <label for="vaccine-rabies" class="form-check-label">Antirrábica</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" id="vaccine-v8" class="form-check-input">
-                                <label for="vaccine-v8" class="form-check-label">V8/V10 (Cães)</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" id="vaccine-v4" class="form-check-input">
-                                <label for="vaccine-v4" class="form-check-label">V3/V4 (Gatos)</label>
-                            </div>
-                            <div class="form-check">
-                                <input type="checkbox" id="vaccine-other" class="form-check-input">
-                                <label for="vaccine-other" class="form-check-label">Outras</label>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Observações Médicas</label>
-                            <textarea class="form-control" rows="4" placeholder="Informações adicionais sobre a saúde do animal"></textarea>
-                        </div>
-                    </div>
-                    -->
+            
                     <!-- Seção 3: Características (Oculto por padrão) -->
                     <div class="form-section" style="display: none;">
                         <!-- Conteúdo da seção Características -->
@@ -1087,29 +788,7 @@
                     <div class="form-section" style="display: none;">
                         <!-- Conteúdo da seção Fotos e Documentos -->
                     </div>
-                    <!--
-                    <div class="form-actions">
-                        
-                        <div class="form-actions-left">
-                            <button type="button" class="btn btn-outline" id="btn-cancel">
-                                <i class="fas fa-times"></i>
-                                Cancelar
-                            </button>
-                            <button type="button" class="btn btn-outline" id="btn-save-draft">
-                                <i class="fas fa-save"></i>
-                                Salvar Rascunho
-                            </button>
-                        </div>
-                        <div class="form-actions-right">
-                            <button type="button" class="btn btn-secondary" id="btn-previous" style="display: none;">
-                                <i class="fas fa-arrow-left"></i>
-                                Anterior
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-next">
-                                Cadastrar
-                                <i class="fas fa-arrow-right" "></i>
-                            </button>
-                        </div>-->
+                    
                     </div>
                 </form>
             </div>
@@ -1338,7 +1017,6 @@
                 });
             }
             
-            // Exemplo de validação básica
             const requiredInputs = document.querySelectorAll('[required]');
             
             if (requiredInputs.length > 0) {
@@ -1367,6 +1045,32 @@
                     });
                 });
             }
+        });
+
+        const baiaSelect = document.getElementById('baia-id-fk');
+
+    fetch('http://localhost:8080/apis/baias/lista')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao buscar as baias');
+            }
+            return response.json();
+        })
+        .then(baias => {
+            // Limpa o select
+            baiaSelect.innerHTML = '<option value="">Selecione uma baia...</option>';
+
+            // Popula o select com as baias
+            baias.forEach(baia => {
+                const option = document.createElement('option');
+                option.value = baia.id; // Certifique-se de que o objeto da API tenha o campo "id"
+                option.textContent = baia.nome || `Baia ${baia.id}`; // Usa o nome da baia, se existir
+                baiaSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            baiaSelect.innerHTML = '<option value="">Erro ao carregar baias</option>';
+            console.error('Erro ao carregar baias:', error);
         });
     </script>
 </body>

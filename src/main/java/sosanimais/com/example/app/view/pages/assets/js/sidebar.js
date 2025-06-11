@@ -63,6 +63,10 @@ class SideBar extends HTMLElement{
                 <i class="fas fa-plus-circle"></i>
                 Cadastrar novo
             </a>
+            <a href="../acolhimento/pageBuscarAcolhimento.html" class="dropdown-item">
+                <i class="fas fa-plus-circle"></i>
+                Buscar 
+            </a>
         </div>
     </div>
 
@@ -82,6 +86,10 @@ class SideBar extends HTMLElement{
             <a href="../Insumo/pageCadastroInsumo.html" class="dropdown-item">
                 <i class="fas fa-plus-circle"></i>
                 Cadastrar novo
+            </a>
+            <a href="../Insumo/pageBuscarInsumo.html" class="dropdown-item">
+                <i class="fas fa-plus-circle"></i>
+                Buscar
             </a>
         </div>
 
@@ -103,6 +111,10 @@ class SideBar extends HTMLElement{
             <a href="../MedicarVacinar/pageRegistroVM.html" class="dropdown-item">
                 <i class="fas fa-plus-circle"></i>
                 Cadastrar nova
+            </a>
+            <a href="../MedicarVacinar/pageBuscaVM.html" class="dropdown-item">
+                <i class="fas fa-plus-circle"></i>
+                Buscar
             </a>
         </div>
     </div>
