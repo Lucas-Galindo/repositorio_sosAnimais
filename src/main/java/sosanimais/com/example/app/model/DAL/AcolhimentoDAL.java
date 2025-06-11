@@ -125,8 +125,8 @@ public class AcolhimentoDAL implements IDAL<Acolhimento> {
         String sql =
                 "SELECT a.aco_cod, a.aco_data, a.funcionario_func_mat, a.animal_ani_cod " +
                         "FROM Acolhimento a " +
-                        "  JOIN Animal ani ON a.animal_ani_cod = ani.ani_cod " +
-                        "WHERE LOWER(ani.ani_nome) = '" + nomeEscaped + "'";
+                        "JOIN Animal ani ON a.animal_ani_cod = ani.ani_cod " +
+                        "WHERE LOWER(ani.ani_nome) LIKE '%" + nomeEscaped + "%'";
 
         List<Acolhimento> resultados = new ArrayList<>();
         try (

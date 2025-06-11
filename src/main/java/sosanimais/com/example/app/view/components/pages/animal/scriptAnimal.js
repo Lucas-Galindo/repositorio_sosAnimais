@@ -68,10 +68,10 @@ async function cadastrarAnimal() {
     const descricao = document.getElementById("animal-description").value.trim();
     const idade = parseInt(document.getElementById("animal-age").value);
     const status = document.getElementById("animal-type").value;
-    const statusVida = document.getElementById("animal-size").value;
+    const statusVida = 'V';
   
     // Validação simples (pode expandir conforme necessidade)
-    if ( !status || !statusVida || isNaN(idade)) {
+    if ( !status || !nome || isNaN(idade) || !raca || !idade) {
       alert("Por favor, preencha todos os campos obrigatórios corretamente.");
       return;
     }

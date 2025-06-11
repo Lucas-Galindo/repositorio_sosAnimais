@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Acolhimentos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+    <style>
+        /* Estilos existentes - incorporando do arquivo fornecido */
+        :root {
+          /* Cores primárias */
+          --color-orange-burnt: #d37a47; /* Laranja queimado (fundo do logo) */
+          --color-brown-dark: #4a2d21;   /* Marrom escuro (silhueta do gato e texto "S.O.S.") */
+          --color-beige-light: #f2e6db;  /* Bege claro (fundo geral) */
+          
+          /* Cores secundárias */
+          --color-orange-light: #e59a62; /* Laranja claro (contorno do cão) */
+          --color-gray-dark: #4d4d4d;    /* Cinza escuro (texto "Amigos de Animais") */
+          
+          /* Variações para elementos de interface (opcionais) */
+          --color-orange-burnt-hover: #c06b3a; /* Versão mais escura para hover */
+          --color-orange-burnt-active: #b05d2c; /* Versão ainda mais escura para active */
+          
+          /* Cores de texto */
+          --text-dark: var(--color-brown-dark);
+          --text-light: #ffffff;
+          --text-muted: var(--color-gray-dark);
+          
+          /* Cores de fundo */
+          --bg-primary: var(--color-beige-light);
+          --bg-secondary: var(--color-orange-burnt);
+          --bg-accent: var(--color-orange-light);
+          
+          /* Cores de borda */
+          --border-primary: var(--color-orange-burnt);
+          --border-secondary: var(--color-orange-light);
+          
+          /* Cores de elementos interativos */
+          --button-primary: var(--color-orange-burnt);
+          --button-primary-hover: var(--color-orange-burnt-hover);
+          --button-secondary: var(--color-brown-dark);
+          --button-text: var(--color-beige-light);
+          
+          /* Sombras */
+          --shadow-small: 0 2px 4px rgba(74, 45, 33, 0.1);
+          --shadow-medium: 0 4px 6px rgba(74, 45, 33, 0.15);
+          --shadow-large: 0 8px 16px rgba(74, 45, 33, 0.2);
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+        }
+
+        header {
+          display: flex;
+          background-color: var(--color-orange-burnt-active);
+          padding: 1rem 4rem;
+          align-items: center;
+          justify-content: space-between;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          height: 100px;
+          position: fixed;
+          width: 100%;
+          top: 0;
+          z-index: 1000;
+        }
+
+        body {
+          background-color: var(--bg-primary);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .logo-container {
+          display: flex;
+          align-items: center;
+        }
+
+        .paw-logo {
+          width: 40px;
+          height: 40px;
+          margin-right: 15px;
+          filter: brightness(0) invert(1);
+        }
+
+        .title {
+          color: white;
+          font-size: 1.8rem;
+          font-weight: bold;
+        }
+
+        .header-icons {
+          display: flex;
+          align-items: center;
+        }
+
+        .notification-icon, .profile-icon {
+          margin-left: 20px;
+          cursor: pointer;
+          color: white;
+        }
+
+         /* Estilos para a página de pesquisa */
+        .search-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .search-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .search-body {
+            padding: 1.5rem;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--color-orange-burnt);
+            box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .search-type {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .search-type-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .search-type-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .search-type-option label {
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-search {
+            background-color: var(--button-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn-search:hover {
+            background-color: var(--button-primary-hover);
+        }
+
+        .results-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-small);
+            overflow: hidden;
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .results-header {
+            background-color: var(--color-orange-light);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .results-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .results-body {
+            padding: 1.5rem;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background-color: #f5f5f5;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            border-bottom: 2px solid #ddd;
+        }
+
+        .results-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #eee;
+            color: var(--text-dark);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.25rem;
+        }
+
+        .badge-funcionario {
+            background-color: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .badge-adotante {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .badge-doador {
+            background-color: #fff8e1;
+            color: #ffa000;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--color-orange-burnt);
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-action:hover {
+            background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .no-results h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Toast de Notificação */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            max-width: 350px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .toast-close {
+            color: var(--text-muted);
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.75rem;
+        }
+
+        .profile-icon {
+          background-color: #e8e8e8;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--color-brown-dark);
+        }
+
+        .main-container {
+          display: flex;
+          margin-top: 100px; /* Altura do header */
+          flex: 1;
+        }
+
+        .sidebar {
+          width: 280px;
+          height: calc(100vh - 100px); /* Altura da viewport menos a altura do header */
+          background-color: var(--color-orange-burnt);
+          color: white;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+          overflow-y: auto;
+          position: fixed;
+          top: 100px; /* Posiciona abaixo do header */
+        }
+
+        .menu-item {
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          padding: 1rem 1.5rem;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1rem;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-button-content {
+          display: flex;
+          align-items: center;
+        }
+
+        .menu-icon {
+          margin-right: 10px;
+        }
+
+        .dropdown-icon {
+          transition: transform 0.3s;
+        }
+
+        .dropdown-icon.active {
+          transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease-out;
+          background-color: var(--color-brown-dark);
+        }
+
+        .dropdown-menu.active {
+          max-height: 500px;
+          transition: max-height 0.5s ease-in;
+        }
+
+        .dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem 0.75rem 3rem;
+          color: White;
+          font-weight: bold;
+          text-decoration: none;
+          transition: background-color 0.3s;
+          font-size: 0.95rem;
+        }
+
+        .dropdown-item:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+          flex: 1;
+          padding: 2rem;
+          margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .page-title {
+          color: var(--text-dark);
+          margin-bottom: 1.5rem;
+          font-size: 1.8rem;
+          display: flex;
+          align-items: center;
+        }
+
+        .page-title i {
+          margin-right: 0.5rem;
+          color: var(--color-orange-burnt);
+        }
+
+        footer {
+          background-color: var(--color-orange-burnt-active);
+          color: white;
+          padding: 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+          margin-left: 280px; /* Largura da sidebar */
+        }
+
+        .footer-logo {
+          display: flex;
+          align-items: center;
+        }
+
+        .footer-brand {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .footer-links {
+          display: flex;
+          gap: 20px;
+        }
+
+        .footer-link {
+          color: white;
+          text-decoration: none;
+          transition: opacity 0.3s;
+        }
+
+        .footer-link:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
+
+        .footer-copyright {
+          font-size: 0.9rem;
+          opacity: 0.9;
+        }
+
+        .sidebar-toggle {
+          display: none;
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+
+        /* Estilos específicos para a página de cadastro */
+        .form-container {
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: var(--shadow-small);
+          margin-bottom: 2rem;
+          overflow: hidden;
+        }
+
+        .form-header {
+          background-color: var(--color-orange-light);
+          color: white;
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .form-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
+        .form-steps {
+          display: flex;
+          background-color: var(--bg-primary);
+          border-bottom: 1px solid #eee;
+        }
+
+        .form-step {
+          padding: 1rem 1.5rem;
+          cursor: pointer;
+          color: var(--text-muted);
+          font-weight: bold;
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .form-step i {
+          margin-right: 0.5rem;
+        }
+
+        .form-step.active {
+          color: var(--color-orange-burnt);
+          background-color: white;
+        }
+
+        .form-step.active::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background-color: var(--color-orange-burnt);
+        }
+
+        .form-step.completed {
+          color: green;
+        }
+
+        .form-body {
+          padding: 1.5rem;
+        }
+
+        .form-section {
+          margin-bottom: 2rem;
+        }
+
+        .section-title {
+          color: var(--text-dark);
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid #eee;
+        }
+
+        .form-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          color: var(--text-dark);
+          font-weight: bold;
+          font-size: 0.9rem;
+        }
+
+        .form-group .required::after {
+          content: '*';
+          color: red;
+          margin-left: 0.25rem;
+        }
+
+        .form-control {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 0.9rem;
+          transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-control:focus {
+          outline: none;
+          border-color: var(--color-orange-burnt);
+          box-shadow: 0 0 0 3px rgba(211, 122, 71, 0.2);
+        }
+
+        .form-control.invalid {
+          border-color: red;
+        }
+
+        .help-text {
+          display: block;
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: var(--text-muted);
+        }
+
+        .error-text {
+          display: block;
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: red;
+        }
+
+        .form-check {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-check-input {
+          margin-right: 0.5rem;
+          width: 16px;
+          height: 16px;
+        }
+
+        .form-check-label {
+          font-size: 0.9rem;
+          color: var(--text-dark);
+        }
+
+        .radio-group {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .file-upload {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .file-preview {
+          width: 100%;
+          height: 150px;
+          border: 1px dashed #ddd;
+          border-radius: 4px;
+          background-color: #f9f9f9;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .file-preview-icon {
+          color: #ddd;
+          font-size: 3rem;
+        }
+
+        .file-preview-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: none;
+        }
+
+        .file-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: space-between;
+          padding-top: 1.5rem;
+          margin-top: 1.5rem;
+          border-top: 1px solid #eee;
+        }
+
+        .form-actions-left,
+        .form-actions-right {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .btn {
+          padding: 0.75rem 1.25rem;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: bold;
+          transition: background-color 0.3s, opacity 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .btn i {
+          margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+          background-color: var(--button-primary);
+          color: var(--button-text);
+        }
+
+        .btn-primary:hover {
+          background-color: var(--button-primary-hover);
+        }
+
+        .btn-secondary {
+          background-color: var(--button-secondary);
+          color: var(--button-text);
+        }
+
+        .btn-outline {
+          background-color: transparent;
+          border: 1px solid var(--color-orange-burnt);
+          color: var(--color-orange-burnt);
+        }
+
+        .btn-outline:hover {
+          background-color: rgba(211, 122, 71, 0.1);
+        }
+
+        .btn-danger {
+          background-color: #dc3545;
+          color: white;
+        }
+
+        .btn-danger:hover {
+          background-color: #c82333;
+        }
+
+        .btn-success {
+          background-color: #28a745;
+          color: white;
+        }
+
+        .btn-success:hover {
+          background-color: #218838;
+        }
+
+        .autocomplete-container {
+          position: relative;
+        }
+
+        .autocomplete-results {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          max-height: 200px;
+          overflow-y: auto;
+          background-color: white;
+          border: 1px solid #ddd;
+          border-top: none;
+          border-radius: 0 0 4px 4px;
+          z-index: 10;
+          display: none;
+        }
+
+        .autocomplete-item {
+          padding: 0.75rem;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+
+        .autocomplete-item:hover {
+          background-color: #f5f5f5;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 1024px) {
+          .form-row {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+          
+          .form-actions {
+            flex-direction: column-reverse;
+            gap: 1rem;
+          }
+          
+          .form-actions-left,
+          .form-actions-right {
+            width: 100%;
+            justify-content: space-between;
+          }
+        }
+
+        @media (max-width: 768px) {
+          header {
+            padding: 1rem 2rem;
+          }
+          
+          .sidebar-toggle {
+            display: block;
+          }
+          
+          .sidebar {
+            transform: translateX(-280px);
+            transition: transform 0.3s ease;
+            z-index: 999;
+          }
+          
+          .sidebar.active {
+            transform: translateX(0);
+          }
+          
+          .content {
+            margin-left: 0;
+            width: 100%;
+            padding: 1.5rem;
+          }
+          
+          footer {
+            margin-left: 0;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+          }
+          
+          .footer-links {
+            flex-direction: column;
+            gap: 10px;
+          }
+          
+          .title {
+            font-size: 1.4rem;
+          }
+          
+          .form-steps {
+            overflow-x: auto;
+            justify-content: flex-start;
+          }
+          
+          .form-step {
+            flex-shrink: 0;
+          }
+        }
+
+        @media (max-width: 480px) {
+          header {
+            padding: 1rem;
+          }
+          
+          .paw-logo {
+            width: 30px;
+            height: 30px;
+          }
+          
+          .title {
+            font-size: 1.2rem;
+          }
+          
+          .header-icons > * {
+            margin-left: 10px;
+          }
+          
+          .profile-icon {
+            width: 35px;
+            height: 35px;
+          }
+          
+          .content {
+            padding: 1rem;
+          }
+          
+          .form-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+          
+          .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+          }
+        }
+    </style>
+</head>
+<body>
+    <script src="scriptAcolhimento.js"></script>
+    <!-- Header -->
+    <main-header></main-header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+         <main-sidebar></main-sidebar>
+
+        <!-- Content -->
+        <main class="content">
+        <h1 class="page-title">
+            <i class="fas fa-search"></i>
+            Pesquisa de Acolhimentos
+        </h1>
+
+        <div class="search-container">
+            <div class="search-header">
+                <div class="search-title">Buscar Acolhimento</div>
+            </div>
+
+            <div class="search-body">
+                <div class="search-type">
+                    <div class="search-type-option">
+                        <input type="radio" id="search-by-id" name="search-type-ac" value="idAcolhimento" checked>
+                        <label for="search-by-id">Buscar por ID</label>
+                    </div>
+                    <div class="search-type-option">
+                        <input type="radio" id="search-by-animal-name" name="search-type-ac" value="nomeAnimal">
+                        <label for="search-by-animal-name">Buscar por Nome do Animal</label>
+                    </div>
+                </div>
+
+                <div class="search-form">
+                    <div class="search-input-group">
+                        <input
+                            type="text"
+                            id="acSearchInput"
+                            class="search-input"
+                            placeholder="Digite o ID do Acolhimento ou o nome do Animal"
+                        >
+                    </div>
+                    <button type="button" id="searchBtnAc" class="btn-search">
+                        <i class="fas fa-search"></i>
+                        Pesquisar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-container" id="results-container-ac" style="display: none; margin-top:20px;">
+            <div class="results-header">
+                <div class="results-title">Resultados da Pesquisa</div>
+                <div class="results-count" id="results-count-ac">0 acolhimentos encontrados</div>
+            </div>
+
+            <div class="results-body">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>ID Acolhimento</th>
+                            <th>Data</th>
+                            <th>ID Funcionário</th>
+                            <th>ID Animal</th>
+                            <th>Nome do Animal</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody-ac">
+                        </tbody>
+                </table>
+
+                <div class="no-results" id="no-results-ac" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h3>Nenhum resultado encontrado</h3>
+                    <p>Tente outro termo de busca ou verifique os filtros aplicados.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="edit-section-ac" class="results-container" style="display:none; margin-top:20px;">
+            <div class="results-header">
+                <div class="results-title">Editar Acolhimento</div>
+            </div>
+            <div class="results-body">
+                <input type="hidden" id="edit-id-ac">
+                <div class="form-row" style="gap:1rem;">
+                    <div class="form-group">
+                        <label for="ac-date" class="required">Data do acolhimento</label>
+                        <input
+                            type="date"
+                            id="ac-date"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="ac-func" class="required">ID do funcionário</label>
+                        <input
+                            type="number"
+                            id="ac-func"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="ac-animal">ID do animal</label>
+                        <input
+                            id="ac-animal"
+                            class="form-control"
+                            readonly
+                        >
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    id="btn-update-ac"
+                    class="btn btn-success"
+                    style="margin-top:1rem;"
+                >
+                    <i class="fas fa-check"></i> Confirmar Alterações
+                </button>
+            </div>
+        </div>
+
+        <div class="toast-container" id="toast-container-ac"></div>
+    </main>
+
+    
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const API_ACOLHIMENTO_BASE = 'http://localhost:8080/apis/acolhimento';
+        const API_ANIMAL_BASE = 'http://localhost:8080/apis/animal';
+        const TOKEN = 'Bearer SEU_TOKEN_AQUI'; // Lembre-se de substituir 'SEU_TOKEN_AQUI' pelo seu token real
+
+        // --- Elementos DOM de Busca e Resultados ---
+        const searchTypeRadiosAc = document.querySelectorAll('input[name="search-type-ac"]');
+        const acSearchInput = document.getElementById('acSearchInput');
+        const searchBtnAc = document.getElementById('searchBtnAc');
+        const resultsContainerAc = document.getElementById('results-container-ac');
+        const resultsTbodyAc = document.getElementById('results-tbody-ac');
+        const resultsCountAc = document.getElementById('results-count-ac');
+        const noResultsAc = document.getElementById('no-results-ac');
+        
+        // --- Elementos DOM de Edição ---
+        const editSectionAc = document.getElementById('edit-section-ac');
+        const editIdAcField = document.getElementById('edit-id-ac'); // Campo escondido para o ID do acolhimento
+        const acDateField = document.getElementById('ac-date');
+        const acFuncField = document.getElementById('ac-func');
+        const acAnimalField = document.getElementById('ac-animal');
+        const btnUpdateAc = document.getElementById('btn-update-ac');
+        
+        // --- Toast ---
+        const toastRootAc = document.getElementById('toast-container-ac');
+
+        // Armazenar os dados completos dos acolhimentos para acesso fácil ao editar
+        let acolhimentosData = [];
+
+        // --- Funções de Utilidade ---
+        function showToast(type, title, msg) {
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${msg}</div>
+                </div>
+                <button class="toast-close">&times;</button>
+            `;
+            toastRootAc.appendChild(t);
+            t.querySelector('.toast-close').onclick = () => t.remove();
+            setTimeout(() => t.classList.add('show'), 10);
+            setTimeout(() => {
+                t.classList.remove('show');
+                setTimeout(() => t.remove(), 300);
+            }, 5000);
+        }
+
+        // Busca o nome do animal por ID
+        async function fetchAnimalName(idAnimal) {
+            try {
+                const resp = await fetch(`${API_ANIMAL_BASE}/id/${idAnimal}`, {
+                    headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                });
+                if (!resp.ok) return '-';
+                const animal = await resp.json();
+                return animal.informacao?.nome ?? '-';
+            } catch {
+                return '-';
+            }
+        }
+
+        // --- Funções de Acolhimento ---
+
+        async function buscarAcolhimento() {
+            const term = acSearchInput.value.trim();
+            if (!term) {
+                return showToast('error', 'Erro', 'Digite um ID ou nome do animal para buscar.');
+            }
+
+            const searchType = document.querySelector('input[name="search-type-ac"]:checked').value;
+
+            resultsTbodyAc.innerHTML = '';
+            resultsContainerAc.style.display = 'none';
+            noResultsAc.style.display = 'none';
+            editSectionAc.style.display = 'none'; // Oculta a seção de edição ao iniciar nova busca
+
+            acolhimentosData = []; // Limpa os dados antes de uma nova busca
+
+            try {
+                let list;
+                if (searchType === "idAcolhimento") {
+                    if (!/^\d+$/.test(term)) {
+                        return showToast('error', 'Erro', 'Para buscar por ID, digite apenas números.');
+                    }
+                    const res = await fetch(`${API_ACOLHIMENTO_BASE}/${term}`, {
+                        headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                    });
+                    if (!res.ok) {
+                         if (res.status === 404) throw new Error('Acolhimento não encontrado.');
+                         throw new Error(await res.text() || 'Erro ao buscar acolhimento por ID.');
+                    }
+                    list = [await res.json()];
+                } else { // searchType === "nomeAnimal"
+                    const res = await fetch(`${API_ACOLHIMENTO_BASE}/nome/${encodeURIComponent(term)}`, {
+                        headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                    });
+                    if (!res.ok) {
+                        if (res.status === 404) throw new Error('Nenhum acolhimento encontrado para o nome do animal.');
+                        throw new Error(await res.text() || 'Erro ao buscar acolhimentos por nome do animal.');
+                    }
+                    list = await res.json();
+                }
+
+                if (!list || list.length === 0) {
+                    noResultsAc.style.display = 'block';
+                    resultsCountAc.textContent = '0 acolhimentos encontrados';
+                    return;
+                }
+
+                acolhimentosData = list; // Armazena os dados completos
+
+                noResultsAc.style.display = 'none';
+                resultsContainerAc.style.display = 'block';
+                resultsCountAc.textContent = `${list.length} acolhimento${list.length > 1 ? 's' : ''} encontrado${list.length > 1 ? 's' : ''}`;
+
+                for (const ac of list) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${ac.id ?? '-'}</td>
+                        <td>${ac.data?.split('T')[0] ?? '-'}</td>
+                        <td>${ac.idFunc ?? '-'}</td>
+                        <td>${ac.idAnimal ?? '-'}</td>
+                        <td class="animal-name-cell">Carregando...</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm btn-action" data-id="${ac.id}" data-action="edit">
+                                <i class="fas fa-edit"></i> Alterar
+                            </button>
+                            <button class="btn btn-danger btn-sm btn-action" data-id="${ac.id}" data-action="delete">
+                                <i class="fas fa-trash-alt"></i> Excluir
+                            </button>
+                        </td>
+                    `;
+                    resultsTbodyAc.appendChild(tr);
+
+                    // Busca e insere o nome do animal assincronamente
+                    const nameCell = tr.querySelector('.animal-name-cell');
+                    fetchAnimalName(ac.idAnimal).then(nome => {
+                        nameCell.innerText = nome;
+                    }).catch(() => {
+                        nameCell.innerText = 'Erro ao carregar nome';
+                    });
+                }
+                showToast('success', 'Busca Concluída', `${list.length} acolhimento(s) encontrado(s).`);
+
+            } catch (e) {
+                console.error('Erro na busca de acolhimento:', e);
+                showToast('error', 'Erro na Busca', e.message);
+                noResultsAc.style.display = 'block';
+                resultsCountAc.textContent = '0 acolhimentos encontrados';
+            }
+        }
+
+        function preencherEdicaoAcolhimento(acolhimentoId) {
+            const acolhimento = acolhimentosData.find(ac => ac.id == acolhimentoId);
+            if (!acolhimento) {
+                return showToast('error', 'Erro', 'Dados do acolhimento não encontrados para edição.');
+            }
+
+            editIdAcField.value = acolhimento.id || '';
+            acDateField.value = acolhimento.data?.split('T')[0] || '';
+            acFuncField.value = acolhimento.idFunc ?? '';
+            acAnimalField.value = acolhimento.idAnimal ?? '';
+
+            editSectionAc.style.display = 'block';
+            window.scrollTo({ top: editSectionAc.offsetTop, behavior: 'smooth' });
+        }
+
+        async function atualizarAcolhimento() {
+            const id = editIdAcField.value;
+            if (!id) {
+                return showToast('error', 'Erro', 'ID do acolhimento para atualização não encontrado.');
+            }
+
+            const payload = {
+                id: id,
+                data: acDateField.value,
+                idFunc: parseInt(acFuncField.value, 10),
+                idAnimal: parseInt(acAnimalField.value, 10),
+            };
+
+            if (!payload.data || isNaN(payload.idFunc) || isNaN(payload.idAnimal)) {
+                return showToast('error', 'Erro', 'Preencha todos os campos obrigatórios (Data, ID Funcionário, ID Animal).');
+            }
+
+            try {
+                const res = await fetch(`${API_ACOLHIMENTO_BASE}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Erro ao atualizar acolhimento.');
+                }
+
+                showToast('success', 'Sucesso', 'Acolhimento atualizado com sucesso!');
+                editSectionAc.style.display = 'none';
+                buscarAcolhimento();
+            } catch (e) {
+                showToast('error', 'Erro', e.message);
+            }
+        }
+
+        async function excluirAcolhimento(id) {
+            if (!confirm(`Tem certeza que deseja excluir o acolhimento com ID ${id}? Esta ação é irreversível!`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_ACOLHIMENTO_BASE}/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN,
+                    },
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(errorText || 'Erro ao excluir acolhimento.');
+                }
+
+                showToast('success', 'Sucesso', 'Acolhimento excluído com sucesso!');
+                buscarAcolhimento();
+            } catch (e) {
+                showToast('error', 'Erro', e.message);
+            }
+        }
+
+        searchBtnAc.addEventListener('click', buscarAcolhimento);
+        acSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarAcolhimento();
+            }
+        });
+        btnUpdateAc.addEventListener('click', atualizarAcolhimento);
+
+        resultsTbodyAc.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-action')) {
+                const btn = e.target.closest('.btn-action');
+                const id = btn.dataset.id;
+                const action = btn.dataset.action;
+
+                if (action === 'edit') {
+                    preencherEdicaoAcolhimento(id);
+                } else if (action === 'delete') {
+                    excluirAcolhimento(id);
+                }
+            }
+        });
+
+        searchTypeRadiosAc.forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.value === 'idAcolhimento') {
+                    acSearchInput.placeholder = "Digite o ID do Acolhimento";
+                } else {
+                    acSearchInput.placeholder = "Digite o nome do Animal";
+                }
+                acSearchInput.value = '';
+            });
+        });
+    });
+    </script>
+
+</body>
+
+</html>

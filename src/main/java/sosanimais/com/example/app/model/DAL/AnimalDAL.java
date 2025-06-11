@@ -61,6 +61,10 @@ public class AnimalDAL implements IDAL<Animal>{
                 WHERE ani_cod=#1
                 """;
 
+        if(entidade.getInformacao().getDescricao()==null){
+            entidade.getInformacao().setDescricao("");
+        }
+
         sql = sql.replace("#1", String.valueOf(entidade.getId()));
         sql = sql.replace("#2", entidade.getInformacao().getNome());
         sql = sql.replace("#3", entidade.getInformacao().getRaca());

@@ -44,12 +44,13 @@ public class Animal {
             this.idAcolhimento = idAcolhimento;
         }
 
-    public AnimalInformacao getInformacao () {
-        return informacao;
-    }
 
-    public void setInformacao (AnimalInformacao informacao){
-        this.informacao = informacao;
-    }
+        public AnimalInformacao getInformacao () {
+            return informacao;
+        }
+
+        public void setInformacao (AnimalInformacao informacao){
+            this.informacao = informacao;
+        }
 
 }

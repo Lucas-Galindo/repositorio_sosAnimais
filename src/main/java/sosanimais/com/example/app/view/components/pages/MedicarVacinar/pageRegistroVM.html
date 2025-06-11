@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Aplicação</title>
+    <title>Relatório de Acolhimentos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+    <script href="./assets/scripts.js"></script>
+
+    <!-- PARTE DOS COMPONENTES -->
+    <link rel="stylesheet" href="../assets/css/header.css">
+    <script src="../assets/js/header.js"></script>
+    <link rel="stylesheet" href="../assets/css/footer.css">
+    <script src="../assets/js/footer.js"></script>
+    <link rel="stylesheet" href="../assets/css/sidebar.css">
+    <script src="../assets/js/sidebar.js"></script>
+
     <style>
         /* Estilos existentes - incorporando do arquivo fornecido */
         :root {
@@ -756,162 +767,14 @@
     </style>
 </head>
 <body>
+  <script src="../assets/js/sidebar.js"></script>
     <!-- Header -->
-    <header>
-        <button class="sidebar-toggle" id="sidebarToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="logo-container">
-            <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
-            <div class="title">S.O.S. Amigos de Animais</div>
-        </div>
-        <div class="header-icons">
-            <i class="fas fa-bell notification-icon fa-lg"></i>
-            <div class="profile-icon">
-                <i class="fas fa-user fa-lg"></i>
-            </div>
-        </div>
-    </header>
+    <main-header></main-header>
 
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-home menu-icon"></i>
-                        Dashboard
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-chart-line"></i>
-                        Estatísticas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-calendar-alt"></i>
-                        Calendário
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-paw menu-icon"></i>
-                        Animais
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu active">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-list"></i>
-                        Listar todos
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-plus-circle"></i>
-                        Cadastrar novo
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-search"></i>
-                        Buscar animal
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-user-friends menu-icon"></i>
-                        Adoções
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-clipboard-list"></i>
-                        Pedidos de adoção
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-check-circle"></i>
-                        Adoções concluídas
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-check"></i>
-                        Verificar adotante
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-heart menu-icon"></i>
-                        Doações
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-hand-holding-heart"></i>
-                        Receber doação
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-history"></i>
-                        Histórico
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-file-alt menu-icon"></i>
-                        Relatórios
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-paw"></i>
-                        Animais
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-home"></i>
-                        Adoções
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-heart"></i>
-                        Doações
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-friends"></i>
-                        Voluntários
-                    </a>
-                </div>
-            </div>
-            <div class="menu-item">
-                <button class="menu-button">
-                    <div class="menu-button-content">
-                        <i class="fas fa-cog menu-icon"></i>
-                        Configurações
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-user-cog"></i>
-                        Perfil
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users-cog"></i>
-                        Usuários
-                    </a>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Sair
-                    </a>
-                </div>
-            </div>
-        </aside>
+        <main-sidebar></main-sidebar>
 
         <!-- Content -->
     <main class="content">
@@ -942,14 +805,34 @@
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
-
-                            <table class="results-table" id="animal-tbl" class="small-table" style="display:none;">
+                            <table class="results-table small-table" id="animal-tbl" style="display:none;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nome</th>
                                         <th>Raça</th>
-                                        <th>Ações</th> </tr>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group" style="flex:2">
+                            <label for="funcionario-busca" class="required">Funcionário (ID ou Nome)</label>
+                            <div style="display:flex;gap:0.5rem;">
+                                <input type="text" id="funcionario-busca" class="form-control" placeholder="Digite ID ou nome">
+                                <button type="button" id="btn-buscar-funcionario" class="btn btn-outline">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <table class="results-table small-table" id="funcionario-tbl" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Login</th>
+                                        <th>Ações</th>
+                                    </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -963,7 +846,7 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-primary" id="btn-registrar">
+                    <button type="submit" class="btn btn-primary" id="btn-registrar">
                         <i class="fas fa-check"></i> Registrar
                     </button>
                 </div>
@@ -971,194 +854,314 @@
         </div>
 
         <div id="toast-container" class="toast-container"></div>
+
     </main>
-    </div>
-    <main-footer></main-footer>
 
+    
+    
     <script>
-  document.addEventListener('DOMContentLoaded', () => {
-      const API_INSUMO = 'http://localhost:8080/apis/insumo/ids/2/6';
-      const API_ANIMAL = 'http://localhost:8080/apis/animal';
-      const API_APLICACAO = 'http://localhost:8080/apis/animal_insumo';
-      // ATENÇÃO: Substitua este token pelo seu token JWT real, obtido após o login.
-      // Este token de exemplo pode estar expirado ou ser inválido.
-      const TOKEN = 'Bearer SEU_TOKEN_AQUI'; 
+    document.addEventListener('DOMContentLoaded', () => {
+        const API_INSUMO = 'http://localhost:8080/apis/insumo/ids/2/6';
+        const API_ANIMAL = 'http://localhost:8080/apis/animal';
+        const API_FUNCIONARIO = 'http://localhost:8080/apis/funcionario';
+        // CORRIGIDO: O erro era "anismal_insumo". Agora é "animal_insumo".
+        const API_APLICACAO = 'http://localhost:8080/apis/animal_insumo'; 
+        const TOKEN = 'Bearer SEU_TOKEN_AQUI'; // **ATENÇÃO: Substitua este token pelo seu JWT real**
 
-      const selectInsumo = document.getElementById('insumo-select');
-      const btnBuscarAnimal = document.getElementById('btn-buscar-animal');
-      const inputAnimal = document.getElementById('animal-busca');
-      const animalTbl = document.getElementById('animal-tbl');
-      const animalTbody = animalTbl.querySelector('tbody');
-      const btnRegistrar = document.getElementById('btn-registrar');
-      const dataField = document.getElementById('aplicacao-data');
-      const toastRoot = document.getElementById('toast-container');
-      let currentAnimal = null; // Variável para armazenar o animal selecionado
+        // --- Elementos DOM ---
+        const formApp = document.querySelector('.form-body form'); // Referência ao formulário principal
+        const selectInsumo = document.getElementById('insumo-select');
+        const btnBuscarAnimal = document.getElementById('btn-buscar-animal');
+        const inputAnimal = document.getElementById('animal-busca');
+        const animalTbl = document.getElementById('animal-tbl');
+        const animalTbody = animalTbl.querySelector('tbody');
 
-      // Função para exibir mensagens de notificação (toasts)
-      function showToast(type, title, msg) {
-          const t = document.createElement('div');
-          t.className = `toast toast-${type}`;
-          t.innerHTML = `
-              <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
-              <div class="toast-content">
-                  <div class="toast-title">${title}</div>
-                  <div class="toast-message">${msg}</div>
-              </div>
-              <button class="toast-close">&times;</button>
-          `;
-          toastRoot.appendChild(t);
-          t.querySelector('.toast-close').onclick = () => t.remove();
-          setTimeout(() => t.classList.add('show'), 10);
-          setTimeout(() => {
-              t.classList.remove('show');
-              setTimeout(() => t.remove(), 300);
-          }, 5000);
-      }
+        const btnBuscarFuncionario = document.getElementById('btn-buscar-funcionario');
+        const inputFuncionario = document.getElementById('funcionario-busca');
+        const funcionarioTbl = document.getElementById('funcionario-tbl');
+        const funcionarioTbody = funcionarioTbl.querySelector('tbody');
 
-      // Carrega insumos das categorias 2 e 6 (função auto-executável)
-      (async function loadInsumos() {
-          selectInsumo.innerHTML = '<option>Carregando...</option>';
-          try {
-              const resp = await fetch(API_INSUMO, {
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': TOKEN
-                  }
-              });
-              if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-              const items = await resp.json();
-              selectInsumo.innerHTML = '<option value="">Selecione o insumo</option>';
-              items.forEach(i => {
-                  const o = document.createElement('option');
-                  o.value = i.id;
-                  o.text = i.nome;
-                  selectInsumo.appendChild(o);
-              });
-          } catch (e) {
-              console.error('Erro ao carregar insumos:', e);
-              selectInsumo.innerHTML = '<option>Erro ao carregar</option>';
-              selectInsumo.disabled = true;
-              showToast('error', 'Erro', 'Não foi possível carregar insumos.');
-          }
-      })();
+        const btnRegistrar = document.getElementById('btn-registrar');
+        const dataField = document.getElementById('aplicacao-data');
+        const toastRoot = document.getElementById('toast-container');
 
-      // Buscar animal
-      btnBuscarAnimal.addEventListener('click', async () => {
-          const term = inputAnimal.value.trim();
-          if (!term) return showToast('error', 'Erro', 'Digite ID ou nome do animal para buscar.');
+        let currentAnimal = null;
+        let currentFuncionario = null;
+        let lastSearchedAnimals = []; // Armazena a lista da última busca de animais
+        let lastSearchedFuncionarios = []; // Armazena a lista da última busca de funcionários
 
-          const url = /^\d+$/.test(term)
-              ? `${API_ANIMAL}/id/${term}`
-              : `${API_ANIMAL}/nome/${encodeURIComponent(term)}`;
+        // --- Funções de Utilidade (Toast) ---
+        function showToast(type, title, msg) {
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${msg}</div>
+                </div>
+                <button class="toast-close">&times;</button>
+            `;
+            toastRoot.appendChild(t);
+            t.querySelector('.toast-close').onclick = () => t.remove();
+            setTimeout(() => t.classList.add('show'), 10);
+            setTimeout(() => {
+                t.classList.remove('show');
+                setTimeout(() => t.remove(), 300);
+            }, 5000);
+        }
 
-          try {
-              const resp = await fetch(url, {
-                  headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
-              });
+        // --- Carrega Insumos (Categorias 2 e 6) ---
+        (async function loadInsumos() {
+            selectInsumo.innerHTML = '<option value="">Selecione o insumo</option>';
+            selectInsumo.disabled = true;
+            try {
+                const resp = await fetch(API_INSUMO, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN
+                    }
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const items = await resp.json();
+                selectInsumo.innerHTML = '<option value="">Selecione o insumo</option>';
+                items.forEach(i => {
+                    const o = document.createElement('option');
+                    o.value = i.id;
+                    o.text = i.nome;
+                    selectInsumo.appendChild(o);
+                });
+                selectInsumo.disabled = false;
+            } catch (e) {
+                console.error('Erro ao carregar insumos:', e);
+                selectInsumo.innerHTML = '<option value="">Erro ao carregar</option>';
+                selectInsumo.disabled = true;
+                showToast('error', 'Erro', 'Não foi possível carregar insumos.');
+            }
+        })();
 
-              if (!resp.ok) {
-                  const errorText = await resp.text();
-                  throw new Error(errorText || 'Animal não encontrado.');
-              }
+        // --- Lógica de Seleção de Animal ---
+        function handleAnimalSelection(animal) {
+            currentAnimal = animal;
+            inputAnimal.value = `${animal.informacao?.nome || ''} (ID: ${animal.id})`;
+            animalTbl.style.display = 'none';
+            showToast('success', 'Animal Selecionado', `Animal ${animal.informacao?.nome || ''} (ID: ${animal.id}) selecionado.`);
+        }
 
-              let data = await resp.json();
-              let animals = Array.isArray(data) ? data : [data]; // Garante que é um array
+        // --- Buscar Animal ---
+        btnBuscarAnimal.addEventListener('click', async () => {
+            const term = inputAnimal.value.trim();
+            if (!term) return showToast('error', 'Erro', 'Digite ID ou nome do animal para buscar.');
 
-              if (animals.length === 0) {
-                  showToast('error', 'Erro', 'Nenhum animal encontrado com este termo.');
-                  animalTbl.style.display = 'none';
-                  animalTbody.innerHTML = '';
-                  currentAnimal = null;
-                  return;
-              }
+            const url = /^\d+$/.test(term)
+                ? `${API_ANIMAL}/id/${term}`
+                : `${API_ANIMAL}/nome/${encodeURIComponent(term)}`;
 
-              animalTbody.innerHTML = ''; // Limpa resultados anteriores
-              animals.forEach(a => {
-                  const tr = document.createElement('tr');
-                  tr.innerHTML = `
-                      <td>${a.id || '-'}</td>
-                      <td>${a.informacao.nome || '-'}</td>
-                      <td>${a.raca || 'SRD'}</td>
-                      <td>
-                          <button style="background-color: #33b533; color: white"  type="button" class="btn btn-outline-primary btn-select-animal" data-animal-id="${a.id}">
-                              Selecionar
-                          </button>
-                      </td>
-                  `;
-                  animalTbody.appendChild(tr);
+            animalTbody.innerHTML = '';
+            animalTbl.style.display = 'none';
+            currentAnimal = null;
 
-                  // Adiciona o evento de clique ao botão "Selecionar"
-                  tr.querySelector('.btn-select-animal').addEventListener('click', () => {
-                      currentAnimal = a; // Armazena o animal selecionado
-                      inputAnimal.value = `${a.informacao.nome} (ID: ${a.id})`; // Atualiza o input com o animal selecionado
-                      animalTbl.style.display = 'none'; // Oculta a tabela de busca
-                      showToast('success', 'Animal Selecionado', `Animal ${a.informacao.nome} (ID: ${a.id}) selecionado.`);
-                  });
-              });
+            try {
+                const resp = await fetch(url, {
+                    headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                });
 
-              animalTbl.style.display = 'table';
-              showToast('success', 'OK', 'Animal(is) carregado(s).');
+                if (!resp.ok) {
+                    const errorText = await resp.text();
+                    throw new Error(errorText || 'Animal não encontrado.');
+                }
 
-          } catch (e) {
-              console.error('Erro na busca de animal:', e);
-              showToast('error', 'Erro', e.message);
-              animalTbl.style.display = 'none';
-              animalTbody.innerHTML = '';
-              currentAnimal = null;
-          }
-      });
+                let data = await resp.json();
+                lastSearchedAnimals = Array.isArray(data) ? data : [data];
 
-      // Registrar aplicação
-      btnRegistrar.addEventListener('click', async () => {
-          const dataAplic = dataField.value;
-          const insumoId = parseInt(selectInsumo.value, 10);
+                if (lastSearchedAnimals.length === 0) {
+                    showToast('error', 'Erro', 'Nenhum animal encontrado com este termo.');
+                    return;
+                }
 
-          if (!dataAplic || !currentAnimal || isNaN(insumoId) || selectInsumo.value === "") {
-              return showToast('error', 'Erro', 'Por favor, preencha a data, selecione um animal e um insumo.');
-          }
+                lastSearchedAnimals.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${a.id || '-'}</td>
+                        <td>${a.informacao?.nome || '-'}</td>
+                        <td>${a.informacao?.raca || 'SRD'}</td>
+                        <td>
+                            <button type="button" class="btn-select" data-animal-id="${a.id}">
+                                Selecionar
+                            </button>
+                        </td>
+                    `;
+                    animalTbody.appendChild(tr);
+                });
 
-          try {
-              const payload = {
-                  animalAniCod: currentAnimal.id,
-                  insumoIsuId: insumoId,
-                  aiDataExecucao: dataAplic
-              };
-              console.log('Payload para POST:', payload);
+                animalTbl.style.display = 'table';
+                showToast('info', 'Animal(is) Carregado(s)', 'Selecione um animal na lista se houver múltiplos.');
 
-              const resp = await fetch(API_APLICACAO, {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': TOKEN
-                  },
-                  body: JSON.stringify(payload)
-              });
+            } catch (e) {
+                console.error('Erro na busca de animal:', e);
+                showToast('error', 'Erro', e.message);
+            }
+        });
 
-              if (!resp.ok) {
-                  const txt = await resp.text();
-                  throw new Error(txt || resp.statusText);
-              }
+        // Delegação de eventos para botões de seleção de animal
+        animalTbody.addEventListener('click', (e) => {
+            const selectBtn = e.target.closest('.btn-select');
+            if (selectBtn && selectBtn.dataset.animalId) {
+                const animalId = selectBtn.dataset.animalId;
+                const selectedAnimal = lastSearchedAnimals.find(a => a.id == animalId);
+                if (selectedAnimal) {
+                    handleAnimalSelection(selectedAnimal);
+                } else {
+                    showToast('error', 'Erro', 'Animal selecionado não encontrado nos resultados.');
+                }
+            }
+        });
 
-              showToast('success', 'Sucesso', 'Aplicação registrada com sucesso!');
-              // Limpa o formulário e reseta o estado
-              document.querySelector('.form-body').reset();
-              animalTbl.style.display = 'none';
-              animalTbody.innerHTML = '';
-              currentAnimal = null;
-          } catch (e) {
-              console.error('Erro ao registrar aplicação:', e);
-              showToast('error', 'Erro', `Falha ao registrar aplicação: ${e.message}`);
-          }
-      });
+        inputAnimal.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                btnBuscarAnimal.click();
+            }
+        });
 
-      // Opcional: Adiciona evento de Enter ao input de busca de animal
-      inputAnimal.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-              e.preventDefault(); // Impede o envio do formulário padrão
-              btnBuscarAnimal.click(); // Simula o clique no botão de busca
-          }
-      });
-  });
-  </script>
+        // --- Lógica de Seleção de Funcionário ---
+        function handleFuncionarioSelection(funcionario) {
+            currentFuncionario = funcionario;
+            inputFuncionario.value = `${funcionario.login || ''} (Matrícula: ${funcionario.matricula})`;
+            funcionarioTbl.style.display = 'none';
+            showToast('success', 'Funcionário Selecionado', `Funcionário ${funcionario.login || ''} (Matrícula: ${funcionario.matricula}) selecionado.`);
+        }
+
+        // --- Buscar Funcionário ---
+        btnBuscarFuncionario.addEventListener('click', async () => {
+            const term = inputFuncionario.value.trim();
+            if (!term) return showToast('error', 'Erro', 'Digite ID ou nome do funcionário para buscar.');
+
+            let url;
+            if (/^\d+$/.test(term)) {
+                url = `${API_FUNCIONARIO}/${term}`;
+            } else {
+                url = `${API_FUNCIONARIO}/lista/${encodeURIComponent(term)}`;
+            }
+
+            funcionarioTbody.innerHTML = '';
+            funcionarioTbl.style.display = 'none';
+            currentFuncionario = null;
+
+            try {
+                const resp = await fetch(url, {
+                    headers: { 'Content-Type': 'application/json', 'Authorization': TOKEN }
+                });
+
+                if (!resp.ok) {
+                    const errorText = await resp.text();
+                    if (resp.status === 400 || resp.status === 404) {
+                        throw new Error('Nenhum funcionário encontrado com o termo informado.');
+                    }
+                    throw new Error(errorText || 'Erro desconhecido ao buscar funcionário.');
+                }
+
+                let data = await resp.json();
+                lastSearchedFuncionarios = Array.isArray(data) ? data : (data ? [data] : []);
+
+                if (lastSearchedFuncionarios.length === 0) {
+                    showToast('error', 'Erro', 'Nenhum funcionário encontrado com este termo.');
+                    return;
+                }
+                
+                lastSearchedFuncionarios.forEach(f => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${f.matricula ?? '-'}</td>
+                        <td>${f.login || '-'}</td>
+                        <td>
+                            <button type="button" class="btn-select" data-funcionario-id="${f.matricula}">
+                                Selecionar
+                            </button>
+                        </td>
+                    `;
+                    funcionarioTbody.appendChild(tr);
+                });
+
+                funcionarioTbl.style.display = 'table';
+                showToast('info', 'Funcionário(s) Carregado(s)', 'Selecione um funcionário na lista se houver múltiplos.');
+
+            } catch (e) {
+                console.error('Erro na busca de funcionário:', e);
+                showToast('error', 'Erro', e.message);
+            }
+        });
+
+        // Delegação de eventos para botões de seleção de funcionário
+        funcionarioTbody.addEventListener('click', (e) => {
+            const selectBtn = e.target.closest('.btn-select');
+            if (selectBtn && selectBtn.dataset.funcionarioId) {
+                const funcionarioId = selectBtn.dataset.funcionarioId;
+                const selectedFuncionario = lastSearchedFuncionarios.find(f => f.matricula == funcionarioId);
+                if (selectedFuncionario) {
+                    handleFuncionarioSelection(selectedFuncionario);
+                } else {
+                    showToast('error', 'Erro', 'Funcionário selecionado não encontrado nos resultados.');
+                }
+            }
+        });
+
+        inputFuncionario.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                btnBuscarFuncionario.click();
+            }
+        });
+
+        // --- Registrar aplicação ---
+        document.querySelector('.form-body').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Previne o comportamento padrão de envio do formulário
+
+            const dataAplic = dataField.value;
+            const insumoId = parseInt(selectInsumo.value, 10);
+
+            if (!dataAplic || !currentAnimal || !currentFuncionario || isNaN(insumoId) || selectInsumo.value === "") {
+                return showToast('error', 'Erro', 'Por favor, preencha a data, selecione um animal, um funcionário e um insumo.');
+            }
+
+            try {
+                const payload = {
+                    animalAniCod: currentAnimal.id,
+                    insumoIsuId: insumoId,
+                    funcionarioFuncCod: currentFuncionario.matricula, // Usando 'matricula' do funcionário
+                    aiDataExecucao: dataAplic
+                };
+                console.log('Payload para POST:', payload);
+
+                const resp = await fetch(API_APLICACAO, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': TOKEN
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!resp.ok) {
+                    const txt = await resp.text();
+                    throw new Error(txt || resp.statusText);
+                }
+
+                showToast('success', 'Sucesso', 'Aplicação registrada com sucesso!');
+                // Limpa o formulário e reseta o estado
+                document.querySelector('.form-body form').reset(); 
+                animalTbl.style.display = 'none';
+                animalTbody.innerHTML = '';
+                currentAnimal = null;
+                funcionarioTbl.style.display = 'none';
+                funcionarioTbody.innerHTML = '';
+                currentFuncionario = null;
+                selectInsumo.value = "";
+            } catch (e) {
+                console.error('Erro ao registrar aplicação:', e);
+            }
+        });
+    });
+    </script>
 </body>
 </html>

@@ -3,19 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Acolhimentos</title>
+    <title>Alterar Animal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/main.css">
-    <script href="./assets/scripts.js"></script>
-
-    <!-- PARTE DOS COMPONENTES -->
-    <link rel="stylesheet" href="../assets/css/header.css">
-    <script src="../assets/js/header.js"></script>
-    <link rel="stylesheet" href="../assets/css/footer.css">
-    <script src="../assets/js/footer.js"></script>
-    <link rel="stylesheet" href="../assets/css/sidebar.css">
-    <script src="../assets/js/sidebar.js"></script>
-    
     <style>
         /* Estilos existentes - incorporando do arquivo fornecido */
         :root {
@@ -687,319 +676,270 @@
         }
     </style>
 </head>
+
 <body>
-    <script src="scriptAcolhimento.js"></script>
+   <script src="../assets/js/sidebar.js"></script>
+    <script src="scriptAnimal.js"></script>
     <!-- Header -->
-    <main-header></main-header>
+    <header>
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="logo-container">
+            <img src="/api/placeholder/40/40" alt="Pata de Animal" class="paw-logo">
+            <div class="title">S.O.S. Amigos de Animais</div>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-bell notification-icon fa-lg"></i>
+            <div class="profile-icon">
+                <i class="fas fa-user fa-lg"></i>
+            </div>
+        </div>
+    </header>
 
     <!-- Main Container -->
+     <main-header></main-header>
     <div class="main-container">
         <!-- Sidebar -->
-        <main-sidebar></main-sidebar>
+         <main-sidebar></main-sidebar>
+
         <!-- Content -->
         <main class="content">
-            <h1 class="page-title">
-                <i class="fas fa-plus-circle"></i>
-                Registro de acolhimento
-            </h1>
-            
-            <div class="form-container">
-                <div class="form-header">
-                    <div class="form-title">Novo Registro de Acolhimento</div>
-                </div>
-                
-                <div class="form-steps">
+  <h1 class="page-title">
+    <i class="fas fa-paw"></i>
+    Gerenciar Animais
+  </h1>
 
-                </div>
-                
-                <form class="form-body">
-                    <!-- Seção 1: Informações Básicas -->
-                    <div class="form-section">
-                        <h3 class="section-title">Insira os dados do acolhimento</h3>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="ac-date" class="required">Data do acolhimento</label>
-                                <input type="date" id="ac-date" class="form-control" placeholder="Data acolhimento" required>
-                            </div>
-                
-                            
-                            
-                            <div class="form-group">
-                                <label for="ac-id-func" class="required">Id do funcionário</label>
-                                <input type="number" id="ac-func" class="form-control" placeholder="Id do funcionário" required>
-                            </div>
-
-                            <div class="form-group">
-                              <label for="ac-animal-select" class="required">Animal</label>
-                              <select id="ac-animal-select" class="form-control" required>
-                                <option value="">Selecione o animal</option>
-                              </select>
-                              <span class="help-text">Selecione um animal que ainda não foi acolhido</span>
-                            </div>
-                            </div>
-                        </div>
-                        
-                        </div>
-                        <button type="button" class="btn btn-primary"  onclick="registrarAcolhimento()">Registrar Acolhimento</button>
-                    </div>
-
-                    
-                
-                    <!-- Seção 3: Características (Oculto por padrão) -->
-                    <div class="form-section" style="display: none;">
-                        <!-- Conteúdo da seção Características -->
-                    </div>
-                    
-                    <!-- Seção 4: Fotos e Documentos (Oculto por padrão) -->
-                    <div class="form-section" style="display: none;">
-                        <!-- Conteúdo da seção Fotos e Documentos -->
-                    </div>
-                    </div>
-                </form>
-            </div>
-        </main>
+  <!-- Busca -->
+  <div class="form-section">
+    <div class="form-row" style="align-items:flex-end; gap:1rem;">
+      <div class="form-group" style="flex:1">
+        <label for="animal-search" class="required">ID ou Nome</label>
+        <input type="text" id="animal-search" class="form-control" placeholder="Ex: 5 ou Rex" />
+      </div>
+      <div class="form-group">
+        <button type="button" id="btn-search" class="btn btn-primary">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <main-footer></main-footer>
+  <!-- Tabela de resultados -->
+  <div class="form-section" id="list-section" style="display: none;">
+    <h3 class="section-title">Resultados</h3>
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Nome</th><th>Raça</th><th>Status</th><th>Idade</th><th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="results-tbody"></tbody>
+    </table>
+  </div>
 
-    <!-- JavaScript -->
-    <script>
-        // JavaScript para controlar os dropdowns
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButtons = document.querySelectorAll('.menu-button');
-            
-            menuButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Encontra o dropdown-menu associado a este botão
-                    const dropdownMenu = this.nextElementSibling;
-                    const dropdownIcon = this.querySelector('.dropdown-icon');
-                    
-                    // Toggle da classe active
-                    dropdownMenu.classList.toggle('active');
-                    dropdownIcon.classList.toggle('active');
-                    
-                    // Opcional: Fecha outros dropdowns abertos
-                    document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                        if (menu !== dropdownMenu) {
-                            menu.classList.remove('active');
-                            menu.previousElementSibling.querySelector('.dropdown-icon').classList.remove('active');
-                        }
-                    });
-                });
-            });
-            
-            // Toggle para exibir/ocultar a sidebar em dispositivos móveis
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('sidebar');
-            
-            if (sidebarToggle && sidebar) {
-                sidebarToggle.addEventListener('click', function() {
-                    sidebar.classList.toggle('active');
-                });
-                
-                // Fechar a sidebar quando clicar fora dela em dispositivos móveis
-                document.addEventListener('click', function(event) {
-                    const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnToggle = sidebarToggle.contains(event.target);
-                    
-                    if (!isClickInsideSidebar && !isClickOnToggle && sidebar.classList.contains('active') && window.innerWidth <= 768) {
-                        sidebar.classList.remove('active');
-                    }
-                });
-            }
-            
-            // Navegação entre etapas do formulário
-            const formSections = document.querySelectorAll('.form-section');
-            const formSteps = document.querySelectorAll('.form-step');
-            const btnNext = document.getElementById('btn-next');
-            const btnPrevious = document.getElementById('btn-previous');
-            
-            let currentStep = 0;
-            
-            if (btnNext && btnPrevious) {
-                btnNext.addEventListener('click', function() {
-                    if (currentStep < formSections.length - 1) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        formSteps[currentStep].classList.add('completed');
-                        
-                        currentStep++;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        
-                        btnPrevious.style.display = 'flex';
-                        
-                        if (currentStep === formSections.length - 1) {
-                            btnNext.textContent = 'Finalizar';
-                            btnNext.innerHTML = 'Finalizar <i class="fas fa-check" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        }
-                    } else {
-                        // Último passo - enviar formulário
-                        alert('Formulário enviado com sucesso!');
-                    }
-                });
-                
-                btnPrevious.addEventListener('click', function() {
-                    if (currentStep > 0) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        
-                        currentStep--;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        formSteps[currentStep].classList.remove('completed');
-                        
-                        if (currentStep === 0) {
-                            btnPrevious.style.display = 'none';
-                        }
-                        
-                        btnNext.textContent = 'Próximo';
-                        btnNext.innerHTML = 'Próximo <i class="fas fa-arrow-right" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                    }
-                });
-            }
-            
-            // Clique nos passos do formulário para navegar (opcional)
-            formSteps.forEach((step, index) => {
-                step.addEventListener('click', function() {
-                    if (index < currentStep || step.classList.contains('completed')) {
-                        formSections[currentStep].style.display = 'none';
-                        formSteps[currentStep].classList.remove('active');
-                        
-                        currentStep = index;
-                        
-                        formSections[currentStep].style.display = 'block';
-                        formSteps[currentStep].classList.add('active');
-                        
-                        btnPrevious.style.display = currentStep > 0 ? 'flex' : 'none';
-                        
-                        btnNext.textContent = currentStep === formSections.length - 1 ? 'Finalizar' : 'Próximo';
-                        if (currentStep === formSections.length - 1) {
-                            btnNext.innerHTML = 'Finalizar <i class="fas fa-check" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        } else {
-                            btnNext.innerHTML = 'Próximo <i class="fas fa-arrow-right" style="margin-left: 0.5rem; margin-right: 0;"></i>';
-                        }
-                    }
-                });
-            });
-            
-            // Simulação de autocomplete para raças
-            const breedInput = document.getElementById('animal-breed');
-            const breedResults = document.getElementById('breed-results');
-            
-            if (breedInput && breedResults) {
-                const dogBreeds = ['Labrador Retriever', 'Golden Retriever', 'Pastor Alemão', 'Bulldog', 'Poodle', 'Beagle', 'Rottweiler', 'Yorkshire Terrier', 'Boxer', 'Dachshund'];
-                const catBreeds = ['Persa', 'Siamês', 'Maine Coon', 'Angorá', 'Sphynx', 'Bengal', 'Ragdoll', 'British Shorthair', 'Abissínio', 'Himalaia'];
-                
-                const animalTypeSelect = document.getElementById('animal-type');
-                
-                breedInput.addEventListener('focus', function() {
-                    breedResults.style.display = 'block';
-                    
-                    // Limpa os resultados anteriores
-                    breedResults.innerHTML = '';
-                    
-                    // Determina quais raças mostrar com base no tipo de animal selecionado
-                    let breeds = [];
-                    if (animalTypeSelect.value === 'dog') {
-                        breeds = dogBreeds;
-                    } else if (animalTypeSelect.value === 'cat') {
-                        breeds = catBreeds;
-                    }
-                    
-                    // Adiciona as raças aos resultados
-                    breeds.forEach(breed => {
-                        const item = document.createElement('div');
-                        item.classList.add('autocomplete-item');
-                        item.textContent = breed;
-                        item.addEventListener('click', function() {
-                            breedInput.value = breed;
-                            breedResults.style.display = 'none';
-                        });
-                        breedResults.appendChild(item);
-                    });
-                });
-                
-                breedInput.addEventListener('input', function() {
-                    const value = this.value.toLowerCase();
-                    
-                    // Limpa os resultados anteriores
-                    breedResults.innerHTML = '';
-                    
-                    // Determina quais raças mostrar com base no tipo de animal selecionado
-                    let breeds = [];
-                    if (animalTypeSelect.value === 'dog') {
-                        breeds = dogBreeds;
-                    } else if (animalTypeSelect.value === 'cat') {
-                        breeds = catBreeds;
-                    }
-                    
-                    // Filtra as raças com base no valor digitado
-                    const filteredBreeds = breeds.filter(breed => breed.toLowerCase().includes(value));
-                    
-                    // Adiciona as raças filtradas aos resultados
-                    filteredBreeds.forEach(breed => {
-                        const item = document.createElement('div');
-                        item.classList.add('autocomplete-item');
-                        item.textContent = breed;
-                        item.addEventListener('click', function() {
-                            breedInput.value = breed;
-                            breedResults.style.display = 'none';
-                        });
-                        breedResults.appendChild(item);
-                    });
-                    
-                    // Mostra ou oculta os resultados com base se há resultados para mostrar
-                    breedResults.style.display = filteredBreeds.length > 0 ? 'block' : 'none';
-                });
-                
-                // Oculta os resultados ao clicar fora do input
-                document.addEventListener('click', function(event) {
-                    if (!breedInput.contains(event.target) && !breedResults.contains(event.target)) {
-                        breedResults.style.display = 'none';
-                    }
-                });
-                
-                // Atualiza as raças quando o tipo de animal muda
-                animalTypeSelect.addEventListener('change', function() {
-                    breedInput.value = '';
-                });
-            }
-            
-            // Exemplo de validação básica
-            const requiredInputs = document.querySelectorAll('[required]');
-            
-            if (requiredInputs.length > 0) {
-                requiredInputs.forEach(input => {
-                    input.addEventListener('blur', function() {
-                        if (!this.value) {
-                            this.classList.add('invalid');
-                            
-                            // Adiciona mensagem de erro se ainda não existir
-                            let errorMessage = this.nextElementSibling;
-                            if (!errorMessage || !errorMessage.classList.contains('error-text')) {
-                                errorMessage = document.createElement('span');
-                                errorMessage.classList.add('error-text');
-                                errorMessage.textContent = 'Este campo é obrigatório';
-                                this.insertAdjacentElement('afterend', errorMessage);
-                            }
-                        } else {
-                            this.classList.remove('invalid');
-                            
-                            // Remove mensagem de erro se existir
-                            const errorMessage = this.nextElementSibling;
-                            if (errorMessage && errorMessage.classList.contains('error-text')) {
-                                errorMessage.remove();
-                            }
-                        }
-                    });
-                });
-            }
-        });
-    </script>
+  <!-- Formulário de edição -->
+  <div class="form-section" id="edit-section" style="display: none;">
+    <h3 class="section-title">Editar Animal</h3>
+    <div class="form-row" style="gap:1rem;">
+      <input type="hidden" id="edit-id">
+      <div class="form-group" style="flex:1">
+        <label for="animal-name" class="required">Nome</label>
+        <input type="text" id="animal-name" class="form-control" required />
+      </div>
+      <div class="form-group" style="flex:1">
+        <label for="animal-raca" class="required">Raça</label>
+        <input type="text" id="animal-raca" class="form-control" required />
+      </div>
+    </div>
+    <div class="form-row" style="gap:1rem; margin-top:1rem;">
+      <div class="form-group" style="flex:1">
+        <label for="animal-status" class="required">Status</label>
+        <select id="animal-status" class="form-control" required>
+          <option value="">Selecione</option>
+          <option value="D">Para adoção</option>
+          <option value="A">Adotado</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:1">
+        <label for="animal-idade" class="required">Idade (anos)</label>
+        <input type="number" id="animal-idade" class="form-control" min="0" required />
+      </div>
+    </div>
+    <button type="button" id="btn-update" class="btn btn-success" style="margin-top:1rem;">
+      <i class="fas fa-check"></i> Confirmar Alterações
+    </button>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+</main>
+
+
+<main-footer></main-footer>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = 'http://localhost:8080/apis/animal';
+  const TOKEN = 'Bearer SEU_TOKEN_AQUI';
+
+  const input = document.getElementById("animal-search");
+  const btnSearch = document.getElementById("btn-search");
+  const listSection = document.getElementById("list-section");
+  const tbody = document.getElementById("results-tbody");
+  const editSection = document.getElementById("edit-section");
+  const toastRoot = document.getElementById("toast-container");
+
+  // Edit fields
+  const nameField = document.getElementById("animal-name");
+  const racaField = document.getElementById("animal-raca");
+  const statusField = document.getElementById("animal-status");
+  const idadeField = document.getElementById("animal-idade");
+  const idField = document.getElementById("edit-id");
+  const btnUpdate = document.getElementById("btn-update");
+
+  function showToast(type, title, msg) {
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.innerHTML = `
+      <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} toast-icon"></i>
+      <div class="toast-content">
+        <div class="toast-title">${title}</div>
+        <div class="toast-message">${msg}</div>
+      </div>
+      <button class="toast-close">&times;</button>
+    `;
+    toastRoot.appendChild(t);
+    t.querySelector('.toast-close').onclick = () => t.remove();
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
+    }, 5000);
+  }
+
+  async function buscarAnimal() {
+    const term = input.value.trim();
+    if (!term) return showToast("error", "Erro", "Digite ID ou nome.");
+
+    listSection.style.display = "none";
+    editSection.style.display = "none";
+    tbody.innerHTML = "";
+
+    let animals = [];
+    try {
+      const url = /^\d+$/.test(term)
+        ? `${API_BASE}/id/${term}`
+        : `${API_BASE}/nome/${encodeURIComponent(term)}`;
+
+      const res = await fetch(url, {
+        headers: { "Content-Type": "application/json", "Authorization": TOKEN },
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      animals = Array.isArray(data) ? data : [data];
+
+      if (animals.length === 0) throw new Error("Nenhum animal encontrado");
+
+      animals.forEach((a) => {
+        const info = a.informacao || {};
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${a.id}</td>
+          <td>${info.nome || "-"}</td>
+          <td>${info.raca || "SRD"}</td>
+          <td>${info.status || "-"}</td>
+          <td>${info.idade ?? "-"}</td>
+          <td>
+            <button class="btn btn-success btn-sm" data-id="${a.id}">Alterar</button>
+            <button class="btn btn-danger btn-sm" data-id="${a.id}">Excluir</button>
+          </td>
+        `;
+        tr.querySelector(".btn-success").onclick = () => preencherEdicao(a);
+        tr.querySelector(".btn-danger").onclick = () => excluirAnimal(a.id);
+        tbody.appendChild(tr);
+      });
+
+      listSection.style.display = "block";
+    } catch (e) {
+      showToast("error", "Erro", e.message);
+    }
+  }
+
+  function preencherEdicao(a) {
+    const info = a.informacao || {};
+    idField.value = a.id;
+    nameField.value = info.nome || "";
+    racaField.value = info.raca || "";
+    statusField.value = info.status || "";
+    idadeField.value = info.idade ?? "";
+
+    editSection.style.display = "block";
+    window.scrollTo({ top: editSection.offsetTop, behavior: "smooth" });
+  }
+
+  async function atualizarAnimal() {
+    const id = idField.value;
+    const payload = {
+      nome: nameField.value.trim(),
+      raca: racaField.value.trim(),
+      status: statusField.value,
+      idade: parseInt(idadeField.value, 10),
+    };
+
+    if (!payload.nome || !payload.raca || !payload.status || isNaN(payload.idade)) {
+      return showToast("error", "Erro", "Preencha todos os campos.");
+    }
+
+    try {
+      const res = await fetch(`${API_BASE}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": TOKEN,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+
+      showToast("success", "Sucesso", "Animal atualizado com sucesso!");
+      editSection.style.display = "none";
+      buscarAnimal(); // recarrega lista
+    } catch (e) {
+      showToast("error", "Erro", e.message);
+    }
+  }
+
+  async function excluirAnimal(id) {
+    if (!confirm("Tem certeza que deseja excluir este animal?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": TOKEN,
+        },
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+
+      showToast("success", "Sucesso", "Animal excluído com sucesso!");
+      buscarAnimal(); // atualiza lista
+    } catch (e) {
+      showToast("error", "Erro", e.message);
+    }
+  }
+
+  btnSearch.addEventListener("click", buscarAnimal);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buscarAnimal();
+    }
+  });
+  btnUpdate.addEventListener("click", atualizarAnimal);
+});
+</script>
 </body>
 </html>

@@ -41,7 +41,9 @@ public class AnimalController {
     @GetMapping("/nome/{nome}")
     public ResponseEntity<Object> getAnimalByName(@PathVariable String nome){
         List<Animal> animalList=new ArrayList<>();
-        animalList = animalService.buscarComFiltro("ani_nome = '" + nome.replace("'", "''") + "'");
+        animalList = animalService.buscarComFiltro(
+                "LOWER(ani_nome) LIKE '%" + nome.toLowerCase().replace("'", "''") + "%'"
+        );
         if(!animalList.isEmpty()){
             return ResponseEntity.ok(animalList);
         }
