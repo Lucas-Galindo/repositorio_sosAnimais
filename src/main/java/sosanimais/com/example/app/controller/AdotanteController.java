@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/apis/adotante")
 public class AdotanteController {
 
-    AdotanteService adotaService = new AdotanteService();
+    Adotante adotaService = new Adotante();
 
     @PostMapping
     public ResponseEntity<Object> cadastro(@RequestBody Adotante elemento){ // correto

@@ -1,14 +1,52 @@
-package sosanimais.com.example.app.controller.service;
+package sosanimais.com.example.app.model.entity;
 
 import sosanimais.com.example.app.model.DAL.TransferenciaDAL;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
-import sosanimais.com.example.app.model.entity.Transferencia;
 import sosanimais.com.example.app.model.objetosAux.FiltrosTransferencia;
 
 import java.util.Date;
 import java.util.List;
 
-public class TransferenciaService {
+public class Transferencia {
+    private Long id;
+    private Date data;
+    private int matFunc;
+
+
+    public Transferencia(Long id, Date data, int matFunc) {
+        this.id = id;
+        this.data = data;
+        this.matFunc = matFunc;
+
+    }
+    public Transferencia(){
+        this(0L,null,0);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public int getMatFunc() {
+        return matFunc;
+    }
+
+    public void setMatFunc(int matFunc) {
+        this.matFunc = matFunc;
+    }
+
     TransferenciaDAL repositorio = new TransferenciaDAL();
 
     public Transferencia salvarTransferencia(Transferencia entidade){ return repositorio.saveTransfere(entidade);}
@@ -29,4 +67,6 @@ public class TransferenciaService {
     public Transferencia pesquisaDetalhesTransfere(FiltrosTransferencia filtro){
         return repositorio.searchDetailsTransfere(filtro);
     }
+
+
 }

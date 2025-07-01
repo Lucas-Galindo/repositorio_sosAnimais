@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/apis/doador")
 public class DoadorController {
 
-    DoadorService doadorService = new DoadorService();
+    Doador doadorService = new Doador();
 
     @PostMapping
     public ResponseEntity<Object> cadastro(@RequestBody Doador elemento){ // correto

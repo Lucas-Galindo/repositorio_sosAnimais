@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/apis/pessoa")
 public class PessoaController {
 
-    PessoaService pessoaService = new PessoaService();
+    Pessoa pessoaService = new Pessoa();
 
     @PostMapping
     public ResponseEntity<Object> cadastro(@RequestBody Pessoa elemento){

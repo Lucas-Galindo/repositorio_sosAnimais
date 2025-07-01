@@ -314,6 +314,8 @@ ALTER TABLE Doacao_Insumos ALTER COLUMN doa_id SET DEFAULT nextval('doacao_insum
 
 -- ITENS COMPRA PRODUTO 
 
+--
+
 CREATE TABLE Itens_Compras_Produto (
     icp_id INTEGER PRIMARY KEY,
     Produto_Prod_Id INTEGER,

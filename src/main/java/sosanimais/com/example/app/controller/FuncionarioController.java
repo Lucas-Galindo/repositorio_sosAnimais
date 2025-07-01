@@ -17,7 +17,7 @@ import java.util.List;
 public class FuncionarioController {
 
 
-    FuncionarioService funcService = new FuncionarioService();
+    Funcionario funcService = new Funcionario();
 
     @PostMapping
     public ResponseEntity<Object> cadastro(@RequestBody Funcionario elemento) { // correto

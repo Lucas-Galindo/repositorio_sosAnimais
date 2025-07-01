@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/apis/baias")
 public class BaiasController {
 
-    BaiasService baiaService = new BaiasService();
+    Baias baiaService = new Baias();
     
 
     @PostMapping
