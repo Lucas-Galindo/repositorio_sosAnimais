@@ -2,6 +2,8 @@ package sosanimais.com.example.app.model.entity;
 
 import sosanimais.com.example.app.model.DAL.ServicoDAL;
 
+import java.util.List;
+
 public class Servico {
 
     private Long cod;
@@ -42,5 +44,10 @@ public class Servico {
     }
 
     ServicoDAL repositorio = new ServicoDAL();
-
+    public boolean save(Servico elemento){ return repositorio.save(elemento);}
+    public boolean update(Servico elemento){ return repositorio.update(elemento);}
+    public boolean delete(Servico elemento){ return repositorio.delete(elemento);}
+    public List<Servico> getAll(String filtro){ return repositorio.get(filtro);}
+    public Servico getServicoCod(Long cod){ return repositorio.get(cod);}
+    public Servico getServicoNome(String nome){ return repositorio.findByNome(nome);}
 }

@@ -230,7 +230,7 @@ ALTER TABLE Produto ALTER COLUMN Prod_Id SET DEFAULT nextval('produto_id_seq');
 -- SERVICO
 CREATE TABLE Servico (
     serv_cod INTEGER PRIMARY KEY,
-    serv_nome VARCHAR(4000) NOT NULL,
+    serv_nome VARCHAR(4000) NOT NULL UNIQUE,
     serv_desc VARCHAR(4000)
 );
 
@@ -422,6 +422,10 @@ ADD COLUMN func_role TEXT DEFAULT 'USER' CHECK (func_role IN ('ADMIN', 'USER'));
 ALTER TABLE baia DROP COLUMN baia_qtde;
 ALTER TABLE baia ADD COLUMN baia_qtde NUMERIC DEFAULT 0;
 ALTER TABLE baia ADD CONSTRAINT positive_baia_qtde CHECK (baia_qtde >= 0);
+
+ALTER TABLE servico DROP COLUMN serv_nome;
+ALTER TABLE servico ADD COLUMN serv_nome NOT NULL UNIQUE;
+
 
 --UPDATE adocao_animal a
 --SET Func_Matricula = 15;

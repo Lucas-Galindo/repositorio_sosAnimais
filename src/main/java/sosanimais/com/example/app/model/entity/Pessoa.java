@@ -36,7 +36,7 @@ public class Pessoa {
     public PessoaInformacao getPessoa(){return this.pessoa;}
 
 
-    private PessoaDAL repositorio = new PessoaDAL();
+    public PessoaDAL repositorio = new PessoaDAL();
 
 
     // CRUD BASICO
@@ -44,9 +44,9 @@ public class Pessoa {
         return repositorio.save(entidade);
     }
     public Pessoa getId(Long id){return repositorio.get(id);}
-    private List<Pessoa> getAll(String filtro){
-        return repositorio.get(filtro);
-    }
+    //public List<Pessoa> getAll(String filtro){
+        //return repositorio.get(filtro);
+    //}
     public boolean deletar(Pessoa entidade){
         return repositorio.delete(entidade);
     }
