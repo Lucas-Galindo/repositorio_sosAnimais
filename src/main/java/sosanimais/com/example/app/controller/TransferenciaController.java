@@ -3,9 +3,8 @@ package sosanimais.com.example.app.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sosanimais.com.example.app.controller.service.TransferenciaService;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
-import sosanimais.com.example.app.model.Transferencia;
+import sosanimais.com.example.app.model.entity.Transferencia;
 import sosanimais.com.example.app.model.objetosAux.FiltrosTransferencia;
 import sosanimais.com.example.app.model.util.Erro;
 
@@ -31,7 +30,7 @@ public class TransferenciaController {
      * */
 
 
-    TransferenciaService transfereService = new TransferenciaService();
+    Transferencia transfereService = new Transferencia();
 
     @PostMapping(path = "/",consumes = "application/json")
     public ResponseEntity<Object> salvarTransferencia(@RequestBody Transferencia elemento) { // correto

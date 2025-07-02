@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import sosanimais.com.example.app.controller.service.PessoaService;
+import sosanimais.com.example.app.model.DAL.PessoaDAL;
 import sosanimais.com.example.app.model.objetosAux.DefineFiltro;
 import sosanimais.com.example.app.model.entity.Pessoa;
 import sosanimais.com.example.app.model.util.Erro;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/apis/pessoa")
 public class PessoaController {
 
-    PessoaService pessoaService = new PessoaService();
+    Pessoa pessoaService = new Pessoa();
 
     @PostMapping
     public ResponseEntity<Object> cadastro(@RequestBody Pessoa elemento){
@@ -45,7 +46,9 @@ public class PessoaController {
 
     @GetMapping("/lista")
     public ResponseEntity<Object> getPessoaLista(){
-        List<Pessoa> lista = pessoaService.getAll("");
+
+        PessoaDAL repositorio = new PessoaDAL();
+        List<Pessoa> lista = repositorio.get("");
         if(lista!=null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));
@@ -54,7 +57,8 @@ public class PessoaController {
     @GetMapping("/lista/{filtro}")
     public ResponseEntity<Object> getPessoaLista(@PathVariable String filtro){
         DefineFiltro define = new DefineFiltro(filtro);
-        List<Pessoa> lista = pessoaService.getAll(define.getFiltro());
+        PessoaDAL repositorio = new PessoaDAL();
+        List<Pessoa> lista = repositorio.get(filtro);
         if(lista!=null)
             return ResponseEntity.ok(lista);
         return ResponseEntity.badRequest().body(new Erro("Problema ao listar Pessoa"));

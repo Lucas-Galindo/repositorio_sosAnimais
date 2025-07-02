@@ -1,8 +1,7 @@
 package sosanimais.com.example.app.model.DAL;
 
-import org.springframework.http.ResponseEntity;
 import sosanimais.com.example.app.model.Transfere_to_Baia;
-import sosanimais.com.example.app.model.Transferencia;
+import sosanimais.com.example.app.model.entity.Transferencia;
 import sosanimais.com.example.app.model.db.SingletonDB;
 import sosanimais.com.example.app.model.objetosAux.FiltrosTransferencia;
 
